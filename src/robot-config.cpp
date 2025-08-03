@@ -9,21 +9,24 @@ brain  Brain;
 
 // VEXcode device constructors
 controller Controller1 = controller(primary);
-motor LF = motor(PORT11, ratio6_1, true);
-motor LM = motor(PORT12, ratio6_1, true);
-motor RF = motor(PORT18, ratio6_1, false);
-motor RM = motor(PORT19, ratio6_1, false);
-motor LB = motor(PORT13, ratio6_1, true);
-motor RB = motor(PORT20, ratio6_1, false);
-motor Roller = motor(PORT21, ratio6_1, false);
-digital_out Pistake = digital_out(Brain.ThreeWirePort.D);
-digital_out Tilt = digital_out(Brain.ThreeWirePort.B);
-digital_out Clamp = digital_out(Brain.ThreeWirePort.A);
-inertial Gyro = inertial(PORT2);
+motor LF = motor(PORT6, ratio6_1, false);
+motor LM = motor(PORT13, ratio6_1, false);
+motor RF = motor(PORT14, ratio6_1, true);
+motor RM = motor(PORT10, ratio6_1, true);
+motor LB = motor(PORT2, ratio6_1, false);
+motor RB = motor(PORT16, ratio6_1, true);
+motor FrontRoller = motor(PORT8, ratio18_1, false);
+motor BackRoller = motor(PORT15, ratio6_1, false);
+motor TopRoller = motor(PORT21, ratio18_1, true);
+
+digital_out Scrapper = digital_out(Brain.ThreeWirePort.H);
+digital_out Lift = digital_out(Brain.ThreeWirePort.A);
+
+inertial Gyro = inertial(PORT12);
 //Naming convention: 
 // Important variables
 const double wheelDiam = 2.75;
-const double wheelToMotorRatio = 48.0/36;
+const double wheelToMotorRatio = 36/48.0;
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

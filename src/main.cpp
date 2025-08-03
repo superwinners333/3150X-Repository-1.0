@@ -36,8 +36,8 @@ bool SP;
 bool EXIT;
 void pre_auton(void) {
    EXIT=false;
-  Tilt.set(true);
-  Clamp.set(true);
+  Lift.set(false);
+  Scrapper.set(false);
   PX=0;
   JX=0;
   AutoSelectorVal=0;
@@ -283,23 +283,27 @@ int DriveTask(void){
   while(true)
   {
     EXIT=true;
-    RV=-Controller1.Axis3.position(percent)-Controller1.Axis1.position(percent);
-    LV=-Controller1.Axis3.position(percent)+Controller1.Axis1.position(percent);
+    RV=-Controller1.Axis3.position(percent)+Controller1.Axis1.position(percent);
+    LV=-Controller1.Axis3.position(percent)-Controller1.Axis1.position(percent);
     Move(LV,RV);
   }
 
 return 0;
 }
 int V;
+bool TopIntake = false;
 int ATask(void)
 {
   double pow;
     while(true)
   {
     pow=((Controller1.ButtonR2.pressing()-Controller1.ButtonR1.pressing())*100);//Calculate intake power, if button pressed, button.pressing returns 1
-    RunRoller(-pow);
-    
-  
+    RunRoller(pow);
+
+    if (TopIntake)
+    {
+      RunTopRoller(pow);
+    }
   //RunPuncher((Controller1.ButtonB.pressing())*100);
   }
   
@@ -308,17 +312,19 @@ int ATask(void)
 
 int ButtonPressingX,XTaskActiv;
 int ButtonPressingY,YTaskActiv;
+int ButtonPressingA,ATaskActiv;
+int ButtonPressingB,BTaskActiv;
 
 int PTask(void)
 {
     while(true)
     {
-      //Toggles Tilt
+      //Toggles Top Intake
     if(XTaskActiv==0&&Controller1.ButtonX.pressing()&&ButtonPressingX==0)
     {
       ButtonPressingX=1;
       XTaskActiv=1;
-      Tilt.set(true);
+      TopIntake = true;
     }
 
     else if(!Controller1.ButtonX.pressing())ButtonPressingX=0;
@@ -327,15 +333,15 @@ int PTask(void)
     {
       ButtonPressingX=1;
       XTaskActiv=0;
-      Tilt.set(false);
+      TopIntake = false;
     }
     //----------------------
-      //Toggles Clamp
+      //Toggles Scrapper
     if(YTaskActiv==0&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
     {
       ButtonPressingY=1;
       YTaskActiv=1;
-      Clamp.set(true);
+      Scrapper.set(true);
     }
 
     else if(!Controller1.ButtonY.pressing())ButtonPressingY=0;
@@ -344,11 +350,25 @@ int PTask(void)
     {
       ButtonPressingY=1;
       YTaskActiv=0;
-      Clamp.set(false);
+      Scrapper.set(false);
+    }
+  // --------------------------------------
+    // Toggles Lift
+    if(ATaskActiv==0&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
+    {
+      ButtonPressingA=1;
+      ATaskActiv=1;
+      Lift.set(true);
     }
 
+    else if(!Controller1.ButtonA.pressing())ButtonPressingA=0;
 
-
+    else if(ATaskActiv==1&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
+    {
+      ButtonPressingA=1;
+      ATaskActiv=0;
+      Lift.set(false);
+    }
   }
   return 0;
 }

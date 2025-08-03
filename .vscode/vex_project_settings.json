@@ -1,0 +1,18 @@
+{
+	"project": {
+		"name": "compautos",
+		"slot": 1,
+		"description": "Empty V5 C++ Project",
+		"platform": "V5",
+		"creationDate": "Wed, 19 Feb 2025 23:36:21 GMT",
+		"language": "cpp",
+		"sdkVersion": "V5_20240802_15_00_00",
+		"cpp": {
+			"includePath": []
+		}
+	},
+	"extension": {
+		"version": "0.6.1",
+		"json": 1
+	}
+}
