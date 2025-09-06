@@ -114,11 +114,11 @@ BackRoller.setMaxTorque(100,percent);
 BackRoller.spin(forward,(double)val/100.0*12,volt);
 }
 
-void RunTopRoller(int val)
-{
-TopRoller.setMaxTorque(100,percent);
-TopRoller.spin(forward,(double)val/100.0*12,volt);
-}
+// void RunTopRoller(int val)
+// {
+// TopRoller.setMaxTorque(100,percent);
+// TopRoller.spin(forward,(double)val/100.0*12,volt);
+// }
 
 
 int PrevE;//Error at t-1
