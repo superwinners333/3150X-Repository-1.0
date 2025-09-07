@@ -24,3 +24,5 @@ void test2(){
     MoveEncoderPID(TestPara, 100, 12, 0.4, 0, true);
     TurnMaxTimePID(TestPara, 30, 0.5,true);
 }
+
+// NEGATIVE TURNS TO THE LEFT

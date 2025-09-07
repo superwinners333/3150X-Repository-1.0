@@ -41,16 +41,16 @@ void DisplayWords(void)
   Brain.Screen.setPenColor("#39FF14");
   Brain.Screen.setFont(monoM);
   Brain.Screen.setCursor(3,3);
-  Brain.Screen.print("6 Ball");
+  Brain.Screen.print("High-9 Ball");
 
   Brain.Screen.setCursor(7,3);
-  Brain.Screen.print("5 Ball");
+  Brain.Screen.print("Low Basic");
 
     Brain.Screen.setCursor(11,3);
   Brain.Screen.print("GS-AWP");
 
     Brain.Screen.setCursor(3,40);
-  Brain.Screen.print("StealAWP");
+  Brain.Screen.print("High Basic");
 
   Brain.Screen.setCursor(7,40);
   Brain.Screen.print("ELIM-STEAL");
@@ -84,15 +84,15 @@ Brain.Screen.setPenColor(black);
 if(AutoSelectorVal==1){
 Brain.Screen.drawRectangle(1,25,100,50);
   Brain.Screen.setCursor(3,3);
-  Brain.Screen.print("6 Ball");
+  Brain.Screen.print("High-9");
 
 Brain.Screen.setFillColor(black);
 Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("GOAL SIDE");
+Brain.Screen.print("HIGH SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("6 BALL");
+Brain.Screen.print("HIGH-9");
 Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 
@@ -101,16 +101,16 @@ Brain.Screen.setFont(monoM);
 if(AutoSelectorVal==2){
 Brain.Screen.drawRectangle(375,25,100,50);
     Brain.Screen.setCursor(3,40);
-  Brain.Screen.print("StealAWP");
+  Brain.Screen.print("High Basic");
 
 Brain.Screen.setFillColor(black);
 
   Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("MATCHLOAD");
+Brain.Screen.print("HIGH SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("StealAWP");
+Brain.Screen.print("High Basic");
 Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 }
@@ -118,16 +118,16 @@ Brain.Screen.setFont(monoM);
 if(AutoSelectorVal==3){
   Brain.Screen.drawRectangle(1,100,100,50);
   Brain.Screen.setCursor(7,3);
-  Brain.Screen.print("5 Ball");
+  Brain.Screen.print("Low Basic");
 
 Brain.Screen.setFillColor(black);
 
     Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("GOAL SIDE");
+Brain.Screen.print("LOW SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("5 BALL");
+Brain.Screen.print("LOW BASIC");
 Brain.Screen.setFont(monoM);  
   Brain.Screen.setFillColor("#39FF14");
 }

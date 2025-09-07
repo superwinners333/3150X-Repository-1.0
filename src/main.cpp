@@ -38,9 +38,10 @@ void pre_auton(void) {
    EXIT=false;
   Lift.set(false);
   Scrapper.set(false);
+  BackDescore.set(false);
   PX=0;
   JX=0;
-  AutoSelectorVal=0;
+  AutoSelectorVal=0; // 0 = default
   SP=false;
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
@@ -103,9 +104,9 @@ if(AutoSelectorVal==1){
 Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("GOAL SIDE");
+Brain.Screen.print("HIGH SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("6 BALL");
+Brain.Screen.print("HIGH-9 BALL");
 Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 
@@ -117,9 +118,9 @@ Brain.Screen.setFillColor(black);
   Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("MATCHLOAD");
+Brain.Screen.print("HIGH SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("StealAWP");
+Brain.Screen.print("High Basic");
 Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 }
@@ -131,9 +132,9 @@ Brain.Screen.setFillColor(black);
     Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("GOAL SIDE");
+Brain.Screen.print("LOW SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("5 BALL");
+Brain.Screen.print("LOW BASIC");
 Brain.Screen.setFont(monoM);  
   Brain.Screen.setFillColor("#39FF14");
 }
@@ -230,20 +231,20 @@ Zeroing(true,true);
 
 //can start editing if nessary
 //Put Auto route function into if statements to use autoselector
-if(AutoSelectorVal==1)//Quali close 6 triball auto 
+if(AutoSelectorVal==1)// High Goal 
 {
-  test();
+  high_long();
 }
 
 if(AutoSelectorVal==2)// awp mid steal
 {
-  test2();
+  high_basic();
 
 }
 
 if(AutoSelectorVal==3)// 5 Ball rush
 {
-  
+  low_basic();
 } 
 
 if(AutoSelectorVal==4)// Elim-Steal
@@ -302,7 +303,8 @@ int ATask(void)
     
     if (Controller1.ButtonL2.pressing()==1)
     {
-      RunRoller(100);
+      RunRoller(-100); // outtake
+      RunTopRoller(-100);
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
@@ -311,7 +313,7 @@ int ATask(void)
     else if (Controller1.ButtonL1.pressing()==1)
     {
       RunRoller(100);
-      RunTopRoller(-100);
+      // RunTopRoller(-100);
     }
     else
     {

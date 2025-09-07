@@ -105,7 +105,6 @@ RB.stop();
 
 
 
-
 void RunRoller(int val)
 {
   FrontRoller.setMaxTorque(100,percent);
@@ -175,7 +174,7 @@ if(fabs(CSpeed)<fabs((double)Speed))
 
   Correction=PVal+IVal+DVal/0.02;
 
-  Move(CSpeed-Correction,CSpeed+Correction);
+  Move(CSpeed+Correction,CSpeed-Correction);
   PrevE=LGV;
   wait(20, msec);
   }
@@ -217,7 +216,7 @@ void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
 
   Correction=PVal+IVal+DVal/0.02;
 
-  Move(CSpeed-Correction,CSpeed+Correction);
+  Move(CSpeed+Correction,CSpeed-Correction);
   PrevE=LGV;
   wait(20, msec);
   }
@@ -250,8 +249,8 @@ void MaxTimePIDTurnOneSide(PIDDataSet KVals,double DeltaAngle,double TE, bool br
   DVal=KVals.kd*(LGV-PrevE);
 
   Correction=PVal+IVal+DVal/0.02;
-LV=-CSpeed+Correction;
-RV=-CSpeed-Correction;
+LV=-CSpeed-Correction;
+RV=-CSpeed+Correction;
 if(LV>=0)LV=0;
 if(RV>=0)RV=0;
   Move(LV,RV);
@@ -293,7 +292,7 @@ if(fabs(CSpeed)<fabs((double)Speed))
 
   Correction=PVal+IVal+DVal/0.02;
 
-  Move(-CSpeed-Correction,-CSpeed+Correction);
+  Move(-CSpeed+Correction,-CSpeed-Correction);
   PrevE=LGV;
   wait(20, msec);
   }
