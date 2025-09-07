@@ -15,12 +15,13 @@ motor RF = motor(PORT9, ratio6_1, true);
 motor RM = motor(PORT19, ratio6_1, true);
 motor LB = motor(PORT18, ratio6_1, false);
 motor RB = motor(PORT20, ratio6_1, true);
-motor FrontRoller = motor(PORT11, ratio18_1, true);
+motor FrontRoller = motor(PORT11, ratio6_1, true);
 motor BackRoller = motor(PORT15, ratio6_1, false); // right
 // motor TopRoller = motor(PORT21, ratio18_1, true);
 
-digital_out Scrapper = digital_out(Brain.ThreeWirePort.H);
-digital_out Lift = digital_out(Brain.ThreeWirePort.A);
+digital_out Scrapper = digital_out(Brain.ThreeWirePort.F);
+digital_out Lift = digital_out(Brain.ThreeWirePort.H);
+digital_out BackDescore = digital_out(Brain.ThreeWirePort.G)
 
 inertial Gyro = inertial(PORT12);
 //Naming convention: 

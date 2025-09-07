@@ -295,15 +295,32 @@ bool TopIntake = false;
 int ATask(void)
 {
   double pow;
+  double pow2;
     while(true)
   {
     pow=((Controller1.ButtonR2.pressing()-Controller1.ButtonR1.pressing())*100);//Calculate intake power, if button pressed, button.pressing returns 1
-    RunRoller(pow);
-
-    if (TopIntake)
+    
+    if (Controller1.ButtonL2.pressing()==1)
     {
-      // RunTopRoller(pow);
+      RunRoller(100);
     }
+    else if (Controller1.ButtonR1.pressing()==1)
+    {
+      RunIndex(100);
+    }
+    else if (Controller1.ButtonL1.pressing()==1)
+    {
+      RunRoller(100);
+      RunTopRoller(-100);
+    }
+    else
+    {
+      RunIndex(0);
+    } 
+    // RunRoller(pow);
+    // RunTopRoller(pow);
+
+
   //RunPuncher((Controller1.ButtonB.pressing())*100);
   }
   
@@ -319,12 +336,13 @@ int PTask(void)
 {
     while(true)
     {
-      //Toggles Top Intake
+      //Toggles Scrapper
     if(XTaskActiv==0&&Controller1.ButtonX.pressing()&&ButtonPressingX==0)
     {
       ButtonPressingX=1;
       XTaskActiv=1;
-      TopIntake = true;
+      // TopIntake = true;
+      Lift.set(true);
     }
 
     else if(!Controller1.ButtonX.pressing())ButtonPressingX=0;
@@ -333,41 +351,56 @@ int PTask(void)
     {
       ButtonPressingX=1;
       XTaskActiv=0;
-      TopIntake = false;
+      // TopIntake = false;
+      Lift.set(false);
     }
-    //----------------------
+
+    //----------------------------------------- SCRAPPER
       //Toggles Scrapper
-    if(YTaskActiv==0&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
+    // if(YTaskActiv==0&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
+    // {
+    //   ButtonPressingY=1;
+    //   YTaskActiv=1;
+    //   Scrapper.set(true);
+    // }
+    // else if(!Controller1.ButtonY.pressing())ButtonPressingY=0;
+    // else if(YTaskActiv==1&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
+    // {
+    //   ButtonPressingY=1;
+    //   YTaskActiv=0;
+    //   Scrapper.set(false);
+    // }
+
+  // -------------------------------------- BACKDESCORE
+    // Toggles BackDescore
+    if(BTaskActiv==0&&Controller1.ButtonB.pressing()&&ButtonPressingB==0)
     {
-      ButtonPressingY=1;
-      YTaskActiv=1;
-      Scrapper.set(true);
+      ButtonPressingB=1;
+      BTaskActiv=1;
+      BackDescore.set(true);
+    }
+    else if(!Controller1.ButtonB.pressing())ButtonPressingB=0;
+    else if(BTaskActiv==1&&Controller1.ButtonB.pressing()&&ButtonPressingB==0)
+    {
+      ButtonPressingB=1;
+      BTaskActiv=0;
+      BackDescore.set(false);
     }
 
-    else if(!Controller1.ButtonY.pressing())ButtonPressingY=0;
-
-    else if(YTaskActiv==1&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
-    {
-      ButtonPressingY=1;
-      YTaskActiv=0;
-      Scrapper.set(false);
-    }
-  // --------------------------------------
+  // -------------------------------------- LIFT
     // Toggles Lift
     if(ATaskActiv==0&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
     {
       ButtonPressingA=1;
       ATaskActiv=1;
-      Lift.set(true);
+      Scrapper.set(true);
     }
-
     else if(!Controller1.ButtonA.pressing())ButtonPressingA=0;
-
     else if(ATaskActiv==1&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
     {
       ButtonPressingA=1;
       ATaskActiv=0;
-      Lift.set(false);
+      Scrapper.set(false);
     }
   }
   return 0;
