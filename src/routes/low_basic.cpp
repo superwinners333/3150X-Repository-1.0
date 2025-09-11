@@ -12,31 +12,29 @@ void low_basic() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TestPara={1.5,0.1,0.15};
 
     Lift.set(false);
-    TurnMaxTimePID(TestPara, 20, 0.5, true); // turns to 3 balls
+    TurnMaxTimePID(TestPara, 18, 0.5, true); // turns to 3 balls
     RunRoller(100); // activates intake
-    MoveEncoderPID(TestPara, -50, 7 , 0.3,20,true); // drives and turns towards the 3 blocks near center
-    MoveEncoderPID(TestPara, -30, 12 , 0.3,20,true); // drives and turns towards the 3 blocks near center
-    wait(400,msec);
-    RunRoller(0); // stop intake
+    MoveEncoderPID(TestPara, -50, 7 , 0.3,18,true); // drives and turns towards the 3 blocks near center
+    MoveEncoderPID(TestPara, -20, 14, 0.3,18,true); // drives and turns towards the 3 blocks near center
+    //MoveEncoderPID(TestPara, 20, 1 , 0.3,18,true); // drives and turns towards the 3 blocks near center
+    wait(250,msec);
+    RunRoller(0); //stop
     TurnMaxTimePID(TestPara, -47, 0.5, true); // turns to under the bar
-    wait(100,msec);
-    MoveEncoderPID(TestPara, -50, 9.8 , 0.4, -47,true); // drives partway to under the bar
-    Lift.set(true);
-    RunRoller(-100); // activates intake to score
-    RunTopRoller(30);
-    wait(1500,msec);
+    MoveEncoderPID(TestPara, -50, 7, 0.4, -47,true); // drives partway to under the bar
+    RunRoller(-100); // putake
+    wait(1000,msec);
     RunRoller(0);
-    RunTopRoller(0);
-    MoveEncoderPID(TestPara, 60, 40.6, 0.4, -45,true); // drives to long goal
+    MoveEncoderPID(TestPara, 60, 37.7, 0.4, -47,true); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.5, true); // turns to matchloader
     Scrapper.set(true);
-    MoveTimePID(TestPara, 55, 0.9 , 0.4, 180,false); // move into matchloader
-    Lift.set(false);
     RunRoller(100); // activates intake to matchload
-    wait(400 ,msec);
-    MoveTimePID(TestPara, -50, 1.5, 0.4, -178,false); // move to long goal
+    MoveTimePID(TestPara, 55, 0.9 , 0.4, 180,false); // move into matchloader
+    //MoveTimePID(TestPara, 10, 0.15, 0.4, 180,false); // mactchload
+    MoveTimePID(TestPara, -50, 1.5, 0.4, -180,false); // move to  long goal
     RunTopRoller(100);
-    wait(1500,msec);
+    MoveTimePID(TestPara, -10, 1.8, 0.4, -180,false); // move to  long goal
+    MoveTimePID(TestPara, 50, 1.5, 0.4, -180,false); // move into matchloader again
+    wait(15000,msec);
 }
 
 

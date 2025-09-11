@@ -41,7 +41,7 @@ void DisplayWords(void)
   Brain.Screen.setPenColor("#39FF14");
   Brain.Screen.setFont(monoM);
   Brain.Screen.setCursor(3,3);
-  Brain.Screen.print("High-9 Ball");
+  Brain.Screen.print("Low Long");
 
   Brain.Screen.setCursor(7,3);
   Brain.Screen.print("Low Basic");
@@ -53,10 +53,10 @@ void DisplayWords(void)
   Brain.Screen.print("High Basic");
 
   Brain.Screen.setCursor(7,40);
-  Brain.Screen.print("ELIM-STEAL");
+  Brain.Screen.print("Low Long");
 
     Brain.Screen.setCursor(11,40);
-  Brain.Screen.print("ML-AWP");
+  Brain.Screen.print("SOLO AWP");
 
       Brain.Screen.setCursor(11,22);
   Brain.Screen.print("Skills");
@@ -84,7 +84,7 @@ Brain.Screen.setPenColor(black);
 if(AutoSelectorVal==1){
 Brain.Screen.drawRectangle(1,25,100,50);
   Brain.Screen.setCursor(3,3);
-  Brain.Screen.print("High-9");
+  Brain.Screen.print("High Long");
 
 Brain.Screen.setFillColor(black);
 Brain.Screen.setFont(monoXL);
@@ -92,7 +92,7 @@ Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("HIGH SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("HIGH-9");
+Brain.Screen.print("HIGH LONG");
 Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 
@@ -127,7 +127,7 @@ Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("LOW SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("LOW BASIC");
+Brain.Screen.print("LOW BASIC......");
 Brain.Screen.setFont(monoM);  
   Brain.Screen.setFillColor("#39FF14");
 }
@@ -135,16 +135,16 @@ Brain.Screen.setFont(monoM);
 if(AutoSelectorVal==4){
 Brain.Screen.drawRectangle(375,100,100,50);
   Brain.Screen.setCursor(7,40);
-  Brain.Screen.print("Elim-Steal");
+  Brain.Screen.print("LOW LONG");
 
 Brain.Screen.setFillColor(black);
 
   Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("MATCHLOAD");
+Brain.Screen.print("LOW SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("Elim-Steal");
+Brain.Screen.print("LOW LONG");
 Brain.Screen.setFont(monoM); 
   Brain.Screen.setFillColor("#39FF14");
 
@@ -170,14 +170,14 @@ Brain.Screen.setFont(monoM);
 if(AutoSelectorVal==6){
 Brain.Screen.drawRectangle(375,175,175,50);
 Brain.Screen.setCursor(11,40);
-Brain.Screen.print("ML-AWP");
+Brain.Screen.print("SOLO AWP");
 Brain.Screen.setFillColor(black);
 Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("MATCHLOAD");
+Brain.Screen.print("mango");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("ONLY AWP");
+Brain.Screen.print("SOLO AWP");
 Brain.Screen.setFont(monoM); 
   Brain.Screen.setFillColor("#39FF14");
 

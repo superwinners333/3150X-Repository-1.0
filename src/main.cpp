@@ -106,7 +106,7 @@ Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("HIGH SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("HIGH-9 BALL");
+Brain.Screen.print("HIGH LONG");
 Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 
@@ -146,9 +146,9 @@ Brain.Screen.setFillColor(black);
   Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("MATCHLOAD");
+Brain.Screen.print("LOW SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("Elim-Steal");
+Brain.Screen.print("Low Long");
 Brain.Screen.setFont(monoM); 
   Brain.Screen.setFillColor("#39FF14");
 
@@ -174,9 +174,9 @@ if(AutoSelectorVal==6){
     Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(3,10);
-Brain.Screen.print("MATCHLOAD");
+Brain.Screen.print("AWP SIDE");
 Brain.Screen.setCursor(4,10);
-Brain.Screen.print("ONLY AWP");
+Brain.Screen.print("SOLO AWP");
 Brain.Screen.setFont(monoM); 
   Brain.Screen.setFillColor("#39FF14");
 
@@ -249,8 +249,7 @@ if(AutoSelectorVal==3)// 5 Ball rush
 
 if(AutoSelectorVal==4)// Elim-Steal
 {
-
-  
+  low_long();
 }
 
 if(AutoSelectorVal==5)// empty
@@ -261,7 +260,7 @@ if(AutoSelectorVal==5)// empty
 
 if(AutoSelectorVal==6)//AWP only
 {
-
+  solo_awp();
 }
 
 
