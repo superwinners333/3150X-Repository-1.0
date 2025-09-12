@@ -312,7 +312,7 @@ int ATask(void)
     else if (Controller1.ButtonL1.pressing()==1)
     {
       RunRoller(100);
-      // RunTopRoller(-100);
+      RunTopRoller(-20);
     }
     else
     {
@@ -330,7 +330,7 @@ int ATask(void)
 
 int ButtonPressingX,XTaskActiv;
 int ButtonPressingY,YTaskActiv;
-int ButtonPressingA,ATaskActiv;
+int ButtonPressingA,ATaskActiv; // Button Down
 int ButtonPressingB,BTaskActiv;
 
 int PTask(void)
@@ -390,14 +390,14 @@ int PTask(void)
 
   // -------------------------------------- LIFT
     // Toggles Lift
-    if(ATaskActiv==0&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
+    if(ATaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingA==0)
     {
       ButtonPressingA=1;
       ATaskActiv=1;
       Scrapper.set(true);
     }
-    else if(!Controller1.ButtonA.pressing())ButtonPressingA=0;
-    else if(ATaskActiv==1&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
+    else if(!Controller1.ButtonDown.pressing())ButtonPressingA=0;
+    else if(ATaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingA==0)
     {
       ButtonPressingA=1;
       ATaskActiv=0;

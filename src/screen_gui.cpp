@@ -41,7 +41,7 @@ void DisplayWords(void)
   Brain.Screen.setPenColor("#39FF14");
   Brain.Screen.setFont(monoM);
   Brain.Screen.setCursor(3,3);
-  Brain.Screen.print("Low Long");
+  Brain.Screen.print("High Long");
 
   Brain.Screen.setCursor(7,3);
   Brain.Screen.print("Low Basic");

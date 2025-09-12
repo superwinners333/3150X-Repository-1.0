@@ -37,8 +37,8 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     TurnMaxTimePID(TestPara, -50, 0.2, true); // turns to center
     RunRoller(0); 
     Scrapper.set(true);
-    MoveEncoderPID(TestPara, -55, 14.5 , 0.3,-50,true); // move to dispurt
-    MoveEncoderPID(TestPara, 55, 14.5 , 0.3,-50,true); // move to dispurt
+    MoveEncoderPID(TestPara, -55, 14 , 0.3,-50,true); // move to dispurt
+    MoveEncoderPID(TestPara, 55, 14 , 0.3,-50,true); // move to dispurt
     TurnMaxTimePID(TestPara, -120, 0.4, true); // turns to matchloader
     MoveEncoderPID(TestPara, -60, 20, 0.4, -120,false); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.5, true); // turns to matchloader
