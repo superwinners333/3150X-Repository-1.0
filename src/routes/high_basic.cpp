@@ -19,6 +19,7 @@ void high_basic() { // NEGATIVE TURNS TO THE LEFT
     wait(400,msec);
     RunRoller(0); // stop intake
     TurnMaxTimePID(TestPara, -135, 0.3, true); // turns to under the bar
+    RunTopRoller(-75);
     MoveEncoderPID(TestPara, 50, 7.5 , 0.4, -135,false); // drives partway to under the bar
     wait(100,msec);
     Lift.set(true);
@@ -28,7 +29,7 @@ void high_basic() { // NEGATIVE TURNS TO THE LEFT
     RunRoller(0);
     RunTopRoller(0);
     Scrapper.set(true);
-    MoveEncoderPID(TestPara, -60, 38, 0.4, -130,false); // drives to long goal
+    MoveEncoderPID(TestPara, -60, 38.1, 0.4, -130,false); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.3, true); // turns to matchloader
     Lift.set(false);
     RunRoller(100); // activates intake to matchload
