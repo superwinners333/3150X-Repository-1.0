@@ -32,13 +32,43 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     */
     TurnMaxTimePID(TestPara, -18, 0.5, true); // turns to 3 balls
     RunRoller(100); // activates intake
-    MoveEncoderPID(TestPara, -50, 10 , 0.3,-18,true); // drives and turns towards the 3 blocks near center
-    MoveEncoderPID(TestPara, -20, 9 , 0.3,-18,true); // drives and turns towards the 3 blocks near center
-    TurnMaxTimePID(TestPara, -50, 0.2, true); // turns to center
+    MoveEncoderPID(TestPara, -50, 9 , 0.3,-18,true); // drives and turns towards the 3 blocks near center
+    MoveEncoderPID(TestPara, -15, 10 , 0.3,-18,true); // drives and turns towards the 3 blocks near center
+    //TurnMaxTimePID(TestPara, -50, 0.2, true); // turns to center
     RunRoller(0); 
     Scrapper.set(true);
     //MoveEncoderPID(TestPara, -55, 13.5 , 0.3,-50,true); // move to dispurt
     //MoveEncoderPID(TestPara, 55, 13.5 , 0.3,-50,true); // move to dispurt
+    TurnMaxTimePID(TestPara, -120, 0.4, true); // turns to matchloader
+    MoveEncoderPID(TestPara, -60, 18.5, 0.4, -120,false); // drives to long goal
+    TurnMaxTimePID(TestPara, 180, 0.5, true); // turns to matchloader
+    RunRoller(100); // activates intake to matchload
+    MoveTimePID(TestPara, 55, 1 , 0.4, 180,false); // move into matchloader
+    MoveTimePID(TestPara, 10, 0.3 , 0.4, 180,false); // move into matchloader
+    MoveTimePID(TestPara, -50, 1.5, 0.4, 180,false); // move to long goal
+    RunRoller(-10);
+    wait(100,msec);
+    RunRoller(100);
+    RunTopRoller(100);
+    wait(3000,msec);
+    MoveEncoderPID(TestPara, -60, 5, 0.4, -180,false); // back up
+    MoveEncoderPID(TestPara, 70, 5.5, 0.4, -180,false); // descore
+    MoveTimePID(TestPara, 50, 1.5, 0.4, 180,false); // move into matchloader again
+    Brain.Screen.setFont(monoXL);
+    Brain.Screen.setPenColor("#39FF14");
+    Brain.Screen.setCursor(3,10);
+    Brain.Screen.print("6-7 Blocks Scored");
+    wait(15000,msec);
+}
+/*TurnMaxTimePID(TestPara, -18, 0.5, true); // turns to 3 balls
+    RunRoller(100); // activates intake
+    MoveEncoderPID(TestPara, -50, 10 , 0.3,-18,true); // drives and turns towards the 3 blocks near center
+    MoveEncoderPID(TestPara, -15, 9 , 0.3,-18,true); // drives and turns towards the 3 blocks near center
+    TurnMaxTimePID(TestPara, -50, 0.2, true); // turns to center
+    RunRoller(0); 
+    Scrapper.set(true);
+    MoveEncoderPID(TestPara, -55, 13.5 , 0.3,-50,true); // move to dispurt
+    MoveEncoderPID(TestPara, 55, 13.5 , 0.3,-50,true); // move to dispurt
     TurnMaxTimePID(TestPara, -120, 0.4, true); // turns to matchloader
     MoveEncoderPID(TestPara, -60, 20, 0.4, -120,false); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.5, true); // turns to matchloader
@@ -48,12 +78,9 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -50, 1.5, 0.4, 180,false); // move to long goal
     RunTopRoller(100);
     wait(3000,msec);
-    MoveEncoderPID(TestPara, 60, 4, 0.4, -180,false); // back up
-    MoveEncoderPID(TestPara, 50, 4.5, 0.4, -180,false); // descore
     MoveTimePID(TestPara, 50, 1.5, 0.4, 180,false); // move into matchloader again
     Brain.Screen.setFont(monoXL);
     Brain.Screen.setPenColor("#39FF14");
     Brain.Screen.setCursor(3,10);
     Brain.Screen.print("6-7 Blocks Scored");
-    wait(15000,msec);
-}
+    wait(15000,msec);*/
