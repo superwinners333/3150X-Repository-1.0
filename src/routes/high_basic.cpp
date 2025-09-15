@@ -29,13 +29,16 @@ void high_basic() { // NEGATIVE TURNS TO THE LEFT
     RunRoller(0);
     RunTopRoller(0);
     Scrapper.set(true);
-    MoveEncoderPID(TestPara, -60, 38.3, 0.4, -130,false); // drives to long goal
+    MoveEncoderPID(TestPara, -60, 39.1, 0.4, -130,false); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.3, true); // turns to matchloader
     Lift.set(false);
     RunRoller(100); // activates intake to matchload
     MoveTimePID(TestPara, 45, 0.9 , 0.4, 180,false); // move into matchloader
     MoveTimePID(TestPara, 10, 0.3, 0.4, 180,false); // mactchload
     MoveTimePID(TestPara, -50, 1.5, 0.4, 180,false); // move to long goal
+    RunRoller(-20);
+    wait(100,msec);
+    RunRoller(100);
     RunTopRoller(100);
     MoveTimePID(TestPara, -10, 1.5, 0.4, 180,false); // move to long goal
     MoveTimePID(TestPara, 50, 1.5, 0.4, 180,false); // move into matchloader again

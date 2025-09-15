@@ -45,7 +45,7 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     RunRoller(100); // activates intake to matchload
     MoveTimePID(TestPara, 55, 1 , 0.4, 180,false); // move into matchloader
     MoveTimePID(TestPara, 10, 0.3 , 0.4, 180,false); // move into matchloader
-    MoveTimePID(TestPara, -50, 1.5, 0.4, 180,false); // move to long goal
+    MoveTimePID(TestPara, -50, 1.7, 0.4, 180,false); // move to long goal
     RunRoller(-10);
     wait(100,msec);
     RunRoller(100);

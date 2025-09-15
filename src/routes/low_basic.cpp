@@ -17,14 +17,13 @@ void low_basic() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, -50, 7 , 0.3,18,true); // drives and turns towards the 3 blocks near center
     MoveEncoderPID(TestPara, -15, 13.7, 0.3,18,true); // drives and turns towards the 3 blocks near center
     //MoveEncoderPID(TestPara, 20, 1 , 0.3,18,true); // drives and turns towards the 3 blocks near center
-    wait(250,msec);
-    RunRoller(0); //stop
     TurnMaxTimePID(TestPara, -47, 0.3, true); // turns to under the bar
+    RunRoller(0); //stop
     MoveEncoderPID(TestPara, -50, 6.7, 0.4, -47,true); // drives partway to under the bar
     RunRoller(-100); // putak
     wait(1000,msec);
     RunRoller(0);
-    MoveEncoderPID(TestPara, 60, 37.5, 0.4, -47,true); // drives to long goal
+    MoveEncoderPID(TestPara, 60, 37.8, 0.4, -47,true); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.3, true); // turns to matchloader
     Scrapper.set(true);
     RunRoller(100); // activates intake to matchload
@@ -32,7 +31,7 @@ void low_basic() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, 10, 0.15, 0.4, 180,false); // mactchload
     MoveTimePID(TestPara, -50, 1.5, 0.4, -180,false); // move to  long goal
     RunTopRoller(100);
-    MoveTimePID(TestPara, -10, 1.8, 0.4, -180,false); // move to  long goal
+    MoveTimePID(TestPara, -10, 2, 0.4, -180,false); // move to  long goal
     MoveTimePID(TestPara, 50, 1.5, 0.4, -180,false); // move into matchloader again
     wait(15000,msec);
 }

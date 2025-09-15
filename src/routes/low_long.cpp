@@ -20,12 +20,15 @@ void low_long() { // NEGATIVE TURNS TO THE LEFT
     //MoveEncoderPID(TestPara, 55, 13 , 0.3,45,true); // move to dispurt
     TurnMaxTimePID(TestPara, 120, 0.3, true); // turns to matchloader
     RunRoller(0); 
-    MoveEncoderPID(TestPara, -60, 20.5, 0.4, 120,true); // drives to long goal
+    MoveEncoderPID(TestPara, -60, 21, 0.4, 120,true); // drives to long goal
     TurnMaxTimePID(TestPara, -180, 0.3, true); // turns to matchloader
     RunRoller(100); // activates intake to matchload
-    MoveTimePID(TestPara, 45, 1 , 0.4, -180,false); // move into matchloader
-    MoveTimePID(TestPara, 10, 0.4 , 0.4, -180,false); // move into matchloader
-    MoveTimePID(TestPara, -50, 1.5, 0.4, -180,false); // move to long goal
+    MoveTimePID(TestPara, 45, 1.1 , 0.4, -180,false); // move into matchloader
+    MoveTimePID(TestPara, 10, 0.3 , 0.4, -180,false); // move into matchloader
+    MoveTimePID(TestPara, -50, 1.7, 0.4, -180,false); // move to long goal
+    RunRoller(-20);
+    wait(100,msec);
+    RunRoller(100);
     RunTopRoller(100);
     wait(3000,msec);
     MoveEncoderPID(TestPara, -60, 5, 0.4, -180,true); // back up
