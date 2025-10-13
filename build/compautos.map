@@ -65,6 +65,10 @@ __sbss_end          0x4               c:\Users\alfre\AppData\Roaming\Code\User\g
 Discarded input sections
 
  .text          0x00000000        0x0 build/src/main.o
+ .text._Z5STaskv
+                0x00000000       0xb0 build/src/main.o
+ .ARM.exidx.text._Z5STaskv
+                0x00000000        0x8 build/src/main.o
  .bss.V         0x00000000        0x4 build/src/main.o
  .bss.TopIntake
                 0x00000000        0x1 build/src/main.o
@@ -72,8 +76,18 @@ Discarded input sections
                 0x00000000        0x4 build/src/main.o
  .bss.YTaskActiv
                 0x00000000        0x4 build/src/main.o
+ .bss.screenheading
+                0x00000000        0x8 build/src/main.o
  .llvm_addrsig  0x00000000        0xe build/src/main.o
  .text          0x00000000        0x0 build/src/screen_gui.o
+ .text._Z19drawCurvedRectangleiiiii
+                0x00000000       0xdc build/src/screen_gui.o
+ .ARM.exidx.text._Z19drawCurvedRectangleiiiii
+                0x00000000        0x8 build/src/screen_gui.o
+ .text._Z9drawFieldv
+                0x00000000      0x110 build/src/screen_gui.o
+ .ARM.exidx.text._Z9drawFieldv
+                0x00000000        0x8 build/src/screen_gui.o
  .llvm_addrsig  0x00000000        0x1 build/src/screen_gui.o
  .text          0x00000000        0x0 build/src/movement.o
  .text._Z21MaxTimePIDTurnOneSide10PIDDataSetddb
@@ -3727,220 +3741,220 @@ Linker script and memory map
 .fini
  *(.fini)
 
-.rodata         0x03806cf8      0x2b4
+.rodata         0x03806cf8      0x2e4
                 0x03806cf8                __rodata_start = .
  *(.rodata)
  *(.rodata.*)
  .rodata.str1.1
-                0x03806cf8       0x89 build/src/main.o
+                0x03806cf8       0xa4 build/src/main.o
  .rodata.str1.1
-                0x03806d81       0x3a build/src/screen_gui.o
-                                 0x94 (size before relaxing)
+                0x03806d9c       0x4e build/src/screen_gui.o
+                                 0xb0 (size before relaxing)
  .rodata.str1.1
-                0x03806dbb        0xc build/src/helper_functions.o
- *fill*         0x03806dc7        0x1 
+                0x03806dea        0xc build/src/helper_functions.o
+ *fill*         0x03806df6        0x2 
  .rodata.wheelDiam
-                0x03806dc8        0x8 build/src/robot-config.o
-                0x03806dc8                wheelDiam
+                0x03806df8        0x8 build/src/robot-config.o
+                0x03806df8                wheelDiam
  .rodata.wheelToMotorRatio
-                0x03806dd0        0x8 build/src/robot-config.o
-                0x03806dd0                wheelToMotorRatio
+                0x03806e00        0x8 build/src/robot-config.o
+                0x03806e00                wheelToMotorRatio
  .rodata.str1.1
-                0x03806dd8       0x12 build/src/routes/high_long.o
+                0x03806e08       0x12 build/src/routes/high_long.o
                                  0x1a (size before relaxing)
  .rodata.str1.1
-                0x03806dea       0x2e c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
+                0x03806e1a       0x2e c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
  .rodata._ZN3vex6PORT20E
-                0x03806e18        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e18                vex::PORT20
- .rodata._ZN3vex5PORT1E
-                0x03806e1c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e1c                vex::PORT1
- .rodata._ZN3vex4voltE
-                0x03806e20        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e20                vex::volt
- .rodata._ZN3vex6PORT10E
-                0x03806e24        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e24                vex::PORT10
- .rodata._ZN3vex7forwardE
-                0x03806e28        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e28                vex::forward
- .rodata._ZN3vex5blackE
-                0x03806e2c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e2c                vex::black
- .rodata._ZN3vex4msecE
-                0x03806e30        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e30                vex::msec
- .rodata._ZN3vex6PORT18E
-                0x03806e34        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e34                vex::PORT18
- .rodata._ZN3vex5PORT2E
-                0x03806e38        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e38                vex::PORT2
- .rodata._ZN3vex6PORT11E
-                0x03806e3c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e3c                vex::PORT11
- .rodata._ZN3vex7primaryE
-                0x03806e40        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e40                vex::primary
- .rodata._ZN3vex6monoXLE
-                0x03806e44        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e44                vex::monoXL
- .rodata._ZN3vex7percentE
                 0x03806e48        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e48                vex::percent
- .rodata._ZN3vex6PORT15E
+                0x03806e48                vex::PORT20
+ .rodata._ZN3vex5PORT1E
                 0x03806e4c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e4c                vex::PORT15
- .rodata._ZN3vex6PORT19E
+                0x03806e4c                vex::PORT1
+ .rodata._ZN3vex4voltE
                 0x03806e50        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e50                vex::PORT19
- .rodata._ZN3vex7degreesE
+                0x03806e50                vex::volt
+ .rodata._ZN3vex6PORT10E
                 0x03806e54        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e54                vex::degrees
- .rodata._ZN3vex6PORT22E
+                0x03806e54                vex::PORT10
+ .rodata._ZN3vex7forwardE
                 0x03806e58        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e58                vex::PORT22
- .rodata._ZN3vex4holdE
+                0x03806e58                vex::forward
+ .rodata._ZN3vex5blackE
                 0x03806e5c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e5c                vex::hold
- .rodata._ZN3vex5monoME
+                0x03806e5c                vex::black
+ .rodata._ZN3vex4msecE
                 0x03806e60        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e60                vex::monoM
- .rodata._ZN3vex8ratio6_1E
+                0x03806e60                vex::msec
+ .rodata._ZN3vex6PORT18E
                 0x03806e64        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e64                vex::ratio6_1
- .rodata._ZN3vex5brakeE
+                0x03806e64                vex::PORT18
+ .rodata._ZN3vex5PORT2E
                 0x03806e68        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e68                vex::brake
- .rodata._ZN3vex5coastE
+                0x03806e68                vex::PORT2
+ .rodata._ZN3vex6PORT11E
                 0x03806e6c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e6c                vex::coast
- .rodata._ZN3vex6PORT17E
+                0x03806e6c                vex::PORT11
+ .rodata._ZN3vex7primaryE
                 0x03806e70        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
-                0x03806e70                vex::PORT17
- *fill*         0x03806e74        0x4 
+                0x03806e70                vex::primary
+ .rodata._ZN3vex6monoXLE
+                0x03806e74        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e74                vex::monoXL
+ .rodata._ZN3vex7percentE
+                0x03806e78        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e78                vex::percent
+ .rodata._ZN3vex6PORT15E
+                0x03806e7c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e7c                vex::PORT15
+ .rodata._ZN3vex6PORT19E
+                0x03806e80        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e80                vex::PORT19
+ .rodata._ZN3vex7degreesE
+                0x03806e84        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e84                vex::degrees
+ .rodata._ZN3vex6PORT22E
+                0x03806e88        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e88                vex::PORT22
+ .rodata._ZN3vex4holdE
+                0x03806e8c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e8c                vex::hold
+ .rodata._ZN3vex5monoME
+                0x03806e90        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e90                vex::monoM
+ .rodata._ZN3vex8ratio6_1E
+                0x03806e94        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e94                vex::ratio6_1
+ .rodata._ZN3vex5brakeE
+                0x03806e98        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e98                vex::brake
+ .rodata._ZN3vex5coastE
+                0x03806e9c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806e9c                vex::coast
+ .rodata._ZN3vex6PORT17E
+                0x03806ea0        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03806ea0                vex::PORT17
+ *fill*         0x03806ea4        0x4 
  .rodata._ZTVN3vex5motorE
-                0x03806e78       0x18 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_motor.cpp.obj)
-                0x03806e78                vtable for vex::motor
+                0x03806ea8       0x18 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_motor.cpp.obj)
+                0x03806ea8                vtable for vex::motor
  .rodata._ZTVN3vex8inertialE
-                0x03806e90       0x68 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_imu.cpp.obj)
-                0x03806e90                vtable for vex::inertial
+                0x03806ec0       0x68 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_imu.cpp.obj)
+                0x03806ec0                vtable for vex::inertial
  .rodata.CSWTCH.16
-                0x03806ef8        0xb c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_controller.cpp.obj)
+                0x03806f28        0xb c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_controller.cpp.obj)
  .rodata.CSWTCH.18
-                0x03806f03        0xb c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_controller.cpp.obj)
+                0x03806f33        0xb c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_controller.cpp.obj)
  .rodata.CSWTCH.24
-                0x03806f0e        0x3 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_controller.cpp.obj)
+                0x03806f3e        0x3 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_controller.cpp.obj)
  .rodata.str1.1
-                0x03806f11       0x14 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_task.cpp.obj)
+                0x03806f41       0x14 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_task.cpp.obj)
  .rodata.str1.1
-                0x03806f25       0x2d c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_brain.cpp.obj)
- *fill*         0x03806f52        0x6 
+                0x03806f55       0x2d c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_brain.cpp.obj)
+ *fill*         0x03806f82        0x6 
  .rodata._ZTVN3vex7triportE
-                0x03806f58       0x18 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_triport.cpp.obj)
-                0x03806f58                vtable for vex::triport
+                0x03806f88       0x18 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_triport.cpp.obj)
+                0x03806f88                vtable for vex::triport
  .rodata.CSWTCH.39
-                0x03806f70        0xe c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_triport.cpp.obj)
+                0x03806fa0        0xe c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_triport.cpp.obj)
  .rodata.CSWTCH.44
-                0x03806f7e       0x10 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_triport.cpp.obj)
- *fill*         0x03806f8e        0x2 
+                0x03806fae       0x10 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_triport.cpp.obj)
+ *fill*         0x03806fbe        0x2 
  .rodata._ZTVN3vex6deviceE
-                0x03806f90       0x18 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_device.cpp.obj)
-                0x03806f90                vtable for vex::device
+                0x03806fc0       0x18 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_device.cpp.obj)
+                0x03806fc0                vtable for vex::device
  .rodata.str1.4
-                0x03806fa8        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-impure.o)
+                0x03806fd8        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-impure.o)
                                   0x2 (size before relaxing)
  *(.gnu.linkonce.r.*)
-                0x03806fac                __rodata_end = .
+                0x03806fdc                __rodata_end = .
 
-.rodata1        0x03806fac        0x0
-                0x03806fac                __rodata1_start = .
+.rodata1        0x03806fdc        0x0
+                0x03806fdc                __rodata1_start = .
  *(.rodata1)
  *(.rodata1.*)
-                0x03806fac                __rodata1_end = .
+                0x03806fdc                __rodata1_end = .
 
-.sdata2         0x03806fac        0x0
-                0x03806fac                __sdata2_start = .
+.sdata2         0x03806fdc        0x0
+                0x03806fdc                __sdata2_start = .
  *(.sdata2)
  *(.sdata2.*)
  *(.gnu.linkonce.s2.*)
-                0x03806fac                __sdata2_end = .
+                0x03806fdc                __sdata2_end = .
 
-.sbss2          0x03806fac        0x0
-                0x03806fac                __sbss2_start = .
+.sbss2          0x03806fdc        0x0
+                0x03806fdc                __sbss2_start = .
  *(.sbss2)
  *(.sbss2.*)
  *(.gnu.linkonce.sb2.*)
-                0x03806fac                __sbss2_end = .
+                0x03806fdc                __sbss2_end = .
 
-.data           0x03806fb0      0x43c
-                0x03806fb0                __data_start = .
+.data           0x03806fe0      0x43c
+                0x03806fe0                __data_start = .
  *(.data)
  *(.data.*)
  .data.appRunning
-                0x03806fb0        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
-                0x03806fb0                appRunning
- .data.__yoff   0x03806fb4        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_apijump.c.obj)
+                0x03806fe0        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
+                0x03806fe0                appRunning
+ .data.__yoff   0x03806fe4        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_apijump.c.obj)
  .data._ZN3vex24__default_motor_velocityE
-                0x03806fb8        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_motor.cpp.obj)
-                0x03806fb8                vex::__default_motor_velocity
- *fill*         0x03806fbc        0x4 
+                0x03806fe8        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_motor.cpp.obj)
+                0x03806fe8                vex::__default_motor_velocity
+ *fill*         0x03806fec        0x4 
  .data.impure_data
-                0x03806fc0      0x428 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-impure.o)
+                0x03806ff0      0x428 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-impure.o)
  .data._impure_ptr
-                0x038073e8        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-impure.o)
-                0x038073e8                _impure_ptr
+                0x03807418        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-impure.o)
+                0x03807418                _impure_ptr
  *(.gnu.linkonce.d.*)
  *(.jcr)
  *(.got)
  *(.got.plt)
-                0x038073ec                __data_end = .
+                0x0380741c                __data_end = .
 
-.igot.plt       0x038073ec        0x0
+.igot.plt       0x0380741c        0x0
  .igot.plt      0x00000000        0x0 build/src/main.o
 
-.data1          0x038073ec        0x0
-                0x038073ec                __data1_start = .
+.data1          0x0380741c        0x0
+                0x0380741c                __data1_start = .
  *(.data1)
  *(.data1.*)
-                0x038073ec                __data1_end = .
+                0x0380741c                __data1_end = .
 
 .got
  *(.got)
 
-.ctors          0x038073ec        0x0
-                0x038073ec                __CTOR_LIST__ = .
-                0x038073ec                ___CTORS_LIST___ = .
+.ctors          0x0380741c        0x0
+                0x0380741c                __CTOR_LIST__ = .
+                0x0380741c                ___CTORS_LIST___ = .
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT(.ctors.*))
  *(.ctors)
-                0x038073ec                __CTOR_END__ = .
-                0x038073ec                ___CTORS_END___ = .
+                0x0380741c                __CTOR_END__ = .
+                0x0380741c                ___CTORS_END___ = .
 
-.dtors          0x038073ec        0x0
-                0x038073ec                __DTOR_LIST__ = .
-                0x038073ec                ___DTORS_LIST___ = .
+.dtors          0x0380741c        0x0
+                0x0380741c                __DTOR_LIST__ = .
+                0x0380741c                ___DTORS_LIST___ = .
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT(.dtors.*))
  *(.dtors)
-                0x038073ec                __DTOR_END__ = .
-                0x038073ec                ___DTORS_END___ = .
+                0x0380741c                __DTOR_END__ = .
+                0x0380741c                ___DTORS_END___ = .
 
-.fixup          0x038073ec        0x0
-                0x038073ec                __fixup_start = .
+.fixup          0x0380741c        0x0
+                0x0380741c                __fixup_start = .
  *(.fixup)
-                0x038073ec                __fixup_end = .
+                0x0380741c                __fixup_end = .
 
 .eh_frame
  *(.eh_frame)
 
-.eh_framehdr    0x038073ec        0x0
-                0x038073ec                __eh_framehdr_start = .
+.eh_framehdr    0x0380741c        0x0
+                0x0380741c                __eh_framehdr_start = .
  *(.eh_framehdr)
-                0x038073ec                __eh_framehdr_end = .
+                0x0380741c                __eh_framehdr_end = .
 
 .gcc_except_table
  *(.gcc_except_table)
@@ -3950,423 +3964,423 @@ Linker script and memory map
  *(.mmu_tbl)
                 0x03808000                __mmu_tbl_end = .
 
-.ARM.exidx      0x038073ec        0x8
-                0x038073ec                __exidx_start = .
+.ARM.exidx      0x0380741c        0x8
+                0x0380741c                __exidx_start = .
  *(.ARM.exidx*)
  .ARM.exidx.text._Z9pre_autonv
-                0x038073ec        0x8 build/src/main.o
+                0x0380741c        0x8 build/src/main.o
  .ARM.exidx.text._Z10autonomousv
-                0x038073f4        0x0 build/src/main.o
+                0x03807424        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z9DriveTaskv
-                0x038073f4        0x0 build/src/main.o
+                0x03807424        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z5ATaskv
-                0x038073f4        0x0 build/src/main.o
+                0x03807424        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z5PTaskv
-                0x038073f4        0x0 build/src/main.o
+                0x03807424        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z11usercontrolv
-                0x038073f4        0x0 build/src/main.o
+                0x03807424        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text.main
-                0x038073f4        0x0 build/src/main.o
+                0x03807424        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._GLOBAL__sub_I_main.cpp
-                0x038073f4        0x0 build/src/main.o
+                0x03807424        0x0 build/src/main.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z19DisplayAutoSelectorv
-                0x038073f4        0x0 build/src/screen_gui.o
+                0x03807424        0x0 build/src/screen_gui.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z12DisplayWordsv
-                0x038073f4        0x0 build/src/screen_gui.o
+                0x03807424        0x0 build/src/screen_gui.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z13UpdateDynamicv
-                0x038073f4        0x0 build/src/screen_gui.o
+                0x03807424        0x0 build/src/screen_gui.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z7Zeroingbb
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z13ChassisUpdatev
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z4Moveii
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z5BStopv
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z5CStopv
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z9RunRolleri
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z12RunTopRolleri
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z8RunIndexi
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z14MoveEncoderPID10PIDDataSetidddb
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z14TurnMaxTimePID10PIDDataSetddb
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z11MoveTimePID10PIDDataSetidddb
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._GLOBAL__sub_I_movement.cpp
-                0x038073f4        0x0 build/src/movement.o
+                0x03807424        0x0 build/src/movement.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z18get_dist_travelledd
-                0x038073f4        0x0 build/src/helper_functions.o
+                0x03807424        0x0 build/src/helper_functions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._GLOBAL__sub_I_helper_functions.cpp
-                0x038073f4        0x0 build/src/helper_functions.o
+                0x03807424        0x0 build/src/helper_functions.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z11vexcodeInitv
-                0x038073f4        0x0 build/src/robot-config.o
+                0x03807424        0x0 build/src/robot-config.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._GLOBAL__sub_I_robot_config.cpp
-                0x038073f4        0x0 build/src/robot-config.o
+                0x03807424        0x0 build/src/robot-config.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z9low_basicv
-                0x038073f4        0x0 build/src/routes/low_basic.o
+                0x03807424        0x0 build/src/routes/low_basic.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z9high_longv
-                0x038073f4        0x0 build/src/routes/high_long.o
+                0x03807424        0x0 build/src/routes/high_long.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z10high_basicv
-                0x038073f4        0x0 build/src/routes/high_basic.o
+                0x03807424        0x0 build/src/routes/high_basic.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z8low_longv
-                0x038073f4        0x0 build/src/routes/low_long.o
+                0x03807424        0x0 build/src/routes/low_long.o
                                   0x8 (size before relaxing)
  .ARM.exidx.text._Z8solo_awpv
-                0x038073f4        0x0 build/src/routes/solo_awp.o
+                0x03807424        0x0 build/src/routes/solo_awp.o
                                   0x8 (size before relaxing)
  *(.gnu.linkonce.armexidix.*.*)
-                0x038073f4                __exidx_end = .
+                0x03807424                __exidx_end = .
 
-.rel.dyn        0x038073f4        0x0
+.rel.dyn        0x03807424        0x0
  .rel.iplt      0x00000000        0x0 build/src/main.o
 
-.preinit_array  0x038073f4        0x0
-                0x038073f4                __preinit_array_start = .
+.preinit_array  0x03807424        0x0
+                0x03807424                __preinit_array_start = .
  *(SORT(.preinit_array.*))
  *(.preinit_array)
-                0x038073f4                __preinit_array_end = .
+                0x03807424                __preinit_array_end = .
 
-.init_array     0x038073f4       0x14
-                0x038073f4                __init_array_start = .
+.init_array     0x03807424       0x14
+                0x03807424                __init_array_start = .
  *(SORT(.init_array.*))
  *(.init_array)
- .init_array    0x038073f4        0x4 build/src/main.o
- .init_array    0x038073f8        0x4 build/src/movement.o
- .init_array    0x038073fc        0x4 build/src/helper_functions.o
- .init_array    0x03807400        0x4 build/src/robot-config.o
- .init_array    0x03807404        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807408                __init_array_end = .
+ .init_array    0x03807424        0x4 build/src/main.o
+ .init_array    0x03807428        0x4 build/src/movement.o
+ .init_array    0x0380742c        0x4 build/src/helper_functions.o
+ .init_array    0x03807430        0x4 build/src/robot-config.o
+ .init_array    0x03807434        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03807438                __init_array_end = .
 
-.fini_array     0x03807408        0x0
-                0x03807408                __fini_array_start = .
+.fini_array     0x03807438        0x0
+                0x03807438                __fini_array_start = .
  *(SORT(.fini_array.*))
  *(.fini_array)
-                0x03807408                __fini_array_end = .
+                0x03807438                __fini_array_end = .
 
 .ARM.attributes
-                0x03807408       0x3c
-                0x03807408                __ARM.attributes_start = .
+                0x03807438       0x3c
+                0x03807438                __ARM.attributes_start = .
  *(.ARM.attributes)
  .ARM.attributes
-                0x03807408       0x3a build/src/main.o
+                0x03807438       0x3a build/src/main.o
  .ARM.attributes
-                0x03807442       0x3a build/src/screen_gui.o
+                0x03807472       0x3a build/src/screen_gui.o
  .ARM.attributes
-                0x0380747c       0x3a build/src/movement.o
+                0x038074ac       0x3a build/src/movement.o
  .ARM.attributes
-                0x038074b6       0x3a build/src/helper_functions.o
+                0x038074e6       0x3a build/src/helper_functions.o
  .ARM.attributes
-                0x038074f0       0x3a build/src/robot-config.o
+                0x03807520       0x3a build/src/robot-config.o
  .ARM.attributes
-                0x0380752a       0x3a build/src/routes/low_basic.o
+                0x0380755a       0x3a build/src/routes/low_basic.o
  .ARM.attributes
-                0x03807564       0x3a build/src/routes/high_long.o
+                0x03807594       0x3a build/src/routes/high_long.o
  .ARM.attributes
-                0x0380759e       0x3a build/src/routes/high_basic.o
+                0x038075ce       0x3a build/src/routes/high_basic.o
  .ARM.attributes
-                0x038075d8       0x3a build/src/routes/low_long.o
+                0x03807608       0x3a build/src/routes/low_long.o
  .ARM.attributes
-                0x03807612       0x3a build/src/routes/solo_awp.o
+                0x03807642       0x3a build/src/routes/solo_awp.o
  .ARM.attributes
-                0x0380764c       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
+                0x0380767c       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
  .ARM.attributes
-                0x03807681       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_util.c.obj)
+                0x038076b1       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_util.c.obj)
  .ARM.attributes
-                0x038076b6       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_apijump.c.obj)
+                0x038076e6       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_apijump.c.obj)
  .ARM.attributes
-                0x038076eb       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_apiversions.c.obj)
+                0x0380771b       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_apiversions.c.obj)
  .ARM.attributes
-                0x03807720       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
+                0x03807750       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_global.cpp.obj)
  .ARM.attributes
-                0x03807755       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_motor.cpp.obj)
+                0x03807785       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_motor.cpp.obj)
  .ARM.attributes
-                0x0380778a       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_imu.cpp.obj)
+                0x038077ba       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_imu.cpp.obj)
  .ARM.attributes
-                0x038077bf       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_controller.cpp.obj)
+                0x038077ef       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_controller.cpp.obj)
  .ARM.attributes
-                0x038077f4       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_task.cpp.obj)
+                0x03807824       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_task.cpp.obj)
  .ARM.attributes
-                0x03807829       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_thread.cpp.obj)
+                0x03807859       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_thread.cpp.obj)
  .ARM.attributes
-                0x0380785e       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_event.cpp.obj)
+                0x0380788e       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_event.cpp.obj)
  .ARM.attributes
-                0x03807893       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_mevent.cpp.obj)
+                0x038078c3       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_mevent.cpp.obj)
  .ARM.attributes
-                0x038078c8       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_brain.cpp.obj)
+                0x038078f8       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_brain.cpp.obj)
  .ARM.attributes
-                0x038078fd       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
+                0x0380792d       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
  .ARM.attributes
-                0x03807932       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_triport.cpp.obj)
+                0x03807962       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_triport.cpp.obj)
  .ARM.attributes
-                0x03807967       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03807997       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
  .ARM.attributes
-                0x0380799c       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_timer.cpp.obj)
+                0x038079cc       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_timer.cpp.obj)
  .ARM.attributes
-                0x038079d1       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_apiuser.c.obj)
+                0x03807a01       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_apiuser.c.obj)
  .ARM.attributes
-                0x03807a06       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_device.cpp.obj)
+                0x03807a36       0x35 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_device.cpp.obj)
  .ARM.attributes
-                0x03807a3b       0x2b c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-fini.o)
+                0x03807a6b       0x2b c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-fini.o)
  .ARM.attributes
-                0x03807a66       0x2b c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-impure.o)
+                0x03807a96       0x2b c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-impure.o)
  .ARM.attributes
-                0x03807a91       0x2b c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-init.o)
-                0x03807abc                __ARM.attributes_end = .
+                0x03807ac1       0x2b c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/gcc/libs\libc.a(lib_a-init.o)
+                0x03807aec                __ARM.attributes_end = .
 
-.sdata          0x03807408        0x0
-                0x03807408                __sdata_start = .
+.sdata          0x03807438        0x0
+                0x03807438                __sdata_start = .
  *(.sdata)
  *(.sdata.*)
  *(.gnu.linkonce.s.*)
-                0x03807408                __sdata_end = .
+                0x03807438                __sdata_end = .
 
-.sbss           0x03807408        0x0
-                0x03807408                __sbss_start = .
+.sbss           0x03807438        0x0
+                0x03807438                __sbss_start = .
  *(.sbss)
  *(.sbss.*)
  *(.gnu.linkonce.sb.*)
-                0x03807408                __sbss_end = .
+                0x03807438                __sbss_end = .
 
-.tdata          0x03807408        0x0
-                0x03807408                __tdata_start = .
+.tdata          0x03807438        0x0
+                0x03807438                __tdata_start = .
  *(.tdata)
  *(.tdata.*)
  *(.gnu.linkonce.td.*)
-                0x03807408                __tdata_end = .
+                0x03807438                __tdata_end = .
 
-.tbss           0x03807408        0x0
-                0x03807408                __tbss_start = .
+.tbss           0x03807438        0x0
+                0x03807438                __tbss_start = .
  *(.tbss)
  *(.tbss.*)
  *(.gnu.linkonce.tb.*)
-                0x03807408                __tbss_end = .
+                0x03807438                __tbss_end = .
 
-.bss            0x03807408      0x6f0
-                0x03807408                __bss_start = .
+.bss            0x03807438      0x6f0
+                0x03807438                __bss_start = .
  *(.bss)
  *(.bss.*)
  .bss.Competition
-                0x03807408       0x28 build/src/main.o
-                0x03807408                Competition
- .bss.SP        0x03807430        0x1 build/src/main.o
-                0x03807430                SP
- .bss.EXIT      0x03807431        0x1 build/src/main.o
-                0x03807431                EXIT
- *fill*         0x03807432        0x2 
- .bss.RV        0x03807434        0x4 build/src/main.o
-                0x03807434                RV
- .bss.LV        0x03807438        0x4 build/src/main.o
-                0x03807438                LV
+                0x03807438       0x28 build/src/main.o
+                0x03807438                Competition
+ .bss.SP        0x03807460        0x1 build/src/main.o
+                0x03807460                SP
+ .bss.EXIT      0x03807461        0x1 build/src/main.o
+                0x03807461                EXIT
+ *fill*         0x03807462        0x2 
+ .bss.RV        0x03807464        0x4 build/src/main.o
+                0x03807464                RV
+ .bss.LV        0x03807468        0x4 build/src/main.o
+                0x03807468                LV
  .bss.ButtonPressingX
-                0x0380743c        0x4 build/src/main.o
-                0x0380743c                ButtonPressingX
+                0x0380746c        0x4 build/src/main.o
+                0x0380746c                ButtonPressingX
  .bss.XTaskActiv
-                0x03807440        0x4 build/src/main.o
-                0x03807440                XTaskActiv
+                0x03807470        0x4 build/src/main.o
+                0x03807470                XTaskActiv
  .bss.ButtonPressingA
-                0x03807444        0x4 build/src/main.o
-                0x03807444                ButtonPressingA
+                0x03807474        0x4 build/src/main.o
+                0x03807474                ButtonPressingA
  .bss.ATaskActiv
-                0x03807448        0x4 build/src/main.o
-                0x03807448                ATaskActiv
+                0x03807478        0x4 build/src/main.o
+                0x03807478                ATaskActiv
  .bss.ButtonPressingB
-                0x0380744c        0x4 build/src/main.o
-                0x0380744c                ButtonPressingB
+                0x0380747c        0x4 build/src/main.o
+                0x0380747c                ButtonPressingB
  .bss.BTaskActiv
-                0x03807450        0x4 build/src/main.o
-                0x03807450                BTaskActiv
+                0x03807480        0x4 build/src/main.o
+                0x03807480                BTaskActiv
  .bss.AutoSelectorVal
-                0x03807454        0x4 build/src/screen_gui.o
-                0x03807454                AutoSelectorVal
+                0x03807484        0x4 build/src/screen_gui.o
+                0x03807484                AutoSelectorVal
  .bss._ZStL8__ioinit
-                0x03807458        0x1 build/src/movement.o
- *fill*         0x03807459        0x3 
- .bss.PX        0x0380745c        0x4 build/src/movement.o
-                0x0380745c                PX
- .bss.JX        0x03807460        0x4 build/src/movement.o
-                0x03807460                JX
- .bss.PrevE     0x03807464        0x4 build/src/movement.o
-                0x03807464                PrevE
+                0x03807488        0x1 build/src/movement.o
+ *fill*         0x03807489        0x3 
+ .bss.PX        0x0380748c        0x4 build/src/movement.o
+                0x0380748c                PX
+ .bss.JX        0x03807490        0x4 build/src/movement.o
+                0x03807490                JX
+ .bss.PrevE     0x03807494        0x4 build/src/movement.o
+                0x03807494                PrevE
  .bss._ZStL8__ioinit
-                0x03807468        0x1 build/src/helper_functions.o
- *fill*         0x03807469        0x3 
- .bss.Brain     0x0380746c      0x2bc build/src/robot-config.o
-                0x0380746c                Brain
+                0x03807498        0x1 build/src/helper_functions.o
+ *fill*         0x03807499        0x3 
+ .bss.Brain     0x0380749c      0x2bc build/src/robot-config.o
+                0x0380749c                Brain
  .bss.Controller1
-                0x03807728      0x1ac build/src/robot-config.o
-                0x03807728                Controller1
- .bss.LF        0x038078d4       0x24 build/src/robot-config.o
-                0x038078d4                LF
- .bss.LM        0x038078f8       0x24 build/src/robot-config.o
-                0x038078f8                LM
- .bss.LB        0x0380791c       0x24 build/src/robot-config.o
-                0x0380791c                LB
- .bss.RF        0x03807940       0x24 build/src/robot-config.o
-                0x03807940                RF
- .bss.RM        0x03807964       0x24 build/src/robot-config.o
-                0x03807964                RM
- .bss.RB        0x03807988       0x24 build/src/robot-config.o
-                0x03807988                RB
+                0x03807758      0x1ac build/src/robot-config.o
+                0x03807758                Controller1
+ .bss.LF        0x03807904       0x24 build/src/robot-config.o
+                0x03807904                LF
+ .bss.LM        0x03807928       0x24 build/src/robot-config.o
+                0x03807928                LM
+ .bss.LB        0x0380794c       0x24 build/src/robot-config.o
+                0x0380794c                LB
+ .bss.RF        0x03807970       0x24 build/src/robot-config.o
+                0x03807970                RF
+ .bss.RM        0x03807994       0x24 build/src/robot-config.o
+                0x03807994                RM
+ .bss.RB        0x038079b8       0x24 build/src/robot-config.o
+                0x038079b8                RB
  .bss.FrontRoller
-                0x038079ac       0x24 build/src/robot-config.o
-                0x038079ac                FrontRoller
+                0x038079dc       0x24 build/src/robot-config.o
+                0x038079dc                FrontRoller
  .bss.BackRoller
-                0x038079d0       0x24 build/src/robot-config.o
-                0x038079d0                BackRoller
- .bss.Scrapper  0x038079f4       0x18 build/src/robot-config.o
-                0x038079f4                Scrapper
- .bss.Lift      0x03807a0c       0x18 build/src/robot-config.o
-                0x03807a0c                Lift
+                0x03807a00       0x24 build/src/robot-config.o
+                0x03807a00                BackRoller
+ .bss.Scrapper  0x03807a24       0x18 build/src/robot-config.o
+                0x03807a24                Scrapper
+ .bss.Lift      0x03807a3c       0x18 build/src/robot-config.o
+                0x03807a3c                Lift
  .bss.BackDescore
-                0x03807a24       0x18 build/src/robot-config.o
-                0x03807a24                BackDescore
- *fill*         0x03807a3c        0x4 
- .bss.Gyro      0x03807a40       0x38 build/src/robot-config.o
-                0x03807a40                Gyro
+                0x03807a54       0x18 build/src/robot-config.o
+                0x03807a54                BackDescore
+ *fill*         0x03807a6c        0x4 
+ .bss.Gyro      0x03807a70       0x38 build/src/robot-config.o
+                0x03807a70                Gyro
  .bss.__dso_handle
-                0x03807a78        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
-                0x03807a78                __dso_handle
+                0x03807aa8        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
+                0x03807aa8                __dso_handle
  .bss._ZN3vex4task8_labelIdE
-                0x03807a7c        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_task.cpp.obj)
-                0x03807a7c                vex::task::_labelId
+                0x03807aac        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_task.cpp.obj)
+                0x03807aac                vex::task::_labelId
  .bss._ZN3vex11competition22bStopTasksBetweenModesE
-                0x03807a80        0x1 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
-                0x03807a80                vex::competition::bStopTasksBetweenModes
+                0x03807ab0        0x1 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
+                0x03807ab0                vex::competition::bStopTasksBetweenModes
  .bss._ZN3vex11competition25bStopAllTasksBetweenModesE
-                0x03807a81        0x1 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
-                0x03807a81                vex::competition::bStopAllTasksBetweenModes
+                0x03807ab1        0x1 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
+                0x03807ab1                vex::competition::bStopAllTasksBetweenModes
  .bss._ZN3vex11competition14_auton_pendingE
-                0x03807a82        0x1 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
-                0x03807a82                vex::competition::_auton_pending
- *fill*         0x03807a83        0x1 
+                0x03807ab2        0x1 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
+                0x03807ab2                vex::competition::_auton_pending
+ *fill*         0x03807ab3        0x1 
  .bss._ZN3vex11competition20_autonomous_callbackE
-                0x03807a84        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
-                0x03807a84                vex::competition::_autonomous_callback
+                0x03807ab4        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
+                0x03807ab4                vex::competition::_autonomous_callback
  .bss._ZN3vex11competition23_drivercontrol_callbackE
-                0x03807a88        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
-                0x03807a88                vex::competition::_drivercontrol_callback
+                0x03807ab8        0x4 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
+                0x03807ab8                vex::competition::_drivercontrol_callback
  .bss._ZN3vex11competition15_driver_pendingE
-                0x03807a8c        0x1 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
-                0x03807a8c                vex::competition::_driver_pending
- *fill*         0x03807a8d        0x3 
+                0x03807abc        0x1 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_competition.cpp.obj)
+                0x03807abc                vex::competition::_driver_pending
+ *fill*         0x03807abd        0x3 
  .bss._ZN3vex5color6orangeE
-                0x03807a90        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807a90                vex::color::orange
- .bss._ZN3vex5color5blackE
-                0x03807a98        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807a98                vex::color::black
- .bss._ZN3vex5color6yellowE
-                0x03807aa0        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807aa0                vex::color::yellow
- .bss._ZN3vex5color5greenE
-                0x03807aa8        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807aa8                vex::color::green
- .bss._ZN3vex5color6purpleE
-                0x03807ab0        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807ab0                vex::color::purple
- .bss._ZN3vex5color4cyanE
-                0x03807ab8        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807ab8                vex::color::cyan
- .bss._ZN3vex5color4blueE
                 0x03807ac0        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807ac0                vex::color::blue
- .bss._ZN3vex5color3redE
+                0x03807ac0                vex::color::orange
+ .bss._ZN3vex5color5blackE
                 0x03807ac8        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807ac8                vex::color::red
- .bss._ZN3vex5color11transparentE
+                0x03807ac8                vex::color::black
+ .bss._ZN3vex5color6yellowE
                 0x03807ad0        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807ad0                vex::color::transparent
- .bss._ZN3vex5color5whiteE
+                0x03807ad0                vex::color::yellow
+ .bss._ZN3vex5color5greenE
                 0x03807ad8        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
-                0x03807ad8                vex::color::white
+                0x03807ad8                vex::color::green
+ .bss._ZN3vex5color6purpleE
+                0x03807ae0        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03807ae0                vex::color::purple
+ .bss._ZN3vex5color4cyanE
+                0x03807ae8        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03807ae8                vex::color::cyan
+ .bss._ZN3vex5color4blueE
+                0x03807af0        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03807af0                vex::color::blue
+ .bss._ZN3vex5color3redE
+                0x03807af8        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03807af8                vex::color::red
+ .bss._ZN3vex5color11transparentE
+                0x03807b00        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03807b00                vex::color::transparent
+ .bss._ZN3vex5color5whiteE
+                0x03807b08        0x8 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(vex_color.cpp.obj)
+                0x03807b08                vex::color::white
  *(.gnu.linkonce.b.*)
  *(COMMON)
- COMMON         0x03807ae0       0x18 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
-                0x03807ae4                __vex_critical_section
-                0x03807af8                __bss_end = .
-                0x03807408                _SDA_BASE_ = (__sdata_start + ((__sbss_end - __sdata_start) / 0x2))
-                0x03806fac                _SDA2_BASE_ = (__sdata2_start + ((__sbss2_end - __sdata2_start) / 0x2))
+ COMMON         0x03807b10       0x18 c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5\libv5rt.a(v5_startup.c.obj)
+                0x03807b14                __vex_critical_section
+                0x03807b28                __bss_end = .
+                0x03807438                _SDA_BASE_ = (__sdata_start + ((__sbss_end - __sdata_start) / 0x2))
+                0x03806fdc                _SDA2_BASE_ = (__sdata2_start + ((__sbss2_end - __sdata2_start) / 0x2))
 
-.heap           0x03807af8   0x100008
-                0x03807b00                . = ALIGN (0x10)
- *fill*         0x03807af8        0x8 
-                0x03807b00                _heap = .
-                0x03807b00                HeapBase = .
-                0x03807b00                _heap_start = .
-                0x03907b00                . = (. + _HEAP_SIZE)
- *fill*         0x03807b00   0x100000 
-                0x03907b00                _heap_end = .
-                0x03907b00                HeapLimit = .
+.heap           0x03807b28   0x100008
+                0x03807b30                . = ALIGN (0x10)
+ *fill*         0x03807b28        0x8 
+                0x03807b30                _heap = .
+                0x03807b30                HeapBase = .
+                0x03807b30                _heap_start = .
+                0x03907b30                . = (. + _HEAP_SIZE)
+ *fill*         0x03807b30   0x100000 
+                0x03907b30                _heap_end = .
+                0x03907b30                HeapLimit = .
 
-.stack          0x03907b00     0x3800
-                0x03907b00                . = ALIGN (0x10)
-                0x03907b00                _stack_end = .
-                0x03909b00                . = (. + _STACK_SIZE)
- *fill*         0x03907b00     0x2000 
-                0x03909b00                . = ALIGN (0x10)
-                0x03909b00                _stack = .
-                0x03909b00                __stack = _stack
-                0x03909b00                . = ALIGN (0x10)
-                0x03909b00                _irq_stack_end = .
-                0x03909f00                . = (. + _IRQ_STACK_SIZE)
- *fill*         0x03909b00      0x400 
-                0x03909f00                . = ALIGN (0x10)
-                0x03909f00                __irq_stack = .
-                0x03909f00                _supervisor_stack_end = .
-                0x0390a700                . = (. + _SUPERVISOR_STACK_SIZE)
- *fill*         0x03909f00      0x800 
-                0x0390a700                . = ALIGN (0x10)
-                0x0390a700                __supervisor_stack = .
-                0x0390a700                _abort_stack_end = .
-                0x0390ab00                . = (. + _ABORT_STACK_SIZE)
- *fill*         0x0390a700      0x400 
-                0x0390ab00                . = ALIGN (0x10)
-                0x0390ab00                __abort_stack = .
-                0x0390ab00                _fiq_stack_end = .
-                0x0390af00                . = (. + _FIQ_STACK_SIZE)
- *fill*         0x0390ab00      0x400 
-                0x0390af00                . = ALIGN (0x10)
-                0x0390af00                __fiq_stack = .
-                0x0390af00                _undef_stack_end = .
-                0x0390b300                . = (. + _UNDEF_STACK_SIZE)
- *fill*         0x0390af00      0x400 
-                0x0390b300                . = ALIGN (0x10)
-                0x0390b300                __undef_stack = .
-                0x0390b300                _end = .
+.stack          0x03907b30     0x3800
+                0x03907b30                . = ALIGN (0x10)
+                0x03907b30                _stack_end = .
+                0x03909b30                . = (. + _STACK_SIZE)
+ *fill*         0x03907b30     0x2000 
+                0x03909b30                . = ALIGN (0x10)
+                0x03909b30                _stack = .
+                0x03909b30                __stack = _stack
+                0x03909b30                . = ALIGN (0x10)
+                0x03909b30                _irq_stack_end = .
+                0x03909f30                . = (. + _IRQ_STACK_SIZE)
+ *fill*         0x03909b30      0x400 
+                0x03909f30                . = ALIGN (0x10)
+                0x03909f30                __irq_stack = .
+                0x03909f30                _supervisor_stack_end = .
+                0x0390a730                . = (. + _SUPERVISOR_STACK_SIZE)
+ *fill*         0x03909f30      0x800 
+                0x0390a730                . = ALIGN (0x10)
+                0x0390a730                __supervisor_stack = .
+                0x0390a730                _abort_stack_end = .
+                0x0390ab30                . = (. + _ABORT_STACK_SIZE)
+ *fill*         0x0390a730      0x400 
+                0x0390ab30                . = ALIGN (0x10)
+                0x0390ab30                __abort_stack = .
+                0x0390ab30                _fiq_stack_end = .
+                0x0390af30                . = (. + _FIQ_STACK_SIZE)
+ *fill*         0x0390ab30      0x400 
+                0x0390af30                . = ALIGN (0x10)
+                0x0390af30                __fiq_stack = .
+                0x0390af30                _undef_stack_end = .
+                0x0390b330                . = (. + _UNDEF_STACK_SIZE)
+ *fill*         0x0390af30      0x400 
+                0x0390b330                . = ALIGN (0x10)
+                0x0390b330                __undef_stack = .
+                0x0390b330                _end = .
 LOAD c:\Users\alfre\AppData\Roaming\Code\User\globalStorage\vexrobotics.vexcode\sdk\cpp\V5\V5_20240802_15_00_00/vexv5/stdlib_0.lib
 LOAD build/src/main.o
 LOAD build/src/screen_gui.o

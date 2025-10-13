@@ -60,7 +60,7 @@ Brain.Screen.drawRectangle(0,0,500,500);
 Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
 Brain.Screen.setCursor(2,10);
-Brain.Screen.print("FLIR TIMEOUT");
+Brain.Screen.print("DO NOT MOVE ROBOT");
 
 
 waitUntil(!Gyro.isCalibrating());
@@ -101,41 +101,38 @@ SP=Brain.Screen.pressing();
 Brain.Screen.clearScreen();
 if(AutoSelectorVal==1){
   Brain.Screen.setFillColor(black);
-Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(3,10);
-Brain.Screen.print("HIGH SIDE");
-Brain.Screen.setCursor(4,10);
-Brain.Screen.print("HIGH LONG");
-Brain.Screen.setFont(monoM);
+  Brain.Screen.setFont(monoXL);
+  Brain.Screen.setPenColor("#39FF14");
+  Brain.Screen.setCursor(3,10);
+  Brain.Screen.print("HIGH SIDE");
+  Brain.Screen.setCursor(4,10);
+  Brain.Screen.print("HIGH LONG");
+  Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 
 }
 
 if(AutoSelectorVal==2){
-Brain.Screen.setFillColor(black);
-
+  Brain.Screen.setFillColor(black);
   Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(3,10);
-Brain.Screen.print("HIGH SIDE");
-Brain.Screen.setCursor(4,10);
-Brain.Screen.print("High Basic");
-Brain.Screen.setFont(monoM);
+  Brain.Screen.setPenColor("#39FF14");
+  Brain.Screen.setCursor(3,10);
+  Brain.Screen.print("HIGH SIDE");
+  Brain.Screen.setCursor(4,10);
+  Brain.Screen.print("High Basic");
+  Brain.Screen.setFont(monoM);
   Brain.Screen.setFillColor("#39FF14");
 }
 
 if(AutoSelectorVal==3){
-
-Brain.Screen.setFillColor(black);
-
-    Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(3,10);
-Brain.Screen.print("LOW SIDE");
-Brain.Screen.setCursor(4,10);
-Brain.Screen.print("LOW BASIC");
-Brain.Screen.setFont(monoM);  
+  Brain.Screen.setFillColor(black);
+  Brain.Screen.setFont(monoXL);
+  Brain.Screen.setPenColor("#39FF14");
+  Brain.Screen.setCursor(3,10);
+  Brain.Screen.print("LOW SIDE");
+  Brain.Screen.setCursor(4,10);
+  Brain.Screen.print("LOW BASIC");
+  Brain.Screen.setFont(monoM);  
   Brain.Screen.setFillColor("#39FF14");
 }
 
@@ -406,6 +403,21 @@ int PTask(void)
   }
   return 0;
 }
+
+double screenheading;
+int STask(void)
+{
+  screenheading = Gyro.heading(degrees);
+  Brain.Screen.clearScreen();
+  Brain.Screen.setFont(monoM);
+  Brain.Screen.setPenColor("#808080");
+  Brain.Screen.setCursor(3,10);
+  Brain.Screen.print("HEADING:");
+  Brain.Screen.setCursor(4,10);
+  Brain.Screen.print(screenheading);
+
+  return 0;
+}
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
 /*                              User Control Task                            */
@@ -420,28 +432,19 @@ void usercontrol(void) {
   EXIT=true;//Force Exit Autosel once drivercontrol began.
   // User control code here, inside the loop
   while (1) {
-    // This is the main execution loop for the user control program.
-    // Each time through the loop your program should update motor + servo
-    // values based on feedback from the joysticks.
-    
-     
     
     task Dtask=task(DriveTask);
     task Atask=task(ATask);
     task Ptask=task(PTask);
-    // ........................................................................
-    // Insert user code here. This is where you use the joystick values to
-    // update your motors, etc.
-    // ........................................................................
+    // task Stask=task(STask);
+
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }
 }
 
-//
 // Main will set up the competition functions and callbacks.
-//
 
 
 int main() {

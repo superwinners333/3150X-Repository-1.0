@@ -1,6 +1,9 @@
 #include "screen_gui.hpp"
 #include "vex.h"
 
+void drawCurvedRectangle(int xPos, int yPos, int length, int height, int radius);
+void drawField(void);
+
 void DisplayAutoSelector(void)
 {
 
@@ -200,4 +203,33 @@ Brain.Screen.setFont(monoM);
 
 }
 
+}
+
+void drawCurvedRectangle(int xPos, int yPos, int length, int height, int radius) {
+  Brain.Screen.drawRectangle(xPos + radius, yPos, length - 2 * radius, height); // center horizontal
+  Brain.Screen.drawRectangle(xPos, yPos + radius, length, height - 2 * radius); // center vertical
+
+  Brain.Screen.drawCircle(xPos + radius, yPos + radius, radius); // top-left
+  Brain.Screen.drawCircle(xPos + length - radius, yPos + radius, radius); // top-right
+  Brain.Screen.drawCircle(xPos + radius, yPos + height - radius, radius); // bottom-left
+  Brain.Screen.drawCircle(xPos + length - radius, yPos + height - radius, radius); // bottom-right
+}
+
+void drawField(void)
+{
+  Brain.Screen.setPenColor("#000000ff");
+  Brain.Screen.setFillColor("#808080");
+  Brain.Screen.drawRectangle(26,0,107,107); // draws field background
+
+  Brain.Screen.setPenColor("#ff9500ff");
+  Brain.Screen.setFillColor("#ff9500ff");
+  Brain.Screen.drawRectangle(62,16,36,4); // draws the top long goal
+  Brain.Screen.drawRectangle(62,88,36,4); // draws the bottom long goal
+
+  Brain.Screen.drawRectangle(27,17,1,1); // draws top left match load
+  Brain.Screen.drawRectangle(27,89,1,1); // draws bottom left match load
+  Brain.Screen.drawRectangle(133,17,1,1); // draws top right match load
+  Brain.Screen.drawRectangle(133,89,1,1); // draws bottom right match load
+
+  // bottom right is at (159,107);
 }
