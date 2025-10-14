@@ -45,7 +45,7 @@ void pre_auton(void) {
   SP=false;
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-Gyro.calibrate();
+  Gyro.calibrate();
 
 //Ensure Robot Launch Position is set before auto proceeds, once plugged into field control,
 //start program and do not temper bot under all circumstances
@@ -56,149 +56,175 @@ Gyro.calibrate();
 
 //Print precautionary message
 Brain.Screen.drawRectangle(0,0,500,500);
-
 Brain.Screen.setFont(monoXL);
 Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(2,10);
+Brain.Screen.setCursor(2,5);
 Brain.Screen.print("DO NOT MOVE ROBOT");
 
+Brain.Screen.setPenWidth(3); // important
 
 waitUntil(!Gyro.isCalibrating());
 
 
 Zeroing(true,true);
-DisplayAutoSelector();
-DisplayWords();
+
+
+
+// DisplayAutoSelector();
+// DisplayWords();
 
 //task AutoSelTask=task(ScreenSelMain);
-  while(!EXIT)
-{
-if(Brain.Screen.xPosition()<100)
-{
-if(Brain.Screen.yPosition()<75&&Brain.Screen.yPosition()>25)AutoSelectorVal=1;
-else if(Brain.Screen.yPosition()<150&&Brain.Screen.yPosition()>100)AutoSelectorVal=3;
-else if(Brain.Screen.yPosition()<225&&Brain.Screen.yPosition()>175)AutoSelectorVal=5;
-}
-else if(Brain.Screen.xPosition()>375)
-{
-if(Brain.Screen.yPosition()<75&&Brain.Screen.yPosition()>25)AutoSelectorVal=2;
-else if(Brain.Screen.yPosition()<150&&Brain.Screen.yPosition()>100)AutoSelectorVal=4;
-else if(Brain.Screen.yPosition()<225&&Brain.Screen.yPosition()>175)AutoSelectorVal=6;
-}
 
-if(Brain.Screen.xPosition()>187&&Brain.Screen.xPosition()<287)
-{
-if(Brain.Screen.yPosition()<55&&Brain.Screen.yPosition()>5) EXIT=true;
-else if(Brain.Screen.yPosition()>125&&Brain.Screen.yPosition()<225)AutoSelectorVal=7;
-}
 
-if(Brain.Screen.pressing()&&!SP) UpdateDynamic();
+//   while(!EXIT)
+// {
+// if(Brain.Screen.xPosition()<100)
+// {
+// if(Brain.Screen.yPosition()<75&&Brain.Screen.yPosition()>25)AutoSelectorVal=1;
+// else if(Brain.Screen.yPosition()<150&&Brain.Screen.yPosition()>100)AutoSelectorVal=3;
+// else if(Brain.Screen.yPosition()<225&&Brain.Screen.yPosition()>175)AutoSelectorVal=5;
+// }
+// else if(Brain.Screen.xPosition()>375)
+// {
+// if(Brain.Screen.yPosition()<75&&Brain.Screen.yPosition()>25)AutoSelectorVal=2;
+// else if(Brain.Screen.yPosition()<150&&Brain.Screen.yPosition()>100)AutoSelectorVal=4;
+// else if(Brain.Screen.yPosition()<225&&Brain.Screen.yPosition()>175)AutoSelectorVal=6;
+// }
 
-SP=Brain.Screen.pressing();
+// if(Brain.Screen.xPosition()>187&&Brain.Screen.xPosition()<287)
+// {
+// if(Brain.Screen.yPosition()<75&&Brain.Screen.yPosition()>25) EXIT=true; // here
+// else if(Brain.Screen.yPosition()>125&&Brain.Screen.yPosition()<225)AutoSelectorVal=7;
+// }
 
-}
+// if(Brain.Screen.pressing()&&!SP) UpdateDynamic();
+
+// SP=Brain.Screen.pressing();
+
+// }
+
+// Brain.Screen.clearScreen();
+// if(AutoSelectorVal==1){
+//   Brain.Screen.setFillColor(black);
+//   Brain.Screen.setFont(monoXL);
+//   Brain.Screen.setPenColor("#39FF14");
+//   Brain.Screen.setCursor(3,10);
+//   Brain.Screen.print("HIGH SIDE");
+//   Brain.Screen.setCursor(4,10);
+//   Brain.Screen.print("HIGH LONG");
+//   Brain.Screen.setFont(monoM);
+//   Brain.Screen.setFillColor("#39FF14");
+
+// }
+
+// if(AutoSelectorVal==2){
+//   Brain.Screen.setFillColor(black);
+//   Brain.Screen.setFont(monoXL);
+//   Brain.Screen.setPenColor("#39FF14");
+//   Brain.Screen.setCursor(3,10);
+//   Brain.Screen.print("HIGH SIDE");
+//   Brain.Screen.setCursor(4,10);
+//   Brain.Screen.print("High Basic");
+//   Brain.Screen.setFont(monoM);
+//   Brain.Screen.setFillColor("#39FF14");
+// }
+
+// if(AutoSelectorVal==3){
+//   Brain.Screen.setFillColor(black);
+//   Brain.Screen.setFont(monoXL);
+//   Brain.Screen.setPenColor("#39FF14");
+//   Brain.Screen.setCursor(3,10);
+//   Brain.Screen.print("LOW SIDE");
+//   Brain.Screen.setCursor(4,10);
+//   Brain.Screen.print("LOW BASIC");
+//   Brain.Screen.setFont(monoM);  
+//   Brain.Screen.setFillColor("#39FF14");
+// }
+
+// if(AutoSelectorVal==4){
+
+// Brain.Screen.setFillColor(black);
+
+//   Brain.Screen.setFont(monoXL);
+// Brain.Screen.setPenColor("#39FF14");
+// Brain.Screen.setCursor(3,10);
+// Brain.Screen.print("LOW SIDE");
+// Brain.Screen.setCursor(4,10);
+// Brain.Screen.print("Low Long");
+// Brain.Screen.setFont(monoM); 
+//   Brain.Screen.setFillColor("#39FF14");
+
+// }
+
+// if(AutoSelectorVal==5){
+
+// Brain.Screen.setFillColor(black);
+//     Brain.Screen.setFont(monoXL);
+// Brain.Screen.setPenColor("#39FF14");
+// Brain.Screen.setCursor(3,10);
+// Brain.Screen.print("GOAL SIDE");
+// Brain.Screen.setCursor(4,10);
+// Brain.Screen.print("GS-AWP");
+// Brain.Screen.setFont(monoM); 
+//   Brain.Screen.setFillColor("#39FF14");
+
+// }
+
+// if(AutoSelectorVal==6){
+  
+//   Brain.Screen.setFillColor(black);
+//     Brain.Screen.setFont(monoXL);
+// Brain.Screen.setPenColor("#39FF14");
+// Brain.Screen.setCursor(3,10);
+// Brain.Screen.print("AWP SIDE");
+// Brain.Screen.setCursor(4,10);
+// Brain.Screen.print("SOLO AWP");
+// Brain.Screen.setFont(monoM); 
+//   Brain.Screen.setFillColor("#39FF14");
+
+//   }
+
+// if(AutoSelectorVal==7){
+
+// Brain.Screen.setFillColor(black);
+// Brain.Screen.setFont(monoXL);
+// Brain.Screen.setPenColor("#39FF14");
+// Brain.Screen.setCursor(3,10);
+// Brain.Screen.print("SKILLS");
+// Brain.Screen.setCursor(4,10);
+// Brain.Screen.print("SKILLS");
+// Brain.Screen.setFont(monoM); 
+// Brain.Screen.setFillColor("#39FF14");
+
+// }
+
+
+
+wait(100,msec); // remove this later
 
 Brain.Screen.clearScreen();
-if(AutoSelectorVal==1){
-  Brain.Screen.setFillColor(black);
-  Brain.Screen.setFont(monoXL);
-  Brain.Screen.setPenColor("#39FF14");
-  Brain.Screen.setCursor(3,10);
-  Brain.Screen.print("HIGH SIDE");
-  Brain.Screen.setCursor(4,10);
-  Brain.Screen.print("HIGH LONG");
-  Brain.Screen.setFont(monoM);
-  Brain.Screen.setFillColor("#39FF14");
+drawField(); // draws field
 
+while(!confirmed) // waits for field corner selection
+{ 
+confirmCorner();
+wait(20,msec);
+}
+Brain.Screen.clearScreen();
+while(!confirmed2) // waits for auto selection
+{ 
+  AutoSelection();
+  wait(20,msec);
 }
 
-if(AutoSelectorVal==2){
-  Brain.Screen.setFillColor(black);
-  Brain.Screen.setFont(monoXL);
-  Brain.Screen.setPenColor("#39FF14");
-  Brain.Screen.setCursor(3,10);
-  Brain.Screen.print("HIGH SIDE");
-  Brain.Screen.setCursor(4,10);
-  Brain.Screen.print("High Basic");
-  Brain.Screen.setFont(monoM);
-  Brain.Screen.setFillColor("#39FF14");
-}
+// Brain.Screen.clearScreen();
+// Brain.Screen.setFillColor(black);
+// Brain.Screen.setFont(monoXL);
+// Brain.Screen.setPenColor("#39FF14");
+// Brain.Screen.setCursor(5,10);
+// Brain.Screen.print("AUTO CONFIRMED");
 
-if(AutoSelectorVal==3){
-  Brain.Screen.setFillColor(black);
-  Brain.Screen.setFont(monoXL);
-  Brain.Screen.setPenColor("#39FF14");
-  Brain.Screen.setCursor(3,10);
-  Brain.Screen.print("LOW SIDE");
-  Brain.Screen.setCursor(4,10);
-  Brain.Screen.print("LOW BASIC");
-  Brain.Screen.setFont(monoM);  
-  Brain.Screen.setFillColor("#39FF14");
-}
-
-if(AutoSelectorVal==4){
-
-Brain.Screen.setFillColor(black);
-
-  Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(3,10);
-Brain.Screen.print("LOW SIDE");
-Brain.Screen.setCursor(4,10);
-Brain.Screen.print("Low Long");
-Brain.Screen.setFont(monoM); 
-  Brain.Screen.setFillColor("#39FF14");
-
-}
-
-if(AutoSelectorVal==5){
-
-Brain.Screen.setFillColor(black);
-    Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(3,10);
-Brain.Screen.print("GOAL SIDE");
-Brain.Screen.setCursor(4,10);
-Brain.Screen.print("GS-AWP");
-Brain.Screen.setFont(monoM); 
-  Brain.Screen.setFillColor("#39FF14");
-
-}
-
-if(AutoSelectorVal==6){
-  
-  Brain.Screen.setFillColor(black);
-    Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(3,10);
-Brain.Screen.print("AWP SIDE");
-Brain.Screen.setCursor(4,10);
-Brain.Screen.print("SOLO AWP");
-Brain.Screen.setFont(monoM); 
-  Brain.Screen.setFillColor("#39FF14");
-
-  }
-
-if(AutoSelectorVal==7){
-
-Brain.Screen.setFillColor(black);
-Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(3,10);
-Brain.Screen.print("SKILLS");
-Brain.Screen.setCursor(4,10);
-Brain.Screen.print("SKILLS");
-Brain.Screen.setFont(monoM); 
-Brain.Screen.setFillColor("#39FF14");
-
-}
-
-Brain.Screen.setFillColor(black);
-Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(5,10);
-Brain.Screen.print("AUTO CONFIRMED");
-
+AutonLogic();
 
 
   // All activities that occur before the competition starts
@@ -216,64 +242,60 @@ Brain.Screen.print("AUTO CONFIRMED");
 /*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
+
+  //Do not change the below
+  PIDDataSet TestPara={4,0.1,0.2};
+  Zeroing(true,true);
+
+  //Put Auto route function into if statements to use autoselector
+  if(AutoSelectorVal==1)// high 9
+  {
+    high_long();
+  }
+
+  if(AutoSelectorVal==2)// high 3+4
+  {
+    high_basic();
+  }
+
+  if(AutoSelectorVal==3)// low 3+4
+  {
+    low_basic();
+  } 
+
+  if(AutoSelectorVal==4)// low 9
+  {
+    low_long();
+  }
+
+  if(AutoSelectorVal==5)// empty
+  {
+    //test();
+  }
+
+  if(AutoSelectorVal==6) // solo awp
+  {
+    solo_awp();
+  }
+
+  if(AutoSelectorVal==7)
+  { 
   
-//PID Straight and turn arguments:
-// MoveEncoderPID(TestPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
-// TurnMaxTimePID(TestPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
-// MoveTimePID(TestPara, motor speed, time traveled (sec), time to full speed, heading, false);
+  }
 
-//Do not change the below
-PIDDataSet TestPara={4,0.1,0.2};
-Zeroing(true,true);
+  if(AutoSelectorVal==8)
+  { 
+  
+  }
 
-//can start editing if nessary
-//Put Auto route function into if statements to use autoselector
-if(AutoSelectorVal==1)// High Goal 
-{
-  high_long();
+  if(AutoSelectorVal==9) // PROGRAMMING SKILLS GO HERE
+  { 
+  
+  }
+
+  CStop();
 }
 
-if(AutoSelectorVal==2)// awp mid steal
-{
-  high_basic();
-
-}
-
-if(AutoSelectorVal==3)// 5 Ball rush
-{
-  low_basic();
-} 
-
-if(AutoSelectorVal==4)// Elim-Steal
-{
-  low_long();
-}
-
-if(AutoSelectorVal==5)// empty
-{
-   //test();
-}
-
-
-if(AutoSelectorVal==6)//AWP only
-{
-  solo_awp();
-}
-
-
-if(AutoSelectorVal==7)//temporary prog skills
-{ 
- 
-
-}
-//MoveTimePID(TestPara, -100, 0.5,0.1,-40,true);//score 2nd triball
-//(PID Parameters, motor speed -100 - 100, time for travel 0 - inf, time to accelerate to full speed, Absolute Heading, Braking?)
-
-    // ..........................................................................
-  // Insert autonomous user code here.
-  // ..........................................................................
-CStop();
-}
 int RV;
 int LV;
 int DriveTask(void){
@@ -438,7 +460,7 @@ void usercontrol(void) {
     task Ptask=task(PTask);
     // task Stask=task(STask);
 
-
+    drawField();
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }

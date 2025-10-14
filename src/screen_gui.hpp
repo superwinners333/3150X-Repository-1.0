@@ -2,10 +2,16 @@
 #define SCREEN_GUI_H
 
 extern int AutoSelectorVal;
+extern bool confirmed;
+extern bool confirmed2;
 
 extern void DisplayAutoSelector();
 extern void DisplayWords();
 extern void UpdateDynamic();
 extern void drawCurvedRectangle();
+extern void drawCurvedBorder();
 extern void drawField();
+extern void confirmCorner();
+extern void AutoSelection();
+extern void AutonLogic();
 #endif
