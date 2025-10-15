@@ -10,13 +10,17 @@ void drawCurvedBorder(int x, int y, int l, int h, int r, int t, char* col1, char
 void drawSkillsCorner(bool SkillsCorner);
 void AutonLogic(void);
 
+// NAMES OF AUTONS GO INSIDE OF HERE
+
 const char* leftAutos[] = {"3+4","9 Block","",""}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
 // autoselector values 1,2,3,4
+// high side
 
 const char* rightAutos[] = {"3+4","9 Block","Solo-AWP",""}; // SAME FOR THIS ONE
-// autoselector values 5,6,7,8
+// autoselector values 5,6,7,8 
+// low side
 
-// skills is autoselector value 9
+// skills is autoselector value 9 btw
 
 
 void DisplayAutoSelector(void)
@@ -518,11 +522,32 @@ void AutonLogic(void)
   Brain.Screen.setPenColor("#39FF14");
   Brain.Screen.setCursor(5,10);
   Brain.Screen.print("AUTO CONFIRMED");
+  Brain.Screen.setCursor(4,10);
 
-  if (corner == 5)
+  if (corner == 5) // skills is corner 5
   {
-    Brain.Screen.setCursor(4,10);
+    // Brain.Screen.setCursor(4,10);
     Brain.Screen.print("SKILLS");
     AutoSelectorVal = 9;
+  }
+  else if (option == 1 && buttonPressed > 0) // left side autos
+  {
+    switch (buttonPressed) // may want to switch buttonPressed-1 with actual values
+    {
+      case 1: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 1; break;
+      case 2: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 2; break;
+      case 3: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 3; break;
+      case 4: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 4; break;
+    }
+  }
+  else if (option == 2 && buttonPressed > 0) // left side autos
+  {
+    switch (buttonPressed) // may want to switch buttonPressed-1 with actual values
+    {
+      case 1: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 5; break;
+      case 2: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 6; break;
+      case 3: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 7; break;
+      case 4: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 8; break;
+    }
   }
 }

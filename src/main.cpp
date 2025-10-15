@@ -248,42 +248,42 @@ void autonomous(void) {
   Zeroing(true,true);
 
   //Put Auto route function into if statements to use autoselector
-  if(AutoSelectorVal==1)// high 9
-  {
-    high_long();
-  }
-
-  if(AutoSelectorVal==2)// high 3+4
+  if(AutoSelectorVal==1)// left 1
   {
     high_basic();
   }
 
-  if(AutoSelectorVal==3)// low 3+4
+  if(AutoSelectorVal==2)// left 2
   {
-    low_basic();
+    high_long();
+  }
+
+  if(AutoSelectorVal==3)// left 3
+  {
+    
   } 
 
-  if(AutoSelectorVal==4)// low 9
+  if(AutoSelectorVal==4)// left 4
+  {
+    
+  }
+
+  if(AutoSelectorVal==5)// right 1
+  {
+    low_basic();
+  }
+
+  if(AutoSelectorVal==6) // right 2
   {
     low_long();
   }
 
-  if(AutoSelectorVal==5)// empty
-  {
-    //test();
-  }
-
-  if(AutoSelectorVal==6) // solo awp
-  {
+  if(AutoSelectorVal==7) // right 3
+  { 
     solo_awp();
   }
 
-  if(AutoSelectorVal==7)
-  { 
-  
-  }
-
-  if(AutoSelectorVal==8)
+  if(AutoSelectorVal==8) // right 4
   { 
   
   }
