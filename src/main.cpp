@@ -293,7 +293,7 @@ void autonomous(void) {
   
   }
 
-  CStop();
+  CStop(); 
 }
 
 int RV;
