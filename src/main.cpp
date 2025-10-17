@@ -68,178 +68,38 @@ waitUntil(!Gyro.isCalibrating());
 
 Zeroing(true,true);
 
-
-
-// DisplayAutoSelector();
-// DisplayWords();
-
-//task AutoSelTask=task(ScreenSelMain);
-
-
-//   while(!EXIT)
-// {
-// if(Brain.Screen.xPosition()<100)
-// {
-// if(Brain.Screen.yPosition()<75&&Brain.Screen.yPosition()>25)AutoSelectorVal=1;
-// else if(Brain.Screen.yPosition()<150&&Brain.Screen.yPosition()>100)AutoSelectorVal=3;
-// else if(Brain.Screen.yPosition()<225&&Brain.Screen.yPosition()>175)AutoSelectorVal=5;
-// }
-// else if(Brain.Screen.xPosition()>375)
-// {
-// if(Brain.Screen.yPosition()<75&&Brain.Screen.yPosition()>25)AutoSelectorVal=2;
-// else if(Brain.Screen.yPosition()<150&&Brain.Screen.yPosition()>100)AutoSelectorVal=4;
-// else if(Brain.Screen.yPosition()<225&&Brain.Screen.yPosition()>175)AutoSelectorVal=6;
-// }
-
-// if(Brain.Screen.xPosition()>187&&Brain.Screen.xPosition()<287)
-// {
-// if(Brain.Screen.yPosition()<75&&Brain.Screen.yPosition()>25) EXIT=true; // here
-// else if(Brain.Screen.yPosition()>125&&Brain.Screen.yPosition()<225)AutoSelectorVal=7;
-// }
-
-// if(Brain.Screen.pressing()&&!SP) UpdateDynamic();
-
-// SP=Brain.Screen.pressing();
-
-// }
-
-// Brain.Screen.clearScreen();
-// if(AutoSelectorVal==1){
-//   Brain.Screen.setFillColor(black);
-//   Brain.Screen.setFont(monoXL);
-//   Brain.Screen.setPenColor("#39FF14");
-//   Brain.Screen.setCursor(3,10);
-//   Brain.Screen.print("HIGH SIDE");
-//   Brain.Screen.setCursor(4,10);
-//   Brain.Screen.print("HIGH LONG");
-//   Brain.Screen.setFont(monoM);
-//   Brain.Screen.setFillColor("#39FF14");
-
-// }
-
-// if(AutoSelectorVal==2){
-//   Brain.Screen.setFillColor(black);
-//   Brain.Screen.setFont(monoXL);
-//   Brain.Screen.setPenColor("#39FF14");
-//   Brain.Screen.setCursor(3,10);
-//   Brain.Screen.print("HIGH SIDE");
-//   Brain.Screen.setCursor(4,10);
-//   Brain.Screen.print("High Basic");
-//   Brain.Screen.setFont(monoM);
-//   Brain.Screen.setFillColor("#39FF14");
-// }
-
-// if(AutoSelectorVal==3){
-//   Brain.Screen.setFillColor(black);
-//   Brain.Screen.setFont(monoXL);
-//   Brain.Screen.setPenColor("#39FF14");
-//   Brain.Screen.setCursor(3,10);
-//   Brain.Screen.print("LOW SIDE");
-//   Brain.Screen.setCursor(4,10);
-//   Brain.Screen.print("LOW BASIC");
-//   Brain.Screen.setFont(monoM);  
-//   Brain.Screen.setFillColor("#39FF14");
-// }
-
-// if(AutoSelectorVal==4){
-
-// Brain.Screen.setFillColor(black);
-
-//   Brain.Screen.setFont(monoXL);
-// Brain.Screen.setPenColor("#39FF14");
-// Brain.Screen.setCursor(3,10);
-// Brain.Screen.print("LOW SIDE");
-// Brain.Screen.setCursor(4,10);
-// Brain.Screen.print("Low Long");
-// Brain.Screen.setFont(monoM); 
-//   Brain.Screen.setFillColor("#39FF14");
-
-// }
-
-// if(AutoSelectorVal==5){
-
-// Brain.Screen.setFillColor(black);
-//     Brain.Screen.setFont(monoXL);
-// Brain.Screen.setPenColor("#39FF14");
-// Brain.Screen.setCursor(3,10);
-// Brain.Screen.print("GOAL SIDE");
-// Brain.Screen.setCursor(4,10);
-// Brain.Screen.print("GS-AWP");
-// Brain.Screen.setFont(monoM); 
-//   Brain.Screen.setFillColor("#39FF14");
-
-// }
-
-// if(AutoSelectorVal==6){
-  
-//   Brain.Screen.setFillColor(black);
-//     Brain.Screen.setFont(monoXL);
-// Brain.Screen.setPenColor("#39FF14");
-// Brain.Screen.setCursor(3,10);
-// Brain.Screen.print("AWP SIDE");
-// Brain.Screen.setCursor(4,10);
-// Brain.Screen.print("SOLO AWP");
-// Brain.Screen.setFont(monoM); 
-//   Brain.Screen.setFillColor("#39FF14");
-
-//   }
-
-// if(AutoSelectorVal==7){
-
-// Brain.Screen.setFillColor(black);
-// Brain.Screen.setFont(monoXL);
-// Brain.Screen.setPenColor("#39FF14");
-// Brain.Screen.setCursor(3,10);
-// Brain.Screen.print("SKILLS");
-// Brain.Screen.setCursor(4,10);
-// Brain.Screen.print("SKILLS");
-// Brain.Screen.setFont(monoM); 
-// Brain.Screen.setFillColor("#39FF14");
-
-// }
-
-
-
-wait(100,msec); // remove this later
+wait(100,msec); // just a small delay
 
 Brain.Screen.clearScreen();
+greyScreen();
 drawField(); // draws field
 
 while(!confirmed) // waits for field corner selection
 { 
 confirmCorner();
-wait(20,msec);
+wait(20,msec); // gives a cooldown before looping again
 }
 Brain.Screen.clearScreen();
+greyScreen();
+
+wait(50,msec);
 while(!confirmed2) // waits for auto selection
 { 
   AutoSelection();
-  wait(20,msec);
+  wait(20,msec); // gives a small cooldown before looping again
 }
 
-// Brain.Screen.clearScreen();
-// Brain.Screen.setFillColor(black);
-// Brain.Screen.setFont(monoXL);
-// Brain.Screen.setPenColor("#39FF14");
-// Brain.Screen.setCursor(5,10);
-// Brain.Screen.print("AUTO CONFIRMED");
 
 AutonLogic();
+
+// Brain.Screen.clearScreen();
+// NewField();
 
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
 }
 
-/*---------------------------------------------------------------------------*/
-/*                                                                           */
-/*                              Autonomous Task                              */
-/*                                                                           */
-/*  This task is used to control your robot during the autonomous phase of   */
-/*  a VEX Competition.                                                       */
-/*                                                                           */
-/*  You must modify the code to add your own robot specific commands here.   */
-/*---------------------------------------------------------------------------*/
 
 void autonomous(void) {
 

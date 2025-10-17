@@ -14,4 +14,5 @@ extern void drawField();
 extern void confirmCorner();
 extern void AutoSelection();
 extern void AutonLogic();
+extern void greyScreen();
 #endif

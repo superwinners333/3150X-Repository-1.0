@@ -1,5 +1,6 @@
 #include "screen_gui.hpp"
 #include "vex.h"
+#include "cstring"
 
 void drawCurvedRectangle(int xPos, int yPos, int length, int height, int radius);
 void drawField(void);
@@ -9,6 +10,10 @@ void AutoSelection(void);
 void drawCurvedBorder(int x, int y, int l, int h, int r, int t, char* col1, char* col2);
 void drawSkillsCorner(bool SkillsCorner);
 void AutonLogic(void);
+void greyScreen(void);
+
+void drawTiltedRectangle(int cx, int cy, double width, double height); // , color c = white
+void fillTiltedRectangle(int centerX, int centerY, double width, double height);
 
 // NAMES OF AUTONS GO INSIDE OF HERE
 
@@ -17,6 +22,7 @@ const char* leftAutos[] = {"3+4","9 Block","",""}; // MAKE SURE THERE ARE FOUR I
 // high side
 
 const char* rightAutos[] = {"3+4","9 Block","Solo-AWP",""}; // SAME FOR THIS ONE
+
 // autoselector values 5,6,7,8 
 // low side
 
@@ -27,40 +33,41 @@ void DisplayAutoSelector(void)
 {
 
   Brain.Screen.clearScreen();
+  greyScreen();
 
 //auton selector
 Brain.Screen.setFont(monoM);
 Brain.Screen.setFillColor(black);
 Brain.Screen.setCursor(1,1);
 Brain.Screen.setPenWidth(3);
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.drawRectangle(1,25,100,50);
 
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.drawRectangle(375,25,100,50);
 
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.drawRectangle(1,100,100,50);
 
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.drawRectangle(375,100,100,50);
 
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.drawRectangle(1,175,100,50);
 
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.drawRectangle(375,175,100,50);
 
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.drawRectangle(187,25,100,50);
 
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.drawRectangle(187,175,100,50);
 }
 
 void DisplayWords(void)
 {
-  Brain.Screen.setPenColor("#39FF14");
+  Brain.Screen.setPenColor("#FFC0CB");
   Brain.Screen.setFont(monoM);
   Brain.Screen.setCursor(3,3);
   Brain.Screen.print("High Long");
@@ -101,7 +108,7 @@ void UpdateDynamic(void)
 {
   DisplayAutoSelector();
   DisplayWords();
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setFillColor("#FFC0CB");
 Brain.Screen.setPenColor(black);
 if(AutoSelectorVal==1){
 Brain.Screen.drawRectangle(1,25,100,50);
@@ -110,13 +117,13 @@ Brain.Screen.drawRectangle(1,25,100,50);
 
 Brain.Screen.setFillColor(black);
 Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("HIGH SIDE");
 Brain.Screen.setCursor(4,10);
 Brain.Screen.print("HIGH LONG");
 Brain.Screen.setFont(monoM);
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setFillColor("#FFC0CB");
 
 }
 
@@ -128,13 +135,13 @@ Brain.Screen.drawRectangle(375,25,100,50);
 Brain.Screen.setFillColor(black);
 
   Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("HIGH SIDE");
 Brain.Screen.setCursor(4,10);
 Brain.Screen.print("High Basic");
 Brain.Screen.setFont(monoM);
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setFillColor("#FFC0CB");
 }
 
 if(AutoSelectorVal==3){
@@ -145,13 +152,13 @@ if(AutoSelectorVal==3){
 Brain.Screen.setFillColor(black);
 
     Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("LOW SIDE");
 Brain.Screen.setCursor(4,10);
 Brain.Screen.print("LOW BASIC......");
 Brain.Screen.setFont(monoM);  
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setFillColor("#FFC0CB");
 }
 
 if(AutoSelectorVal==4){
@@ -162,13 +169,13 @@ Brain.Screen.drawRectangle(375,100,100,50);
 Brain.Screen.setFillColor(black);
 
   Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("LOW SIDE");
 Brain.Screen.setCursor(4,10);
 Brain.Screen.print("LOW LONG");
 Brain.Screen.setFont(monoM); 
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setFillColor("#FFC0CB");
 
 }
 
@@ -179,13 +186,13 @@ if(AutoSelectorVal==5){
 
 Brain.Screen.setFillColor(black);
     Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("GOAL SIDE");
 Brain.Screen.setCursor(4,10);
 Brain.Screen.print("GS-AWP");
 Brain.Screen.setFont(monoM); 
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setFillColor("#FFC0CB");
 
 }
 
@@ -195,13 +202,13 @@ Brain.Screen.setCursor(11,40);
 Brain.Screen.print("SOLO AWP");
 Brain.Screen.setFillColor(black);
 Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
+Brain.Screen.setPenColor("#FFC0CB");
 Brain.Screen.setCursor(3,10);
 Brain.Screen.print("mango");
 Brain.Screen.setCursor(4,10);
 Brain.Screen.print("SOLO AWP");
 Brain.Screen.setFont(monoM); 
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setFillColor("#FFC0CB");
 
   }
 
@@ -209,21 +216,18 @@ if(AutoSelectorVal==7){
   Brain.Screen.drawRectangle(187,175,100,50);
   Brain.Screen.setCursor(11,22);
   Brain.Screen.print("Skills");
-
-Brain.Screen.setFillColor(black);
-      Brain.Screen.setFont(monoXL);
-Brain.Screen.setPenColor("#39FF14");
-Brain.Screen.setCursor(3,10);
-Brain.Screen.print("SKILLS");
-Brain.Screen.setCursor(4,10);
-Brain.Screen.print("SKILLS");
-Brain.Screen.setFont(monoM); 
-  Brain.Screen.setFillColor("#39FF14");
-
+  Brain.Screen.setFillColor(black);
+  Brain.Screen.setFont(monoXL);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.setCursor(3,10);
+  Brain.Screen.print("SKILLS");
+  Brain.Screen.setCursor(4,10);
+  Brain.Screen.print("SKILLS");
+  Brain.Screen.setFont(monoM); 
+  Brain.Screen.setFillColor("#FFC0CB");
 }
 
 }
-
 void drawCurvedRectangle(int xPos, int yPos, int length, int height, int radius) {
   Brain.Screen.drawRectangle(xPos + radius, yPos, length - 2 * radius, height); // center horizontal
   Brain.Screen.drawRectangle(xPos, yPos + radius, length, height - 2 * radius); // center vertical
@@ -235,8 +239,8 @@ void drawCurvedRectangle(int xPos, int yPos, int length, int height, int radius)
 }
 
 void drawCurvedBorder(int x, int y, int l, int h, int r, int t, char* col1, char* col2) {
-  Brain.Screen.setPenColor("#39FF14");
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.setFillColor("#FFC0CB");
   drawCurvedRectangle(x,y,l,h,r);
   Brain.Screen.setPenColor("#000000");
   Brain.Screen.setFillColor("#000000");
@@ -249,7 +253,6 @@ void drawEmptyRectangle(int x, int y, int width, int height)
   Brain.Screen.drawLine(x, y + height, x + width, y + height); // bottom edge
   Brain.Screen.drawLine(x, y, x, y + height); // left edge
   Brain.Screen.drawLine(x + width, y, x + width, y + height); // right edge
-
 }
 
 void drawField(void)
@@ -299,7 +302,7 @@ void drawField(void)
   // bottom right is at (159,107);
   // 240x480
   drawCurvedBorder(310,50,140,50,10,2,"e","e");
-  Brain.Screen.setPenColor("#39FF14");
+  Brain.Screen.setPenColor("#FFC0CB");
   Brain.Screen.setFillColor("#000000");
   Brain.Screen.setFont(mono30);
   Brain.Screen.setCursor(3,23);
@@ -307,6 +310,17 @@ void drawField(void)
   Brain.Screen.setFont(monoM);
 
   drawSkillsCorner(false);
+  
+  Brain.Screen.setPenColor("#dadada");
+  Brain.Screen.setFillColor("#dadada");
+  drawTiltedRectangle(146,120,50,10);
+  fillTiltedRectangle(146,120,48,8);
+
+  Brain.Screen.setPenColor("#c8c8c8");
+  Brain.Screen.setFillColor("#c8c8c8");
+  drawTiltedRectangle(146,120,10,50);
+  fillTiltedRectangle(146,120,8,48);
+
 }
 
 
@@ -319,7 +333,7 @@ void drawSkillsCorner(bool SkillsCorner)
 {
   if (SkillsCorner == false) {
   drawCurvedBorder(310,140,140,50,10,2,"e","e");
-  Brain.Screen.setPenColor("#39FF14");
+  Brain.Screen.setPenColor("#FFC0CB");
   Brain.Screen.setFillColor("#000000");
   Brain.Screen.setFont(mono30);
   Brain.Screen.setCursor(6,23);
@@ -327,11 +341,11 @@ void drawSkillsCorner(bool SkillsCorner)
   Brain.Screen.setFont(monoM);
   }
   if (SkillsCorner == true) {
-  Brain.Screen.setPenColor("#39FF14");
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.setFillColor("#FFC0CB");
   drawCurvedRectangle(310,140,140,50,10);
   Brain.Screen.setPenColor("#000000");
-  Brain.Screen.setFillColor("#39FF14");
+  Brain.Screen.setFillColor("#FFC0CB");
   Brain.Screen.setFont(mono30);
   Brain.Screen.setCursor(6,23);
   Brain.Screen.print("SKILLS");
@@ -340,7 +354,7 @@ void drawSkillsCorner(bool SkillsCorner)
 }
 void confirmCorner(void)
 {
-  // Brain.Screen.setPenColor("#39FF14");
+  // Brain.Screen.setPenColor("#FFC0CB");
   // Brain.Screen.setFillColor("#000000");
   // drawCurvedBorder(325,95,100,50,10,2,"e","e");
   // Brain.Screen.drawRectangle(325,95,100,50);
@@ -370,9 +384,10 @@ void confirmCorner(void)
 
   if (OLDcorner != corner){ // makes sure that it the field doesn't constantly update
     Brain.Screen.clearScreen();
+    greyScreen();
     drawField(); 
     drawSkillsCorner(false);
-    Brain.Screen.setPenColor("#39FF14");
+    Brain.Screen.setPenColor("#FFC0CB");
     if (corner == 1) drawEmptyRectangle(26,0,120,120); // draws rectangle around selected corner
     else if (corner == 2) drawEmptyRectangle(146,0,120,120);
     else if (corner == 3) drawEmptyRectangle(26,120,120,120);
@@ -381,7 +396,7 @@ void confirmCorner(void)
     OLDcorner = corner;
   }
 
-  // Brain.Screen.setPenColor("#39FF14");
+  // Brain.Screen.setPenColor("#FFC0CB");
   // Brain.Screen.setFillColor("#000000");
   // Brain.Screen.setCursor(11,40);
   // Brain.Screen.print(corner);
@@ -396,14 +411,14 @@ int buttonPressed = 0;
 
 bool confirmed2 = false;
 
-void AutoSelection(void) // displays auto selection screen
+void AutoSelectionRefresh(void)
 {
-  // drawing confirmation button
-  drawCurvedBorder(345,115,100,50,10,2,"e","e");
-  Brain.Screen.setPenColor("#39FF14");
+  // draws confirm button
+  drawCurvedBorder(345,105,100,50,10,2,"e","e");
+  Brain.Screen.setPenColor("#FFC0CB");
   Brain.Screen.setFillColor("#000000");
   Brain.Screen.setFont(monoM);
-  Brain.Screen.setCursor(4,37); // prints auto names
+  Brain.Screen.setCursor(7,37); // prints auto names
   Brain.Screen.print("CONFIRM");
 
     // displaying stuff on the screen part
@@ -416,7 +431,7 @@ void AutoSelection(void) // displays auto selection screen
     drawCurvedBorder(185,144,100,50,10,2,"e","e");
     drawCurvedBorder(35,144,100,50,10,2,"e","e");
 
-    Brain.Screen.setPenColor("#39FF14");
+    Brain.Screen.setPenColor("#FFC0CB");
     Brain.Screen.setFillColor("#000000");
     Brain.Screen.setFont(monoM);
 
@@ -442,13 +457,13 @@ void AutoSelection(void) // displays auto selection screen
   if (corner == 2 || corner == 3)
   {
     option = 2; // just for deciding which auton
-    drawCurvedBorder(185,42,100,50,10,2,"#39FF14","#000000"); // draws rectangles for the border
-    drawCurvedBorder (35,42,100,50,10,2,"#39FF14","#000000");
+    drawCurvedBorder(185,42,100,50,10,2,"#FFC0CB","#000000"); // draws rectangles for the border
+    drawCurvedBorder (35,42,100,50,10,2,"#FFC0CB","#000000");
 
-    drawCurvedBorder(185,144,100,50,10,2,"#39FF14","#000000");
-    drawCurvedBorder(35,144,100,50,10,2,"#39FF14","#000000");
+    drawCurvedBorder(185,144,100,50,10,2,"#FFC0CB","#000000");
+    drawCurvedBorder(35,144,100,50,10,2,"#FFC0CB","#000000");
 
-    Brain.Screen.setPenColor("#39FF14");
+    Brain.Screen.setPenColor("#FFC0CB");
     Brain.Screen.setFillColor("#000000");
     Brain.Screen.setFont(monoM);
 
@@ -463,38 +478,49 @@ void AutoSelection(void) // displays auto selection screen
     Brain.Screen.setCursor(9,21);
     Brain.Screen.print(rightAutos[3]);
   }
+}
+
+void AutoSelection(void) // displays auto selection screen
+{
+  // Brain.Screen.setCursor(10,40);
+  // Brain.Screen.print(confirmed2);
+  // Brain.Screen.setCursor(11,40); // debugging purposes
+  // Brain.Screen.print(Brain.Screen.xPosition());
+  // Brain.Screen.setCursor(12,40);
+  // Brain.Screen.print(Brain.Screen.yPosition());
 
   // ---------------------------------------------------------------------------------------------
   // button detection part -----------------------------------------------------------------------
 
-  if (pressing && corner != 5) // corner 5 is skills so it auto confirms
-  {
-    if (Brain.Screen.yPosition() > 115 && Brain.Screen.yPosition() < 165) // detects confirm button
+  if (Brain.Screen.xPosition() > 345 && Brain.Screen.xPosition() < 445) // detects confirm button
     {
-      if (Brain.Screen.xPosition() > 345 && Brain.Screen.xPosition() > 395) confirmed2 = true; // tells loop in main.cpp to exit
+      if (Brain.Screen.yPosition() > 105 && Brain.Screen.yPosition() < 155) confirmed2 = true; // tells loop in main.cpp to exit
     }
 
-    else if (Brain.Screen.yPosition() > 42 && Brain.Screen.yPosition() < 92) // detects the button that you pressed
+  if (pressing && !Brain.Screen.pressing() && corner != 5) // corner 5 is skills so it auto confirms
+  {
+
+    if (Brain.Screen.yPosition() > 42 && Brain.Screen.yPosition() < 92) // detects the button that you pressed
       {
-        if (Brain.Screen.xPosition() > 55 && Brain.Screen.xPosition() > 155) buttonPressed = 1;
-        if (Brain.Screen.xPosition() > 265 && Brain.Screen.xPosition() < 365) buttonPressed = 2;
+        if (Brain.Screen.xPosition() > 35 && Brain.Screen.xPosition() < 135) buttonPressed = 1;
+        if (Brain.Screen.xPosition() > 185 && Brain.Screen.xPosition() < 285) buttonPressed = 2;
       }
       else if (Brain.Screen.yPosition() > 144 && Brain.Screen.yPosition() < 194)
       {
-        if (Brain.Screen.xPosition() > 55 && Brain.Screen.xPosition() < 155) buttonPressed = 3;
-        if (Brain.Screen.xPosition() > 265 && Brain.Screen.xPosition() < 365) buttonPressed = 4;
+        if (Brain.Screen.xPosition() > 35 && Brain.Screen.xPosition() < 135) buttonPressed = 3;
+        if (Brain.Screen.xPosition() > 185 && Brain.Screen.xPosition() < 285) buttonPressed = 4;
       }
     pressing = false; // prevents this from immediately looping again
 
-    
-    Brain.Screen.setPenColor("#39FF14"); // creates inverted colours
-    Brain.Screen.setFillColor("#39FF14");
+    AutoSelectionRefresh();
+    Brain.Screen.setPenColor("#FFC0CB"); // creates inverted colours
+    Brain.Screen.setFillColor("#FFC0CB");
     switch (buttonPressed) // draws the curved rectangle depending on which position everything is in
     {
-      case 1: drawCurvedRectangle(55,42,100,50,10); Brain.Screen.setCursor(4,10); break;
-      case 2: drawCurvedRectangle(265,42,100,50,10); Brain.Screen.setCursor(4,29); break;
-      case 3: drawCurvedRectangle(265,144,100,50,10); Brain.Screen.setCursor(9,9); break;
-      case 4: drawCurvedRectangle(55,144,100,50,10); Brain.Screen.setCursor(9,29); break;
+      case 1: drawCurvedRectangle(35,42,100,50,10); Brain.Screen.setCursor(4,7); break;
+      case 2: drawCurvedRectangle(185,42,100,50,10); Brain.Screen.setCursor(4,21); break;
+      case 3: drawCurvedRectangle(35,144,100,50,10); Brain.Screen.setCursor(9,6); break;
+      case 4: drawCurvedRectangle(185,144,100,50,10); Brain.Screen.setCursor(9,21); break;
       default: break;
     }
     if (corner == 1 || corner == 4)
@@ -508,21 +534,21 @@ void AutoSelection(void) // displays auto selection screen
       if (buttonPressed > 0) Brain.Screen.print(rightAutos[buttonPressed-1]);
     }
   }
-  else confirmed2 = true; // automatically confirmed for skills
+  else if (corner == 5 || corner == 0) confirmed2 = true; // automatically confirmed for skills
 
   pressing = Brain.Screen.pressing(); // detects button pressing
 }
 
-
-void AutonLogic(void)
+void AutonLogic(void) // shows confirmation and which auton is being run
 {
   Brain.Screen.clearScreen();
+  greyScreen();
   Brain.Screen.setFillColor(black);
   Brain.Screen.setFont(monoXL);
-  Brain.Screen.setPenColor("#39FF14");
-  Brain.Screen.setCursor(5,10);
-  Brain.Screen.print("AUTO CONFIRMED");
-  Brain.Screen.setCursor(4,10);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.setCursor(5,5);
+  Brain.Screen.print("AUTO CONFIRMED"); // shows confirmation message
+  Brain.Screen.setCursor(2,5);
 
   if (corner == 5) // skills is corner 5
   {
@@ -550,5 +576,87 @@ void AutonLogic(void)
       case 4: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 8; break;
     }
   }
+  
+  Brain.Screen.setCursor(3,5);
+  Brain.Screen.setPenColor("#FFC0CB");
+  if (option == 1 && leftAutos[buttonPressed-1][0] != '\0') Brain.Screen.print("HIGH/LEFT SIDE");
+  else if (option == 2 && rightAutos[buttonPressed-1][0] != '\0') Brain.Screen.print("LOW/RIGHT SIDE");
+  else if (corner == 5) Brain.Screen.print("mango");  
 }
-void tester(void);
+
+void greyScreen(void) // was meant to change the background to grey but it looked ugly
+{
+  // #4F4F4F
+  // Brain.Screen.setPenColor("#4F4F4F"); 
+  // Brain.Screen.setFillColor("#4F4F4F");
+  // Brain.Screen.drawRectangle(0,0,480,240);
+}
+
+
+void drawTiltedRectangle(int cx, int cy, double width, double height) 
+{
+  double angleRad = 45.0 * M_PI / 180.0;  // Fixed 45° rotation
+  double cosA = cos(angleRad);
+  double sinA = sin(angleRad);
+
+  // Half dimensions for centering
+  double hw = width / 2.0;
+  double hh = height / 2.0;
+
+  // Define rectangle corners relative to center
+  double corners[4][2] = {
+    {-hw, -hh}, // top-left
+    { hw, -hh}, // top-right
+    { hw,  hh}, // bottom-right
+    {-hw,  hh}  // bottom-left
+  };
+
+  // Rotated and translated corner positions
+  int X[4];
+  int Y[4];
+
+  for (int i = 0; i < 4; i++) {
+    double xRot = corners[i][0] * cosA - corners[i][1] * sinA;
+    double yRot = corners[i][0] * sinA + corners[i][1] * cosA;
+
+    X[i] = round(cx + xRot);
+    Y[i] = round(cy + yRot);
+  }
+
+  // Draw rectangle edges
+  for (int i = 0; i < 4; i++) {
+    int next = (i + 1) % 4;
+    Brain.Screen.drawLine(X[i], Y[i], X[next], Y[next]);
+  }
+}
+
+void fillTiltedRectangle(int centerX, int centerY, double width, double height) 
+{
+    double angleRad = 45.0 * M_PI / 180.0;
+    double cosA = cos(angleRad);
+    double sinA = sin(angleRad);
+
+    // Half dimensions for centering
+    double hw = width / 2.0;
+    double hh = height / 2.0;
+
+    // Loop over the "height" of the rectangle in small steps
+    for (double h = -hh; h <= hh; h += 1.0) {
+        // Left and right x positions before rotation
+        double xLeft = -hw;
+        double xRight = hw;
+
+        double yPos = h;
+
+        // Rotate the left point
+        int Xs = round(centerX + xLeft * cosA - yPos * sinA);
+        int Ys = round(centerY + xLeft * sinA + yPos * cosA);
+
+        // Rotate the right point
+        int Xe = round(centerX + xRight * cosA - yPos * sinA);
+        int Ye = round(centerY + xRight * sinA + yPos * cosA);
+
+        // Draw the horizontal "scanline"
+        Brain.Screen.drawLine(Xs, Ys, Xe, Ye);
+    }
+}
