@@ -72,7 +72,7 @@ wait(100,msec); // just a small delay
 
 Brain.Screen.clearScreen();
 greyScreen();
-drawField(); // draws field
+// drawField(); // draws field
 
 while(!confirmed) // waits for field corner selection
 { 
@@ -102,7 +102,9 @@ AutonLogic();
 
 
 void autonomous(void) {
-
+  confirmed = true;
+  confirmed2 = true;
+  Brain.Screen.clearScreen();
   //Do not change the below
   PIDDataSet TestPara={4,0.1,0.2};
   Zeroing(true,true);
@@ -320,7 +322,9 @@ void usercontrol(void) {
     task Ptask=task(PTask);
     // task Stask=task(STask);
 
-    drawField();
+    confirmed = true;
+    confirmed2 = true;
+
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
   }

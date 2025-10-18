@@ -11,23 +11,23 @@ brain  Brain;
 controller Controller1 = controller(primary);
 
 // LEFT SIDE
-motor LF = motor(PORT17, ratio6_1, false);
-motor LM = motor(PORT10, ratio6_1, false);
-motor LB = motor(PORT18, ratio6_1, true); // flipped
+motor LF = motor(PORT6, ratio6_1, false);
+motor LM = motor(PORT5, ratio6_1, false);
+motor LB = motor(PORT7, ratio6_1, true); // flipped
 // RIGHT SIDE
-motor RF = motor(PORT2, ratio6_1, true);
-motor RM = motor(PORT19, ratio6_1, true);
-motor RB = motor(PORT20, ratio6_1, false); // flipped
+motor RF = motor(PORT10, ratio6_1, true);
+motor RM = motor(PORT9, ratio6_1, true);
+motor RB = motor(PORT8, ratio6_1, false); // flipped
 
-motor FrontRoller = motor(PORT15, ratio6_1, false);
-motor BackRoller = motor(PORT11, ratio6_1, true); // right
+motor FrontRoller = motor(PORT18, ratio6_1, true);
+motor BackRoller = motor(PORT19, ratio6_1, false); // right
 // motor TopRoller = motor(PORT21, ratio18_1, true);
 
-digital_out Scrapper = digital_out(Brain.ThreeWirePort.F);
-digital_out Lift = digital_out(Brain.ThreeWirePort.H);
-digital_out BackDescore = digital_out(Brain.ThreeWirePort.G);
+digital_out Scrapper = digital_out(Brain.ThreeWirePort.A);
+digital_out Lift = digital_out(Brain.ThreeWirePort.B);
+digital_out BackDescore = digital_out(Brain.ThreeWirePort.C);
 
-inertial Gyro = inertial(PORT1);
+inertial Gyro = inertial(PORT21);
 //Naming convention: 
 // Important variables
 const double wheelDiam = 3.25;
