@@ -19,11 +19,11 @@ void high_basic() { // NEGATIVE TURNS TO THE LEFT
     wait(400,msec);
     RunRoller(0); // stop intake
     TurnMaxTimePID(TestPara, -135, 0.3, true); // turns to under the bar
-    RunTopRoller(-75);
+    // RunTopRoller(-75);
     MoveEncoderPID(TestPara, 50, 7.5 , 0.4, -135,false); // drives partway to under the bar
     wait(100,msec);
     Lift.set(true);
-    RunTopRoller(-20);
+    // RunTopRoller(-20);
     RunRoller(100); // activates intake to score
     wait(1800,msec);
     RunRoller(0);

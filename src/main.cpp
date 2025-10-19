@@ -39,6 +39,8 @@ void pre_auton(void) {
   Lift.set(false);
   Scrapper.set(false);
   BackDescore.set(false);
+  confirmed = false;
+  confirmed2 = false;
   PX=0;
   JX=0;
   AutoSelectorVal=0; // 0 = default
@@ -70,9 +72,12 @@ Zeroing(true,true);
 
 wait(100,msec); // just a small delay
 
+
+
 Brain.Screen.clearScreen();
-greyScreen();
 // drawField(); // draws field
+confirmed = false;
+confirmed2 = false;
 
 while(!confirmed) // waits for field corner selection
 { 
@@ -102,8 +107,7 @@ AutonLogic();
 
 
 void autonomous(void) {
-  confirmed = true;
-  confirmed2 = true;
+  
   Brain.Screen.clearScreen();
   //Do not change the below
   PIDDataSet TestPara={4,0.1,0.2};
@@ -193,7 +197,7 @@ int ATask(void)
     else if (Controller1.ButtonL1.pressing()==1)
     {
       RunRoller(100);
-      RunTopRoller(-20);
+      // RunTopRoller(-20);
     }
     else
     {
@@ -322,8 +326,8 @@ void usercontrol(void) {
     task Ptask=task(PTask);
     // task Stask=task(STask);
 
-    confirmed = true;
-    confirmed2 = true;
+    // confirmed = true;
+    // confirmed2 = true;
 
     wait(20, msec); // Sleep the task for a short amount of time to
                     // prevent wasted resources.
