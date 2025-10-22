@@ -10,4 +10,5 @@ extern void low_long();
 extern void high_long();
 extern void high_basic();
 extern void low_basic();
+extern void skills();
 #endif

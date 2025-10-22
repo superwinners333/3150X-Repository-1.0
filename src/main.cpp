@@ -75,20 +75,20 @@ wait(100,msec); // just a small delay
 
 
 Brain.Screen.clearScreen();
-// drawField(); // draws field
+drawField(); // draws field
 confirmed = false;
 confirmed2 = false;
 
-while(!confirmed) // waits for field corner selection
+while(!confirmed && !EXIT) // waits for field corner selection
 { 
 confirmCorner();
 wait(20,msec); // gives a cooldown before looping again
 }
 Brain.Screen.clearScreen();
-greyScreen();
+// greyScreen();
 
 wait(50,msec);
-while(!confirmed2) // waits for auto selection
+while(!confirmed2 && !EXIT) // waits for auto selection
 { 
   AutoSelection();
   wait(20,msec); // gives a small cooldown before looping again
@@ -156,7 +156,7 @@ void autonomous(void) {
 
   if(AutoSelectorVal==9) // PROGRAMMING SKILLS GO HERE
   { 
-  
+    skills();
   }
 
   CStop(); 
@@ -183,7 +183,7 @@ int ATask(void)
   double pow2;
     while(true)
   {
-    pow=((Controller1.ButtonR2.pressing()-Controller1.ButtonR1.pressing())*100);//Calculate intake power, if button pressed, button.pressing returns 1
+    //pow=((Controller1.ButtonR2.pressing()-Controller1.ButtonR1.pressing())*100);//Calculate intake power, if button pressed, button.pressing returns 1
     
     if (Controller1.ButtonL2.pressing()==1)
     {
@@ -192,7 +192,7 @@ int ATask(void)
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
-      RunIndex(100);
+      RunIndex(100); // intakes
     }
     else if (Controller1.ButtonL1.pressing()==1)
     {
