@@ -16,6 +16,7 @@ extern motor TopRoller;
 extern digital_out Scrapper;
 extern digital_out Lift;
 extern digital_out BackDescore;
+extern digital_out Wings;
 extern motor PU;
 extern inertial Gyro;
 

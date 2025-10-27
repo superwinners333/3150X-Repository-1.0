@@ -23,9 +23,10 @@ motor FrontRoller = motor(PORT19, ratio6_1, false);
 motor BackRoller = motor(PORT18, ratio6_1, true); // right
 // motor TopRoller = motor(PORT21, ratio18_1, true);
 
-digital_out Scrapper = digital_out(Brain.ThreeWirePort.A);
-digital_out Lift = digital_out(Brain.ThreeWirePort.B);
-digital_out BackDescore = digital_out(Brain.ThreeWirePort.C);
+digital_out Scrapper = digital_out(Brain.ThreeWirePort.B);
+digital_out Lift = digital_out(Brain.ThreeWirePort.C);
+digital_out BackDescore = digital_out(Brain.ThreeWirePort.H);
+digital_out Wings = digital_out(Brain.ThreeWirePort.E);
 
 inertial Gyro = inertial(PORT21);
 //Naming convention: 

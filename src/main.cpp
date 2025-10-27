@@ -39,6 +39,7 @@ void pre_auton(void) {
   Lift.set(false);
   Scrapper.set(false);
   BackDescore.set(false);
+  Wings.set(false);
   confirmed = false;
   confirmed2 = false;
   PX=0;
@@ -197,7 +198,7 @@ int ATask(void)
     else if (Controller1.ButtonL1.pressing()==1)
     {
       RunRoller(100);
-      // RunTopRoller(-20);
+      RunTopRoller(-10);
     }
     else
     {
@@ -217,12 +218,13 @@ int ButtonPressingX,XTaskActiv;
 int ButtonPressingY,YTaskActiv;
 int ButtonPressingA,ATaskActiv; // Button Down
 int ButtonPressingB,BTaskActiv;
+int ButtonPressingDown,DownTaskActiv;
 
 int PTask(void)
 {
     while(true)
     {
-      //Toggles Scrapper
+      //Toggles Lift
     if(XTaskActiv==0&&Controller1.ButtonX.pressing()&&ButtonPressingX==0)
     {
       ButtonPressingX=1;
@@ -257,36 +259,52 @@ int PTask(void)
     //   Scrapper.set(false);
     // }
 
-  // -------------------------------------- BACKDESCORE
-    // Toggles BackDescore
+  // -------------------------------------- Scrapper
+    // Toggles Scrapper
     if(BTaskActiv==0&&Controller1.ButtonB.pressing()&&ButtonPressingB==0)
     {
       ButtonPressingB=1;
       BTaskActiv=1;
-      BackDescore.set(true);
+      Scrapper.set(true);
     }
     else if(!Controller1.ButtonB.pressing())ButtonPressingB=0;
     else if(BTaskActiv==1&&Controller1.ButtonB.pressing()&&ButtonPressingB==0)
     {
       ButtonPressingB=1;
       BTaskActiv=0;
-      BackDescore.set(false);
+      Scrapper.set(false);
     }
 
-  // -------------------------------------- LIFT
-    // Toggles Lift
-    if(ATaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingA==0)
+    // -------------------------------------- BACKDESCORE
+    // TOGGLES BACKDESCORE
+    if(ATaskActiv==0&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
     {
       ButtonPressingA=1;
       ATaskActiv=1;
-      Scrapper.set(true);
+      BackDescore.set(true);
     }
-    else if(!Controller1.ButtonDown.pressing())ButtonPressingA=0;
-    else if(ATaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingA==0)
+    else if(!Controller1.ButtonA.pressing())ButtonPressingA=0;
+    else if(ATaskActiv==1&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
     {
       ButtonPressingA=1;
       ATaskActiv=0;
-      Scrapper.set(false);
+      BackDescore.set(false);
+    }
+
+  // -------------------------------------- WINGS
+    // Toggles WINGS
+    if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    {
+      ButtonPressingDown=1;
+      DownTaskActiv=1;
+      Wings.set(true);
+    }
+    else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
+    else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    {
+      ButtonPressingDown=1;
+      DownTaskActiv=0;
+      Wings.set(false);
     }
   }
   return 0;
