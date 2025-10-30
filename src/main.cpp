@@ -198,7 +198,7 @@ int ATask(void)
     else if (Controller1.ButtonL1.pressing()==1)
     {
       RunRoller(100);
-      RunTopRoller(-10);
+      RunTopRoller(-20);
     }
     else
     {

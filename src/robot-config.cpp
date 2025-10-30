@@ -19,7 +19,7 @@ motor RF = motor(PORT10, ratio6_1, true);
 motor RM = motor(PORT9, ratio6_1, true);
 motor RB = motor(PORT8, ratio6_1, false); // flipped
 
-motor FrontRoller = motor(PORT19, ratio6_1, false);
+motor FrontRoller = motor(PORT1, ratio6_1, false);
 motor BackRoller = motor(PORT18, ratio6_1, true); // right
 // motor TopRoller = motor(PORT21, ratio18_1, true);
 
