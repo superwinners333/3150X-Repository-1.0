@@ -577,11 +577,11 @@ void AutonLogic(void) // shows confirmation and which auton is being run
     }
   }
   
-  Brain.Screen.setCursor(3,5);
+  Brain.Screen.setCursor(3,5); 
   Brain.Screen.setPenColor("#FFC0CB");
-  if (option == 1 && leftAutos[buttonPressed-1][0] != '\0') Brain.Screen.print("HIGH/LEFT SIDE");
-  else if (option == 2 && rightAutos[buttonPressed-1][0] != '\0') Brain.Screen.print("LOW/RIGHT SIDE");
-  else if (corner == 5) Brain.Screen.print("mango");  
+  if (option == 1 && leftAutos[buttonPressed-1][0] != '\0') Brain.Screen.print("HIGH/LEFT SIDE"); // shows where to place bot 
+  else if (option == 2 && rightAutos[buttonPressed-1][0] != '\0') Brain.Screen.print("LOW/RIGHT SIDE"); // shows where to place bot
+  else if (corner == 5) Brain.Screen.print("mango"); 
 }
 
 void greyScreen(void) // was meant to change the background to grey but it looked ugly
