@@ -109,7 +109,19 @@ AutonLogic();
 
 void autonomous(void) {
   
+  // if (!confirmed) AutoSelectorVal = 5; // for pid tuning
+
+
   Brain.Screen.clearScreen();
+
+  Brain.Screen.setFont(monoL);
+  Brain.Screen.setPenColor("#808080");
+  Brain.Screen.setCursor(3,3);
+  Brain.Screen.print("1, 2 miss a few ahhhhhh auto");
+  Brain.Screen.setCursor(4,5);
+  Brain.Screen.print("AUTO CONFIRMED");
+
+
   //Do not change the below
   PIDDataSet TestPara={4,0.1,0.2};
   Zeroing(true,true);

@@ -13,6 +13,48 @@ void low_basic() { // NEGATIVE TURNS TO THE LEFT
 
     TurnMaxTimePID(TestPara, 20, 0.1, true); // turns to 3 balls
     RunRoller(100); // activates intake
+    MoveEncoderPID(TestPara, -70, 8 , 0.3,20,true); // drives and turns towards the 3 blocks near center
+    MoveEncoderPID(TestPara, -25, 9 , 0.3,20,true); // drives and turns towards the 3 blocks near center
+    MoveEncoderPID(TestPara, -70, 6.33 , 0.3,20,true); // drives towards line
+    RunRoller(100);
+    MoveEncoderPID(TestPara, -60, 14.2 , 0.3,80,true); // grab balls
+    Scrapper.set(true);
+    MoveEncoderPID(TestPara, -60, 2 , 0.3,80,true); // grab balls
+    wait(250,msec);
+    TurnMaxTimePID(TestPara, 70, 0.1, true); // turns away
+    MoveEncoderPID(TestPara, 70, 21 , 0.3,70,true); // move back
+    Scrapper.set(false);
+    TurnMaxTimePID(TestPara, -43, 0.2, true); // turns to low goal
+    MoveEncoderPID(TestPara, -70, 4.5, 0.4, -43,false); // drives to low goal
+    RunRoller(-100);
+    wait(900,msec);
+    RunRoller(100);
+    MoveEncoderPID(TestPara, 70, 2, 0.4, -45,false); // backs away from low goal
+    RunRoller(0);
+    TurnMaxTimePID(TestPara, 135, 0.2, true);
+    Scrapper.set(true);
+    MoveEncoderPID(TestPara, -70, 29.3, 0.4, 135,false); // drives to long goal
+
+    TurnMaxTimePID(TestPara, 180, 0.2, true); // turns to matchloader
+    RunRoller(100);
+    MoveTimePID(TestPara, 45, 1.2 , 0.4, 180,false); // move into matchloader
+    MoveTimePID(TestPara, 20, 0.35, 0.4, 180,false); // mactchload
+    MoveTimePID(TestPara, -50, 1.5, 0.4, 180,false); // move to long goal
+    wait(100,msec);
+    RunTopRoller(100);
+    MoveTimePID(TestPara, -10, 1.5, 0.4, 180,false); // move to long goal
+    MoveTimePID(TestPara, 45, 1.5, 0.4, 180,false); // move into matchloader again
+    MoveTimePID(TestPara, 20, 100, 0.4, 180,false); // mactchload the opposite coloured blocks out of the tube
+    wait(15000,msec);
+    
+    
+
+
+
+
+    /*
+    TurnMaxTimePID(TestPara, 20, 0.1, true); // turns to 3 balls
+    RunRoller(100); // activates intake
     wait(10,msec);
     MoveEncoderPID(TestPara, -90, 8 , 0.3,20,true); // drives and turns towards the 3 blocks near center
     MoveEncoderPID(TestPara, -25, 9 , 0.3,20,true); // drives and turns towards the 3 blocks near center
@@ -46,6 +88,8 @@ void low_basic() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, 45, 1.5, 0.4, 180,false); // move into matchloader again
     MoveTimePID(TestPara, 20, 100, 0.4, 180,false); // mactchload
     wait(15000,msec);
+    */
+
 
     /*
         TurnMaxTimePID(TestPara, -20, 0.3, true); // turns to 3 balls

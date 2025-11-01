@@ -2,45 +2,58 @@
 #include "../helper_functions.hpp"
 #include "vex.h"
 //PID Straight and turn arguments:
-// MoveEncoderPID(TestPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
-// TurnMaxTimePID(TestPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
-// MoveTimePID(TestPara, motor speed, time traveled (sec), time to full speed, heading, false);
+// MoveEncoderPID(TurnPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
+// TurnMaxTimePID(TurnPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
+// MoveTimePID(TurnPara, motor speed, time traveled (sec), time to full speed, heading, false);
 
 void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
-    //PIDDataSet TestPara={4,0.1,0.2};
+    //PIDDataSet TurnPara={4,0.1,0.2};
     PIDDataSet TestPara={1.5,0.1,0.15};
+    PIDDataSet TurnPara={1.5,0.1,0.12};
     // SIXSEVEEN 77777777777777777777
-    MoveEncoderPID(TestPara, -70, 22.2 , 0.3, 0,true); // drives to mathcloader
+    MoveEncoderPID(TurnPara, -70, 20.9 , 0.3, 0,true); // drives to mathcloader
     Scrapper.set(true);
     RunRoller(100);
-    TurnMaxTimePID(TestPara, 90, 0.3, true); // turns to matchloader
-    MoveTimePID(TestPara, 55, 0.95 , 0.4, 90,false); // move into matchloader
-    //MoveTimePID(TestPara, 10, 0.05 , 0.4, 90,false); // move into matchloader
-    MoveTimePID(TestPara, -70, 1, 0.4, 90,false); // move to long goal
+    TurnMaxTimePID(TurnPara, 90, 0.2, true); // turns to matchloader
+    MoveTimePID(TurnPara, 55, 1 , 0.3, 90,false); // move into matchloader
+    MoveTimePID(TurnPara, -70, 1.1, 0.3, 90,false); // move backwards to long goal
     RunTopRoller(100);
-    MoveTimePID(TestPara, -10, 1.5, 0.4, 90,false); // move to long goal
+    MoveTimePID(TurnPara, -10, 1, 0.3, 90,false); // move to long goal
     RunRoller(0);
     RunTopRoller(0);
     Scrapper.set(false);
-    MoveEncoderPID(TestPara, -70, 2 , 0.3, 90,true); // backup
-    TurnMaxTimePID(TestPara, -180, 0.2, true); // turns to 3
+    MoveEncoderPID(TurnPara, -70, 2 , 0.3, 90,true); // go back up from long goal 
+    TurnMaxTimePID(TurnPara, -154, 0.3, false); // turns left
     RunRoller(100);
-    MoveEncoderPID(TestPara, -70, 6.2, 0.3, -180,true); // move into middle
-    TurnMaxTimePID(TestPara, -135, 0.1, true); // turns to middle
-    MoveEncoderPID(TestPara, -30, 25, 0.3, -135,true); // get 3 blocks
+    //MoveEncoderPID(TurnPara, -70, 7, 0.2, -180,true); // moves forward to get into a better position
+    //TurnMaxTimePID(TurnPara, -140, 0.2, true); // turns to blocks
+    MoveEncoderPID(TurnPara, -40, 19.7, 0.4, -154,true); // gets 3 blocks
+    TurnMaxTimePID(TurnPara, 175, 0.2, false); // turns to other 3 blocks
+    MoveEncoderPID(TurnPara, -100, 24, 0.3, -180,false); // move to other side
+    MoveEncoderPID(TurnPara, -40, 19.7, 0.3, -180,true); // pick up other 3 balls
+    Scrapper.set(true); // activates scraper
+    TurnMaxTimePID(TurnPara, 135, 0.2, true); // turns to middle goal
+    RunRoller(0); // stops intake
+    MoveEncoderPID(TurnPara, 60, 9.7, 0.3, 135,true); // move to middle goal
+    RunRoller(-100); // stop jam
+    wait(100,msec);
+    Lift.set(true); // lets us score on middle goal
+    RunRoller(100); // activates intake
+    RunTopRoller(67);
+    wait(750,msec);
+    Lift.set(false); // lets us score on long goal
+    RunTopRoller(-15);
+    MoveEncoderPID(TurnPara, -80, 39, 0.3, 135, true); // backs up a so that it is in between other long goal and matchload tube
+    TurnMaxTimePID(TurnPara, 90, 0.1, true); // turn so scraper faces matchload tube
+    RunTopRoller(0);
+    MoveTimePID(TurnPara, 55, 1.2 , 0.4, 90,false); // move into matchloader
+    MoveTimePID(TurnPara, -70, 1, 0.4, 90,false); // moves backwards into long goal
     RunRoller(-100);
-    wait(1100,msec);
+    wait(75,msec);
     RunRoller(100);
-    MoveEncoderPID(TestPara, 70, 6, 0.3, -135,true); // back up
-    TurnMaxTimePID(TestPara, -180, 0.1, true); // turns to middle
-    MoveEncoderPID(TestPara, -80, 25, 0.3, -180,true); // move to other side
-    MoveEncoderPID(TestPara, -30, 13.8, 0.3, -180,true); // pick up 3 balls
-    RunRoller(0);
-    TurnMaxTimePID(TestPara, 135, 0.2, true); // turns to high bar
-    RunTopRoller(-25);
-    MoveEncoderPID(TestPara, 70, 15.5, 0.3, 135,true); // move to high bar
-    Lift.set(true);
-    RunRoller(100);
+    RunTopRoller(100);
+    MoveTimePID(TurnPara, -10, 1.1, 0.4, 90,false); // moves further towards long goal
+    Scrapper.set(false); // turns off scrapper in prep for driver
     wait(1000,msec);
 }

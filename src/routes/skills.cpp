@@ -128,18 +128,11 @@ void MoveEncoderPID3(PIDDataSet KVals, int Speed, double dist, double AccT, doub
 void skills() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     PIDDataSet TestPara={1.5,0.1,0.12};
-    PIDDataSet PidTuner={1.0,0.1,0.1};
-    MoveEncoderPID2(TestPara, 100, 80, 0.3, 0,true);
-    // MoveEncoderPID3(TestPara, 100, 24, 0.3, 0,true,0.10);
+    PIDDataSet PidTuner={3.0,0.5,0.2};
+    TurnMaxTimePID(TestPara, 90, 1, true);
     wait(500,msec);
-    // TurnMaxTimePID(TestPara, 90, 0.6, true);
-    // wait(500,msec);
-    // TurnMaxTimePID(TestPara, -90, 0.6, true);
-    // wait(500,msec);
-    // TurnMaxTimePID(TestPara, 90, 0.6, true);
-    // wait(500,msec);
-    // TurnMaxTimePID(TestPara, 0, 0.6, true);
-    // wait(500,msec);
+
+    
     int screenheading = Gyro.heading(degrees);
     Brain.Screen.clearScreen();
     Brain.Screen.setFont(monoL);
