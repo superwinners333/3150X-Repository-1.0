@@ -16,14 +16,14 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, -25, 9 , 0.3,-20,true); // slows down
     MoveEncoderPID(TestPara, -70, 6.25 , 0.3,-20,true); // drives towards line 
     RunRoller(100);
-    MoveEncoderPID(TestPara, -60, 13 , 0.3,-80,true); // grab balls under long goal
+    MoveEncoderPID(TestPara, -60, 13.5 , 0.3,-80,true); // grab balls under long goal
     Scrapper.set(true);
     MoveEncoderPID(TestPara, -60, 2 , 0.3,-80,true); // moves forward a bit more
     wait(250,msec);
     TurnMaxTimePID(TestPara, -70, 0.1, true); // turns away
     MoveEncoderPID(TestPara, 70, 15 , 0.3,-70,true); // moves awaay from under long goal
     TurnMaxTimePID(TestPara, -136, 0.3, true); // turns to face between long goal and match load
-    MoveEncoderPID(TestPara, -70, 28.7, 0.4, -136,false); // drives to between long goal and match load
+    MoveEncoderPID(TestPara, -70, 30.5, 0.4, -136,false); // drives to between long goal and match load
     //MoveEncoderPID(TestPara, -60, 39.1, 0.4, -130,false); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.2, true); // turns so back faces long goal
     MoveTimePID(TestPara, -50, 0.83, 0.4, 180,false); // move to long goal to score

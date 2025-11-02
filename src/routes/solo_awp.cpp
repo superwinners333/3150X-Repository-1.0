@@ -12,7 +12,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TestPara={1.5,0.1,0.15};
     PIDDataSet TurnPara={1.5,0.1,0.12};
     // SIXSEVEEN 77777777777777777777
-    MoveEncoderPID(TurnPara, -70, 20.9 , 0.3, 0,true); // drives to mathcloader
+    MoveEncoderPID(TurnPara, -70, 21.4 , 0.3, 0,true); // drives to mathcloader
     Scrapper.set(true);
     RunRoller(100);
     TurnMaxTimePID(TurnPara, 90, 0.2, true); // turns to matchloader
@@ -44,7 +44,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     wait(750,msec);
     Lift.set(false); // lets us score on long goal
     RunTopRoller(-15);
-    MoveEncoderPID(TurnPara, -80, 39, 0.3, 135, true); // backs up a so that it is in between other long goal and matchload tube
+    MoveEncoderPID(TurnPara, -80, 42, 0.3, 135, true); // moves to between matchload tube and long goal
     TurnMaxTimePID(TurnPara, 90, 0.1, true); // turn so scraper faces matchload tube
     RunTopRoller(0);
     MoveTimePID(TurnPara, 55, 1.2 , 0.4, 90,false); // move into matchloader
