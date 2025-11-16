@@ -237,6 +237,7 @@ int PTask(void)
     while(true)
     {
       //Toggles Lift
+    if(XTaskActiv == 0) Lift.set(false); // moves middle piston up in case if its down after auton
     if(XTaskActiv==0&&Controller1.ButtonX.pressing()&&ButtonPressingX==0)
     {
       ButtonPressingX=1;
@@ -273,6 +274,7 @@ int PTask(void)
 
   // -------------------------------------- Scrapper
     // Toggles Scrapper
+    if(BTaskActiv == 0) Scrapper.set(false); // turns off scrapper after auton in case if its on
     if(BTaskActiv==0&&Controller1.ButtonB.pressing()&&ButtonPressingB==0)
     {
       ButtonPressingB=1;
