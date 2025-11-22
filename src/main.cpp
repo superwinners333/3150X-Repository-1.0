@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 1; // for pid tuning
+  if (!confirmed) AutoSelectorVal = 1; // for auto selection
 
 
   Brain.Screen.clearScreen();
