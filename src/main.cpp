@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 1; // for auto selection
+  if (!confirmed) AutoSelectorVal = 7; // for auto selection
 
 
   Brain.Screen.clearScreen();
@@ -177,6 +177,8 @@ void autonomous(void) {
 
 int RV;
 int LV;
+
+bool middleActiv = false;
 int DriveTask(void){
   while(true)
   {
@@ -197,8 +199,12 @@ int ATask(void)
     while(true)
   {
     //pow=((Controller1.ButtonR2.pressing()-Controller1.ButtonR1.pressing())*100);//Calculate intake power, if button pressed, button.pressing returns 1
-    
-    if (Controller1.ButtonL2.pressing()==1)
+    if (middleActiv == true)
+    {
+      RunRoller(100);
+      RunTopRoller(-20);
+    }
+    else if (Controller1.ButtonL2.pressing()==1)
     {
       RunRoller(-100); // outtake
       RunTopRoller(-100);
@@ -237,6 +243,7 @@ int PTask(void)
     while(true)
     {
       //Toggles Lift
+    /*
     if(XTaskActiv == 0) Lift.set(false); // moves middle piston up in case if its down after auton
     if(XTaskActiv==0&&Controller1.ButtonX.pressing()&&ButtonPressingX==0)
     {
@@ -255,23 +262,37 @@ int PTask(void)
       // TopIntake = false;
       Lift.set(false);
     }
+    */
 
+    if(Controller1.ButtonX.pressing()&&middleActiv==false)
+    {
+      // TopIntake = true;
+      Lift.set(true);
+      middleActiv = true;
+    }
+
+    else if(!Controller1.ButtonX.pressing()) 
+    {
+      middleActiv = false;
+      Lift.set(false);
+    }
     //----------------------------------------- SCRAPPER
-      //Toggles Scrapper
-    // if(YTaskActiv==0&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
-    // {
-    //   ButtonPressingY=1;
-    //   YTaskActiv=1;
-    //   Scrapper.set(true);
-    // }
-    // else if(!Controller1.ButtonY.pressing())ButtonPressingY=0;
-    // else if(YTaskActiv==1&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
-    // {
-    //   ButtonPressingY=1;
-    //   YTaskActiv=0;
-    //   Scrapper.set(false);
-    // }
-
+      // Toggles Scrapper
+    /*
+    if(YTaskActiv==0&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
+    {
+      ButtonPressingY=1;
+      YTaskActiv=1;
+      Scrapper.set(true);
+    }
+    else if(!Controller1.ButtonY.pressing())ButtonPressingY=0;
+    else if(YTaskActiv==1&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
+    {
+      ButtonPressingY=1;
+      YTaskActiv=0;
+      Scrapper.set(false);
+    }
+    */
   // -------------------------------------- Scrapper
     // Toggles Scrapper
     if(BTaskActiv == 0) Scrapper.set(false); // turns off scrapper after auton in case if its on
