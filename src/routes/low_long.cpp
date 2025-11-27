@@ -16,17 +16,17 @@ void low_long() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, -25, 9 , 0.3,20,true); // drives and turns towards the 3 blocks near center
     MoveEncoderPID(TestPara, -70, 6.25 , 0.3,20,true); // drives towards line
     RunRoller(100);
-    MoveEncoderPID(TestPara, -60, 12 , 0.3,80,true); // grab balls
+    MoveEncoderPID(TestPara, -60, 11.6 , 0.3,80,true); // grab balls
     Scrapper.set(true);
     MoveEncoderPID(TestPara, -60, 2 , 0.3,80,true); // grab balls
     wait(250,msec);
     TurnMaxTimePID(TestPara, 70, 0.1, true); // turns away
     MoveEncoderPID(TestPara, 70, 15 , 0.3,70,true); // move back
     TurnMaxTimePID(TestPara, 136, 0.3, true); // turns to long goal
-    MoveEncoderPID(TestPara, -70, 30.7, 0.4, 136,false); // drives to long goal
+    MoveEncoderPID(TestPara, -70, 29.4, 0.4, 136,false); // drives to long goal
     //MoveEncoderPID(TestPara, -60, 39.1, 0.4, -130,false); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.2, true); // turns to long goal
-    MoveTimePID(TestPara, -60, 0.7, 0.4, 180,false); // move to long goal
+    MoveTimePID(TestPara, -70, 0.64, 0.4, 180,false); // move to long goal
     RunRoller(-100);
     wait(200,msec);
     RunTopRoller(100);
@@ -38,9 +38,9 @@ void low_long() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -60, 1, 0.6, 180,false); // move to long goal
     wait(100,msec);
     RunTopRoller(100);
-    MoveTimePID(TestPara, -10, 1, 0.4, 180,false); // score
-    MoveTimePID(TestPara, 70, 0.3, 0.4, 180,false); // ram
-    MoveTimePID(TestPara, -70, 1, 0.4, 180,false); // ram
+    MoveTimePID(TestPara, -10, 0.9, 0.4, 180,false); // score
+    MoveTimePID(TestPara, 100, 0.36, 0.4, 180,false); // ram
+    MoveTimePID(TestPara, -100, 1, 0.4, 180,false); // ram
     wait(15000,msec);
     
     

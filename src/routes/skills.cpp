@@ -11,9 +11,62 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     PIDDataSet TestPara={1.5,0.1,0.12};
 
-    MoveEncoderPID(TestPara, -100, 13, 0.3, 0,true);
-    TurnMaxTimePID(TestPara, 90, 1, true);
+    RunRoller(100);
+    MoveTimePID(TestPara, 80, 1.2, 0.3, 0,false); // drives through park
+    MoveTimePID(TestPara, 45, 2.3, 0.3, 5,false); // slows down 
+    MoveEncoderPID(TestPara, 60, 7, 0.3, 10, true); // backs up a bit so we have space to turn
+    wait(100,msec);
+    TurnMaxTimePID(TestPara, -45, 0.3, true); // turns
     wait(500,msec);
+    MoveEncoderPID(TestPara, -90, 15.65, 0.3, -45, true); // goes to between matchload and long goal
+    TurnMaxTimePID(TestPara, 90, 0.6, true); // turns so back faces long goal
+    MoveTimePID(TestPara, -80, 0.9, 0.4, 90,true); // score on long goal
+    RunTopRoller(100);
+    MoveTimePID(TestPara, -10, 2.1, 0.3, 90, true); // pushes into long goal a bit
+    wait(50,msec);
+    RunTopRoller(0);
+    Scrapper.set(true);
+    MoveTimePID(TestPara, 50, 1.7 , 0.4, 90,false); // move forward into matchloader
+    MoveTimePID(TestPara, 20, 1, 0.4, 90,false); // mactchload
+    MoveTimePID(TestPara, -60, 1.2, 0.6, 90,true); // move to long goal
+    wait(50,msec);
+    RunTopRoller(100);
+    MoveTimePID(TestPara, -10, 2, 0.4, 90,true); // score
+    Scrapper.set(false);
+    MoveEncoderPID(TestPara, -40, 4, 0.2, 90, true); // moves away from long goal
+    RunTopRoller(0);
+    RunRoller(0);
+    TurnMaxTimePID(TestPara, 0, 0.4, true); // turns to face wall
+    MoveTimePID(TestPara, 40, 1.5, 0.4, 0, true); // aligns against wall
+    wait(100,msec);
+    Gyro.setHeading(0, degrees);
+    wait(100,msec);
+    MoveEncoderPID(TestPara, 40, 1.9, 0.4, 0, true); // backs off from wall
+    TurnMaxTimePID(TestPara, -90, 0.6, true); // turns to face other side of the field
+    MoveEncoderPID(TestPara, -100, 62, 0.3, -90, false); // goes to other side of the field
+    MoveEncoderPID(TestPara, -50, 7, 0.2, -90, true); // slows down
+    wait(100,msec);
+    TurnMaxTimePID(TestPara, 180, 0.4, true); // turns to face blue park
+    MoveEncoderPID(TestPara, -70, 5.1, 0.3, 180, true);
+    TurnMaxTimePID(TestPara, -90, 0.4, true);
+    Scrapper.set(true);
+    RunRoller(100);
+    MoveTimePID(TestPara, 50, 1.2 , 0.4, -90,false); // move forward into matchloader
+    MoveTimePID(TestPara, 20, 1, 0.4, -90,false); // mactchload
+
+    MoveTimePID(TestPara, -60, 1.2, 0.6, -90,true); // move to long goal
+    wait(50,msec);
+    RunTopRoller(100);
+    MoveTimePID(TestPara, -10, 2, 0.4, -90,true); // score
+    RunTopRoller(0);
+    Scrapper.set(false);
+    MoveEncoderPID(TestPara, -70, 9, 0.3, -90, true); // moves away from long goal
+    TurnMaxTimePID(TestPara, -165, 0.4, true); // turns to face blue park again
+    MoveEncoderPID(TestPara, -80, 8, 0.3, -165, false); // drives towareds blue park
+    MoveEncoderPID(TestPara, -80, 8, 0.3, -170, false); // curves a bit
+    MoveTimePID(TestPara, 80, 3, 0.2, -175, false); // goes into blue park
+    MoveTimePID(TestPara, 45, 3, 0.2, -175, false); // slows down
+
 
     
     int screenheading = Gyro.heading(degrees);
