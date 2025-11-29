@@ -39,7 +39,7 @@ void pre_auton(void) {
   Lift.set(false);
   Scrapper.set(false);
   BackDescore.set(false);
-  Wings.set(false);
+  Wings.set(true);
   confirmed = false;
   confirmed2 = false;
   PX=0;
@@ -332,14 +332,14 @@ int PTask(void)
     {
       ButtonPressingDown=1;
       DownTaskActiv=1;
-      Wings.set(true);
+      Wings.set(false);
     }
     else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
     else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
     {
       ButtonPressingDown=1;
       DownTaskActiv=0;
-      Wings.set(false);
+      Wings.set(true);
     }
   }
   return 0;
