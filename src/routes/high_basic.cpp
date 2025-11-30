@@ -4,20 +4,20 @@
 //PID Straight and turn arguments:
 // MoveEncoderPID(TestPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
 // TurnMaxTimePID(TestPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
-// MoveTimePID(TestPara, motor speed, time traveled (sec), time to full speed, heading, false);
+// MoveTimePID(TestPara, motor speed, time traveled (sec), time to full speed, heading, false); 
 
 void high_basic() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     //PIDDataSet TestPara={4,0.1,0.2};
     PIDDataSet TestPara={1.5,0.1,0.15};
     
-    TurnMaxTimePID(TestPara, -20, 0.2, true); // turns to 3 balls
+    TurnMaxTimePID(TestPara, -20, 0.1, true); // turns to 3 balls
     RunRoller(100); // activates intake
     MoveEncoderPID(TestPara, -70, 8 , 0.3,-20,true); // drives and turns towards the 3 blocks near center
-    MoveEncoderPID(TestPara, -25, 9 , 0.3,-20,true); // drives and turns towards the 3 blocks near center
-    MoveEncoderPID(TestPara, -70, 6.25 , 0.3,-20,true); // drives towards line 
+    MoveEncoderPID(TestPara, -25, 9 , 0.3,-20,true); // slows down
+    MoveEncoderPID(TestPara, -70, 5.9 , 0.3,-20,true); // drives towards line 
     RunRoller(100);
-    MoveEncoderPID(TestPara, -60, 14 , 0.3,-80,true); // grab balls under long goal
+    MoveEncoderPID(TestPara, -60, 11.3 , 0.3,-80,true); // grab balls under long goal
     Scrapper.set(true);
     MoveEncoderPID(TestPara, -60, 2 , 0.3,-80,true); // moves forward a bit more
     wait(250,msec);
@@ -44,7 +44,9 @@ void high_basic() { // NEGATIVE TURNS TO THE LEFT
     wait(100,msec);
     RunTopRoller(100);
     MoveTimePID(TestPara, -10, 1.5, 0.4, 180,false); // move to long goal
-    MoveEncoderPID(TestPara, -100, 4, 0.2, 180,false); // move into matchloader again
+    RunRoller(0);
+    RunTopRoller(0);
+    MoveEncoderPID(TestPara, -100, 4, 0.2, 180,false); // move towards matchloader again
     MoveTimePID(TestPara, -100, 1, 0.4, 180,false); // rams backwards
 
     // MoveTimePID(TestPara, 20, 100, 0.4, 180,false); // mactchload the opposite coloured blocks out of the tube

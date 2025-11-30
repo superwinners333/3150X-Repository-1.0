@@ -20,6 +20,7 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     Scrapper.set(true);
     MoveEncoderPID(TestPara, -60, 2 , 0.3,-80,true); // moves forward a bit more
     wait(250,msec);
+    
     TurnMaxTimePID(TestPara, -70, 0.1, true); // turns away
     MoveEncoderPID(TestPara, 70, 15 , 0.3,-70,true); // moves awaay from under long goal
     TurnMaxTimePID(TestPara, -136, 0.3, true); // turns to face between long goal and match load
@@ -38,10 +39,12 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -60, 1, 0.6, 180,false); // move to long goal
     wait(100,msec);
     RunTopRoller(100);
-    MoveTimePID(TestPara, -10, 1, 0.4, 180,false); // score
-    MoveTimePID(TestPara, 100, 0.36, 0.4, 180,false); // ram
-    wait(50,msec);
-    MoveTimePID(TestPara, -100, 1, 0.3, 180,false); // ram
+    MoveTimePID(TestPara, -10, 10, 0.4, 180,false); // score // (change time value back to 1 later)
+    // RunRoller(0);
+    // RunTopRoller(0);
+    // MoveTimePID(TestPara, 100, 0.36, 0.4, 180,false); // go forwards to prepare ram
+    // wait(50,msec);
+    // MoveTimePID(TestPara, -100, 1, 0.3, 180,false); // ram
     wait(15000,msec);
 }
 /*TurnMaxTimePID(TestPara, -18, 0.5, true); // turns to 3 balls

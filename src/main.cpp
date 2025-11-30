@@ -39,7 +39,7 @@ void pre_auton(void) {
   Lift.set(false);
   Scrapper.set(false);
   BackDescore.set(false);
-  Wings.set(true);
+  Wings.set(false);
   confirmed = false;
   confirmed2 = false;
   PX=0;
@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 9; // for auto selection
+  // if (!confirmed) AutoSelectorVal = 1; // for auto selection
 
 
   Brain.Screen.clearScreen();
@@ -121,7 +121,8 @@ void autonomous(void) {
   Brain.Screen.setCursor(4,5);
   Brain.Screen.print("AUTO CONFIRMED");
 
-
+  Wings.set(true);
+  
   //Do not change the below
   PIDDataSet TestPara={4,0.1,0.2};
   Zeroing(true,true);
@@ -202,7 +203,7 @@ int ATask(void)
     if (middleActiv == true)
     {
       RunRoller(100);
-      RunTopRoller(-20);
+      RunTopRoller(40);
     }
     else if (Controller1.ButtonL2.pressing()==1)
     {
@@ -328,6 +329,7 @@ int PTask(void)
 
   // -------------------------------------- WINGS
     // Toggles WINGS
+    if (DownTaskActiv == 0) Wings.set(true);
     if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
     {
       ButtonPressingDown=1;
@@ -397,8 +399,6 @@ int main() {
   Competition.drivercontrol(usercontrol);
   // Run the pre-autonomous function.
   pre_auton();
-  
-  
 
   // Prevent main from exiting with an infinite loop.
   while (true) {

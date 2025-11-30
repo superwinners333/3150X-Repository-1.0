@@ -39,6 +39,8 @@ void low_long() { // NEGATIVE TURNS TO THE LEFT
     wait(100,msec);
     RunTopRoller(100);
     MoveTimePID(TestPara, -10, 0.9, 0.4, 180,false); // score
+    RunRoller(0);
+    RunTopRoller(0);
     MoveTimePID(TestPara, 100, 0.36, 0.4, 180,false); // ram
     MoveTimePID(TestPara, -100, 1, 0.4, 180,false); // ram
     wait(15000,msec);

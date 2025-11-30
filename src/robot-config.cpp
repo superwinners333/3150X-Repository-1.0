@@ -25,8 +25,8 @@ motor BackRoller = motor(PORT18, ratio6_1, true); // right
 
 digital_out Scrapper = digital_out(Brain.ThreeWirePort.E);
 digital_out Lift = digital_out(Brain.ThreeWirePort.C);
-digital_out BackDescore = digital_out(Brain.ThreeWirePort.B); // double park
-digital_out Wings = digital_out(Brain.ThreeWirePort.F);
+digital_out BackDescore = digital_out(Brain.ThreeWirePort.F); // double park
+digital_out Wings = digital_out(Brain.ThreeWirePort.B);
 
 inertial Gyro = inertial(PORT21);
 //Naming convention: 
