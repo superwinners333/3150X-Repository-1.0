@@ -122,7 +122,7 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     TurnMaxTimePID(TestPara, 180, 0.4, true); // turns to face wall
     MoveTimePID(TestPara, 40, 1.5, 0.4, 180, true); // aligns against wall
     wait(100,msec);
-    Gyro.setHeading(0, degrees);
+    Gyro.setHeading(180, degrees);
     wait(100,msec);
     MoveEncoderPID(TestPara, 40, 2, 0.4, 180, true); // backs off from wall
     TurnMaxTimePID(TestPara, -90, 0.6, true); // turns to face other side of the field
