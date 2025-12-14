@@ -96,8 +96,8 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     RunRoller(100);
 
     wait(200,msec);
-    MoveEncoderPID(TestPara, -100, 18.3, 0.3, 140, false); // goes to between long goal and matchload
-    MoveEncoderPID(TestPara, -40, 3.5, 0.3, 140, false); // slows down
+    MoveEncoderPID(TestPara, -100, 18.8, 0.3, 140, false); // goes to between long goal and matchload
+    MoveEncoderPID(TestPara, -40, 3.2, 0.3, 140, false); // slows down
     wait(50,msec);
     TurnMaxTimePID(TestPara, -90, 0.3, false); // turns so back faces long goal
 
@@ -126,7 +126,7 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     wait(100,msec);
     Gyro.setHeading(180, degrees);
     wait(100,msec);
-    MoveEncoderPID(TestPara, 40, 2, 0.4, 180, true); // backs off from wall
+    MoveEncoderPID(TestPara, 40, 1.8, 0.4, 180, true); // backs off from wall
     TurnMaxTimePID(TestPara, 90, 0.3, true); // turns to face other side of the field
     MoveEncoderPID(TestPara, -100, 62, 0.4, 90, false); // goes to other side of the field
     MoveEncoderPID(TestPara, -50, 9, 0.2, 90, true); // slows down
@@ -135,7 +135,7 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
 
 
 
-    MoveEncoderPID(TestPara, -70, 5.4, 0.3, 0, true); // drives forward to between long goal and matchload tube
+    MoveEncoderPID(TestPara, -70, 5.75, 0.3, 0, true); // drives forward to between long goal and matchload tube
     TurnMaxTimePID(TestPara, 90, 0.3, true); // turns to have back face long goal
 
     Scrapper.set(true);

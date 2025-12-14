@@ -203,7 +203,7 @@ int ATask(void)
     if (middleActiv == true)
     {
       RunRoller(100);
-      RunTopRoller(40);
+      RunTopRoller(50);
     }
     else if (Controller1.ButtonL2.pressing()==1)
     {
