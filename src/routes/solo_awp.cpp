@@ -38,11 +38,11 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TurnPara, 60, 11.2, 0.3, 135,true); // move to middle goal
     RunRoller(-100); // stop jam
     wait(100,msec);
-    Lift.set(true); // lets us score on middle goal
+    LiftUp.set(true); // lets us score on middle goal
     RunRoller(100); // activates intake
     RunTopRoller(67);
     wait(750,msec);
-    Lift.set(false); // lets us score on long goal
+    LiftUp.set(false); // lets us score on long goal
     RunTopRoller(-15);
     MoveEncoderPID(TurnPara, -80, 38.7, 0.3, 135, true); // moves to between matchload tube and long goal
     TurnMaxTimePID(TurnPara, 90, 0.1, true); // turn so scraper faces matchload tube

@@ -29,6 +29,9 @@ extern void CStop();
 extern void RunRoller(int val);
 extern void RunTopRoller(int val);
 extern void RunIndex(int val);
+extern void MiddleScore(void);
+extern void NeutralScore(void);
+extern void HighScore(void);
 
 extern int PrevE;
 extern void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double ABSHDG,bool brake);

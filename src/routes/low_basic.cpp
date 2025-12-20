@@ -105,13 +105,13 @@ void low_basic() { // NEGATIVE TURNS TO THE LEFT
     // RunTopRoller(-75);
     MoveEncoderPID(TestPara, 60, 7.5 , 0.4, -135,false); // drives partway to under the bar
     wait(100,msec);
-    Lift.set(true);
+    LiftUp.set(true);
     RunTopRoller(67);
     RunRoller(100); // activates intake to score
     wait(750,msec);
     RunRoller(0);
     RunTopRoller(0);
-    Lift.set(false);
+    LiftUp.set(false);
     MoveEncoderPID(TestPara, -60, 0.5 , 0.3,-135,true); // back up a bit
     TurnMaxTimePID(TestPara, -65, 0.3, true); // turns to 2 balls
     RunRoller(0); 

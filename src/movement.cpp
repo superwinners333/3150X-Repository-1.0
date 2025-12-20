@@ -107,21 +107,18 @@ RB.stop();
 
 void RunRoller(int val)
 {
-  FrontRoller.setMaxTorque(100,percent);
-  FrontRoller.spin(forward,(double)val/100.0*12,volt);
-  FrontRoller.setBrake(hold);
-  // BackRoller.setMaxTorque(100,percent);
-  // BackRoller.spin(forward,(double)val/100.0*12,volt);
+  // FrontRoller.setMaxTorque(100,percent);
+  // FrontRoller.spin(forward,(double)val/100.0*12,volt);
+  // FrontRoller.setBrake(hold);
 }
 
 void RunTopRoller(int val)
 {
-  BackRoller.setMaxTorque(100,percent);
-  BackRoller.spin(forward,(double)val/100.0*12,volt);
-  BackRoller.setBrake(hold);
-  //TopRoller.setMaxTorque(100,percent);
-  // TopRoller.spin(forward,(double)val/100.0*12,volt);
+  // BackRoller.setMaxTorque(100,percent);
+  // BackRoller.spin(forward,(double)val/100.0*12,volt);
+  // BackRoller.setBrake(hold);
 }
+
 void RunIndex(int val)
 {
   FrontRoller.setMaxTorque(100,percent);
@@ -132,6 +129,23 @@ void RunIndex(int val)
   BackRoller.setBrake(hold);
 }
 
+// default means that its like that when the code is off
+// its should be in the high or neutral position as default
+void MiddleScore(void)
+{
+  LiftUp.set(true);
+  LiftDown.set(true); // set this to false if its neutral default
+}
+void NeutralScore(void)
+{
+  LiftUp.set(false);
+  LiftDown.set(true); // set this to false if its neutral default
+}
+void HighScore(void)
+{
+  LiftUp.set(false);
+  LiftDown.set(false); // set this to true if its neutral default
+}
 
 int PrevE;//Error at t-1
 

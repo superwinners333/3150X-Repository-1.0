@@ -27,13 +27,13 @@ void high_basic() { // NEGATIVE TURNS TO THE LEFT
     TurnMaxTimePID(TestPara, -135, 0.2, true); // turns to mid goal
     MoveEncoderPID(TestPara, 70, 1.5 , 0.4, -135,false); // drives backwards to middle goal
     wait(100,msec);
-    Lift.set(true);
+    LiftUp.set(true);
     RunTopRoller(50);
     RunRoller(100); // activates intake to score
     wait(900,msec);
     RunRoller(0);
     RunTopRoller(0);
-    Lift.set(false);
+    LiftUp.set(false);
     MoveEncoderPID(TestPara, -70, 34.2, 0.4, -125,false); // drives to long goal
     //MoveEncoderPID(TestPara, -60, 39.1, 0.4, -130,false); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.3, true); // turns to matchloader

@@ -36,9 +36,9 @@ bool SP;
 bool EXIT;
 void pre_auton(void) {
    EXIT=false;
-  Lift.set(false);
+  NeutralScore();
   Scrapper.set(false);
-  BackDescore.set(false);
+  DoubleP.set(false);
   Wings.set(false);
   confirmed = false;
   confirmed2 = false;
@@ -195,39 +195,33 @@ int V;
 bool TopIntake = false;
 int ATask(void)
 {
-  double pow;
-  double pow2;
     while(true)
   {
-    //pow=((Controller1.ButtonR2.pressing()-Controller1.ButtonR1.pressing())*100);//Calculate intake power, if button pressed, button.pressing returns 1
-    if (middleActiv == true)
+    if (Controller1.ButtonR2.pressing()==1)
     {
-      RunRoller(100);
-      RunTopRoller(50);
+      RunIndex(100);
+      MiddleScore();
     }
     else if (Controller1.ButtonL2.pressing()==1)
     {
-      RunRoller(-100); // outtake
-      RunTopRoller(-100);
+      RunIndex(-100);
+      NeutralScore();
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
       RunIndex(100); // intakes
+      HighScore();
     }
-    else if (Controller1.ButtonL1.pressing()==1)
+    else if (Controller1.ButtonL1.pressing()==1) 
     {
-      RunRoller(100);
-      RunTopRoller(-20);
+      RunIndex(100);
+      NeutralScore();
     }
     else
     {
       RunIndex(0);
+      NeutralScore();
     } 
-    // RunRoller(pow);
-    // RunTopRoller(pow);
-
-
-  //RunPuncher((Controller1.ButtonB.pressing())*100);
   }
   
   return 0;
@@ -244,14 +238,13 @@ int PTask(void)
     while(true)
     {
       //Toggles Lift
-    /*
-    if(XTaskActiv == 0) Lift.set(false); // moves middle piston up in case if its down after auton
+    
+    // if(XTaskActiv == 0) Lift.set(false); 
     if(XTaskActiv==0&&Controller1.ButtonX.pressing()&&ButtonPressingX==0)
     {
       ButtonPressingX=1;
       XTaskActiv=1;
-      // TopIntake = true;
-      Lift.set(true);
+      DoubleP.set(true);
     }
 
     else if(!Controller1.ButtonX.pressing())ButtonPressingX=0;
@@ -260,11 +253,12 @@ int PTask(void)
     {
       ButtonPressingX=1;
       XTaskActiv=0;
-      // TopIntake = false;
-      Lift.set(false);
+      DoubleP.set(false);
     }
-    */
+    
 
+
+    /*
     if(Controller1.ButtonX.pressing()&&middleActiv==false)
     {
       // TopIntake = true;
@@ -277,6 +271,9 @@ int PTask(void)
       middleActiv = false;
       Lift.set(false);
     }
+    */
+
+
     //----------------------------------------- SCRAPPER
       // Toggles Scrapper
     /*
@@ -311,21 +308,21 @@ int PTask(void)
       Scrapper.set(false);
     }
 
-    // -------------------------------------- BACKDESCORE
-    // TOGGLES BACKDESCORE
-    if(ATaskActiv==0&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
-    {
-      ButtonPressingA=1;
-      ATaskActiv=1;
-      BackDescore.set(true);
-    }
-    else if(!Controller1.ButtonA.pressing())ButtonPressingA=0;
-    else if(ATaskActiv==1&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
-    {
-      ButtonPressingA=1;
-      ATaskActiv=0;
-      BackDescore.set(false);
-    }
+    // -------------------------------------- Double Park
+    // TOGGLES Double Park
+    // if(ATaskActiv==0&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
+    // {
+    //   ButtonPressingA=1;
+    //   ATaskActiv=1;
+    //   DoubleP.set(true);
+    // }
+    // else if(!Controller1.ButtonA.pressing())ButtonPressingA=0;
+    // else if(ATaskActiv==1&&Controller1.ButtonA.pressing()&&ButtonPressingA==0)
+    // {
+    //   ButtonPressingA=1;
+    //   ATaskActiv=0;
+    //   DoubleP.set(false);
+    // }
 
   // -------------------------------------- WINGS
     // Toggles WINGS
