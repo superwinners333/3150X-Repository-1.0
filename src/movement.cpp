@@ -107,26 +107,26 @@ RB.stop();
 
 void RunRoller(int val)
 {
-  // FrontRoller.setMaxTorque(100,percent);
-  // FrontRoller.spin(forward,(double)val/100.0*12,volt);
-  // FrontRoller.setBrake(hold);
+  //FrontRoller.setMaxTorque(100,percent);
+  //FrontRoller.spin(forward,(double)val/100.0*12,volt);
+  //FrontRoller.setBrake(hold);
 }
 
 void RunTopRoller(int val)
 {
-  // BackRoller.setMaxTorque(100,percent);
-  // BackRoller.spin(forward,(double)val/100.0*12,volt);
-  // BackRoller.setBrake(hold);
+  //BackRoller.setMaxTorque(100,percent);
+  //BackRoller.spin(forward,(double)val/100.0*12,volt);
+  //BackRoller.setBrake(hold);
 }
 
 void RunIndex(int val)
 {
-  FrontRoller.setMaxTorque(100,percent);
-  FrontRoller.spin(forward,(double)val/100.0*12,volt);
-  FrontRoller.setBrake(hold);
-  BackRoller.setMaxTorque(100,percent);
-  BackRoller.spin(forward,(double)val/100.0*12,volt);
-  BackRoller.setBrake(hold);
+  LeftRoller.setMaxTorque(100,percent);
+  LeftRoller.spin(forward,(double)val/100.0*12,volt);
+  LeftRoller.setBrake(hold);
+  RightRoller.setMaxTorque(100,percent);
+  RightRoller.spin(forward,(double)val/100.0*12,volt);
+  RightRoller.setBrake(hold);
 }
 
 // default means that its like that when the code is off

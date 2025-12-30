@@ -13,7 +13,7 @@ void test() {
     MoveEncoderPID(TestPara, 100, 36 , 0.4,0,true);
     Scrapper.set(false);
     wait(200,msec);
-    Lift.set(false);
+    //Lift.set(false);
     TurnMaxTimePID(TestPara, -100, 0.9, true);
     RunRoller(-100);
 

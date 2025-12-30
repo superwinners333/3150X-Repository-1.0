@@ -204,17 +204,17 @@ int ATask(void)
     }
     else if (Controller1.ButtonL2.pressing()==1)
     {
-      RunIndex(-100);
+      RunIndex(100);
       NeutralScore();
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
-      RunIndex(100); // intakes
+      RunIndex(-100); // intakes
       HighScore();
     }
     else if (Controller1.ButtonL1.pressing()==1) 
     {
-      RunIndex(100);
+      RunIndex(-100);
       NeutralScore();
     }
     else

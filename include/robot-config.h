@@ -10,8 +10,8 @@ extern motor RF;
 extern motor RM;
 extern motor LB;
 extern motor RB;
-extern motor FrontRoller;
-extern motor BackRoller;
+extern motor LeftRoller;
+extern motor RightRoller;
 extern motor TopRoller;
 extern digital_out Scrapper;
 extern digital_out LiftUp;
@@ -20,6 +20,7 @@ extern digital_out DoubleP;
 extern digital_out Wings;
 extern motor PU;
 extern inertial Gyro;
+extern digital_out Lift;
 
 extern const double wheelDiam;
 extern const double wheelToMotorRatio;
