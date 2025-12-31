@@ -6,6 +6,7 @@
 #include "movement.hpp"
 
 #include <iostream>
+#include <vector>
 
 using namespace vex;
 
@@ -40,12 +41,32 @@ void Zeroing(bool dist, bool HDG)
   }
 }
 
+// global odom variables
+double globalX = 0;
+double globalY = 0;
+double prevAvg = 0;
+
+
 ChassisDataSet ChassisUpdate()
 {
   ChassisDataSet CDS;
   CDS.Left=get_dist_travelled((LF.position(degrees)+LM.position(degrees)+LB.position(degrees))/3.0);
   CDS.Right=get_dist_travelled((RF.position(degrees)+RM.position(degrees)+RB.position(degrees))/3.0);
   CDS.Avg=(CDS.Left+CDS.Right)/2;
+
+  // odom stuff
+  double delta = CDS.Avg - prevAvg;
+  prevAvg = CDS.Avg;
+
+  double headingRad = CDS.HDG * M_PI / 180.0;
+
+  globalX += delta * cos(headingRad);
+  globalY += delta * sin(headingRad);
+
+  CDS.X = globalX;
+  CDS.Y = globalY;
+  // odom stuff ended
+
   CDS.Diff=CDS.Left-CDS.Right;
   CDS.HDG=Gyro.heading(degrees);
 
@@ -313,4 +334,204 @@ if(fabs(CSpeed)<fabs((double)Speed))
   if(brake){BStop();
   wait(200,msec);}
   else CStop();
+}
+
+void MoveDistancePID(PIDDataSet KDist, PIDDataSet KTurn, double dist, double ABSHDG, bool brake)
+{
+    Zeroing(true, false);
+    ChassisDataSet SensorVals = ChassisUpdate();
+
+    // Distance PID variables
+    double dP = 0;
+    double dI = 0;
+    double dD = 0;
+    double prevDistErr = 0;
+
+    // Heading PID variables
+    double hP = 0;
+    double hI = 0;
+    double hD = 0;
+    double prevHErr = 0;
+
+    double Correction = 0;
+    double BasePower = 0;
+
+    const double dt = 0.02; // 20ms loop
+
+    while (fabs(SensorVals.Avg) < fabs(dist))
+    {
+        SensorVals = ChassisUpdate();
+
+        // -----------------------------
+        // DISTANCE PID
+        // -----------------------------
+        double distErr = dist - SensorVals.Avg;
+
+        dP = KDist.kp * distErr;
+        dI += KDist.ki * distErr * dt;
+        dD = KDist.kd * (distErr - prevDistErr) / dt;
+
+        BasePower = dP + dI + dD;
+        prevDistErr = distErr;
+
+        // -----------------------------
+        // HEADING PID
+        // -----------------------------
+        double HErr = SensorVals.HDG - ABSHDG;
+
+        if (HErr > 180) HErr -= 360;
+        if (HErr < -180) HErr += 360;
+
+        hP = KTurn.kp * HErr;
+        hI += KTurn.ki * HErr * dt;
+        hD = KTurn.kd * (HErr - prevHErr) / dt;
+
+        Correction = hP + hI + hD;
+        prevHErr = HErr;
+
+        // -----------------------------
+        // MOTOR OUTPUT
+        // -----------------------------
+        double left = BasePower + Correction;
+        double right = BasePower - Correction;
+
+        Move(left, right);
+
+        wait(20, msec);
+    }
+
+    if (brake)
+    {
+        BStop();
+        wait(120, msec);
+    }
+    else CStop();
+}
+
+
+
+
+// ODOM =======================================================
+
+// double globalX = 0;
+// double globalY = 0;
+// double prevAvg = 0;
+
+double dist(Point a, Point b) {
+    return sqrt((a.x - b.x)*(a.x - b.x) + (a.y - b.y)*(a.y - b.y));
+}
+
+Point findLookahead(Point robot, std::vector<Point> path, double L) {
+  Point best = path.back();
+  double bestDist = 1e9;
+
+  for (int i = 0; i < path.size() - 1; i++) {
+    Point p1 = path[i];
+    Point p2 = path[i+1];
+
+    double dx = p2.x - p1.x;
+    double dy = p2.y - p1.y;
+
+    double fx = p1.x - robot.x;
+    double fy = p1.y - robot.y;
+
+    double a = dx*dx + dy*dy;
+    double b = 2*(fx*dx + fy*dy);
+    double c = fx*fx + fy*fy - L*L;
+
+    double disc = b*b - 4*a*c;
+    if (disc < 0) continue;
+
+    disc = sqrt(disc);
+
+    double t1 = (-b + disc) / (2*a);
+    double t2 = (-b - disc) / (2*a);
+
+    auto check = [&](double t) {
+      if (t >= 0 && t <= 1) {
+        Point hit = { p1.x + t*dx, p1.y + t*dy };
+        double d = dist(robot, hit);
+        if (d < bestDist) {
+          bestDist = d;
+          best = hit;
+        }
+      }
+    };
+
+    check(t1);
+    check(t2);
+  }
+
+  return best;
+}
+
+void PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake)
+{
+  // Reset odometry (LOCAL MODE)
+  globalX = 0;
+  globalY = 0;
+  prevAvg = 0;
+  Zeroing(true, false); // reset encoders only
+
+  double dt = 0.02;
+  double I = 0;
+  double prevErr = 0;
+
+  while (true)
+  {
+    ChassisDataSet S = ChassisUpdate();
+    Point robot = { S.X, S.Y };
+
+    // End condition
+    if (dist(robot, path.back()) < 2.0)
+      break;
+
+    // Find lookahead point
+    Point target = findLookahead(robot, path, lookahead);
+
+    // Desired heading (forward mode)
+    double desired = atan2(target.y - robot.y, target.x - robot.x) * 180.0 / M_PI;
+
+    // Reverse mode: flip heading by 180 degrees
+    if (reverse)
+      desired += 180.0;
+
+    // Normalize heading
+    while (desired > 180) desired -= 360;
+    while (desired < -180) desired += 360;
+
+    double err = S.HDG - desired;
+    if (err > 180) err -= 360;
+    if (err < -180) err += 360;
+
+    // Heading PID
+    double P = KTurn.kp * err;
+    I += KTurn.ki * err * dt;
+    double D = KTurn.kd * (err - prevErr) / dt;
+    prevErr = err;
+
+    double turn = P + I + D;
+
+    // Forward speed
+    double forward = maxSpeed;
+
+    // Reverse mode: invert forward speed
+    if (reverse)
+      forward = -maxSpeed;
+
+    // Slow down when turning sharply
+    forward *= (1.0 - fabs(turn) / 100.0);
+    if (fabs(forward) < 10)
+      forward = (reverse ? -10 : 10);
+
+    Move(forward + turn, forward - turn);
+
+    wait(20, msec);
+  }
+
+  // Apply braking or coasting
+  if (brake)
+    BStop();
+  else
+    CStop();
 }

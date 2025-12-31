@@ -1,6 +1,8 @@
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
 
+#include <vector>
+
 extern int turninverse;
 extern int JB;
 extern int PB;
@@ -13,6 +15,10 @@ struct ChassisDataSet{
   double Avg;   // Average between left and right of the drive train
   int Diff;     // Left - Right
   double HDG;   // Robot heading
+
+  double X; // for odom
+  double Y;
+
 };
 
 struct PIDDataSet{
@@ -20,6 +26,14 @@ struct PIDDataSet{
   double ki;
   double kd;
 };
+
+
+// for odom
+struct Point {
+  double x;
+  double y;
+};
+
 
 extern void Zeroing(bool dist, bool HDG);
 extern ChassisDataSet ChassisUpdate();
@@ -39,5 +53,7 @@ extern void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool br
 void MaxTimePIDTurnOneSide(PIDDataSet KVals,double DeltaAngle,double TE, bool brake);
 void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake);
 
+extern void MoveDistancePID(PIDDataSet KDist, PIDDataSet KTurn, double dist, double ABSHDG, bool brake);
+extern void PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake);
 
 #endif

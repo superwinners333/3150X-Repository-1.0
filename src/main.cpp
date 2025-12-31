@@ -204,17 +204,17 @@ int ATask(void)
     }
     else if (Controller1.ButtonL2.pressing()==1)
     {
-      RunIndex(100);
+      RunIndex(-100);
       NeutralScore();
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
-      RunIndex(-100); // intakes
+      RunIndex(100); 
       HighScore();
     }
     else if (Controller1.ButtonL1.pressing()==1) 
     {
-      RunIndex(-100);
+      RunIndex(100);
       NeutralScore();
     }
     else
@@ -326,18 +326,30 @@ int PTask(void)
 
   // -------------------------------------- WINGS
     // Toggles WINGS
-    if (DownTaskActiv == 0) Wings.set(true);
-    if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    // if (DownTaskActiv == 0) Wings.set(true);
+    // if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    // {
+    //   ButtonPressingDown=1;
+    //   DownTaskActiv=1;
+    //   Wings.set(false);
+    // }
+    // else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
+    // else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    // {
+    //   ButtonPressingDown=1;
+    //   DownTaskActiv=0;
+    //   Wings.set(true);
+    // }
+
+    DownTaskActiv = 0;
+    if(Controller1.ButtonDown.pressing()&&DownTaskActiv==1)
     {
-      ButtonPressingDown=1;
-      DownTaskActiv=1;
       Wings.set(false);
+      DownTaskActiv = 0;
     }
-    else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
-    else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    else if(!Controller1.ButtonDown.pressing()&&DownTaskActiv==0) 
     {
-      ButtonPressingDown=1;
-      DownTaskActiv=0;
+      DownTaskActiv = false;
       Wings.set(true);
     }
   }

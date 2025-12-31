@@ -17,6 +17,8 @@
 
 #include "robot-config.h"
 
+#include <vector>
+
 #define waitUntil(condition)                                                   \
   do {                                                                         \
     wait(5, msec);                                                             \
