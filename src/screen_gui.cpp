@@ -17,11 +17,11 @@ void fillTiltedRectangle(int centerX, int centerY, double width, double height);
 
 // NAMES OF AUTONS GO INSIDE OF HERE
 
-const char* leftAutos[] = {"3+6","9 Block","",""}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
+const char* leftAutos[] = {"3+6","9 Block","7 Wing",""}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
 // autoselector values 1,2,3,4
 // high side
 
-const char* rightAutos[] = {"3+6","9 Block","Solo-AWP",""}; // SAME FOR THIS ONE
+const char* rightAutos[] = {"3+6","9 Block","Solo-AWP"," 7 Wing"}; // SAME FOR THIS ONE
 
 // autoselector values 5,6,7,8 
 // low side
@@ -445,13 +445,6 @@ void AutoSelectionRefresh(void)
     Brain.Screen.print(leftAutos[2]);
     Brain.Screen.setCursor(9,21);
     Brain.Screen.print(leftAutos[3]);
-    
-
-    // int column = 0;
-    // for (int i; i < leftCounter; i++) 
-    // {
-    //   if (i>2) column++; i=0;
-    // }
   }
 
   if (corner == 2 || corner == 3)

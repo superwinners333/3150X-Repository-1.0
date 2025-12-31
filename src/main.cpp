@@ -140,7 +140,7 @@ void autonomous(void) {
 
   if(AutoSelectorVal==3)// left 3
   {
-    
+    high_rush
   } 
 
   if(AutoSelectorVal==4)// left 4
@@ -165,7 +165,7 @@ void autonomous(void) {
 
   if(AutoSelectorVal==8) // right 4
   { 
-  
+    low_rush();
   }
 
   if(AutoSelectorVal==9) // PROGRAMMING SKILLS GO HERE
