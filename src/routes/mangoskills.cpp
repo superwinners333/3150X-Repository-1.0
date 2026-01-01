@@ -13,18 +13,21 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     PIDDataSet TurnPara={1.5,0.1,0.12};
     PIDDataSet DrivePara={1.5,0.1,0.12};
-    PIDDataSet PurePara={1.5,0.1,0.12};
 
-    MoveDistancePID(DrivePara, TurnPara, 10, 0, true);
+    PIDDataSet PurePara={0.05,0.0,0.3};
 
-    std::vector<Point> backCurve = {
-    {0, 0},
-    {-12, -6},
-    {-24, -6},
-    {-36, 0}
+    // MoveDistancePID(DrivePara, TurnPara, 10, 0, true);
+
+
+    std::vector<Point> path = {
+        {0, 0},
+        {24, 0}   // 24 inches forward
     };
 
-    PurePursuitDrive(backCurve, PurePara, 10, 80, true, false);
+    // Positive speed = forward
+    PurePursuitDrive(path, PurePara, 20, 60, false, true);
+
+
 
 
     int screenheading = Gyro.heading(degrees);

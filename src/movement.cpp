@@ -73,6 +73,34 @@ ChassisDataSet ChassisUpdate()
   return CDS;
 }
 
+ChassisDataSet ChassisUpdate2()
+{
+  ChassisDataSet CDS;
+
+  CDS.Left  = get_dist_travelled((LF.position(degrees)+LM.position(degrees)+LB.position(degrees))/3.0);
+  CDS.Right = get_dist_travelled((RF.position(degrees)+RM.position(degrees)+RB.position(degrees))/3.0);
+  CDS.Avg   = (CDS.Left + CDS.Right) / 2;
+
+  // FIRST: get heading from gyro
+  CDS.HDG = Gyro.heading(degrees);
+
+  // odom stuff
+  double delta = CDS.Avg - prevAvg;
+  prevAvg = CDS.Avg;
+
+  double headingRad = -CDS.HDG * M_PI / 180.0;
+
+  globalX += delta * cos(headingRad);
+  globalY += delta * sin(headingRad);
+
+  CDS.X = globalX;
+  CDS.Y = globalY;
+
+  CDS.Diff = CDS.Left - CDS.Right;
+
+  return CDS;
+}
+
 void Move(int left, int right)
 {
 LF.setMaxTorque(100,percent);
@@ -155,17 +183,17 @@ void RunIndex(int val)
 void MiddleScore(void)
 {
   LiftUp.set(true);
-  LiftDown.set(true); // set this to false if its neutral default
+  LiftDown.set(false); // set this to false if its neutral default
 }
 void NeutralScore(void)
 {
   LiftUp.set(false);
-  LiftDown.set(true); // set this to false if its neutral default
+  LiftDown.set(false); // set this to false if its neutral default
 }
 void HighScore(void)
 {
   LiftUp.set(false);
-  LiftDown.set(false); // set this to true if its neutral default
+  LiftDown.set(true); // set this to true if its neutral default
 }
 
 int PrevE;//Error at t-1
@@ -464,74 +492,214 @@ Point findLookahead(Point robot, std::vector<Point> path, double L) {
 
   return best;
 }
+/*
+void PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake)
+{
+    // Reset odometry (LOCAL MODE)
+    globalX = 0;
+    globalY = 0;
+    prevAvg = 0;
+    Zeroing(true, false);
+
+    double dt = 0.02;
+    double I = 0;
+    double prevErr = 0;
+
+    while (true)
+    {
+        ChassisDataSet S = ChassisUpdate2();
+        Point robot = { S.X, S.Y };
+
+        // End condition
+        if (dist(robot, path.back()) < 2.0)
+            break;
+
+        // Lookahead point
+        Point target = findLookahead(robot, path, lookahead);
+
+        // Desired heading (math CCW)
+        double desired = atan2(target.y - robot.y, target.x - robot.x) * 180.0 / M_PI;
+
+        // Reverse mode: flip heading
+        if (reverse)
+            desired -= 180.0;
+
+        // Normalize desired
+        while (desired > 180) desired -= 360;
+        while (desired < -180) desired += 360;
+
+        // ----------------------------------------------------
+        // FIX #1: Your gyro increases CLOCKWISE.
+        // Pure Pursuit expects COUNTER-CLOCKWISE.
+        // So heading error must be: err = desired + S.HDG
+        // ----------------------------------------------------
+        double err = desired + S.HDG;
+
+        // Normalize error
+        if (err > 180) err -= 360;
+        if (err < -180) err += 360;
+
+        // PID
+        double P = KTurn.kp * err;
+        I += KTurn.ki * err * dt;
+        double D = KTurn.kd * (err - prevErr) / dt;
+        prevErr = err;
+
+        // ----------------------------------------------------
+        // FIX #2: Your robot turns LEFT when turn > 0
+        // This matches Pure Pursuit, so no inversion needed.
+        // ----------------------------------------------------
+        double turn = P + I + D;
+
+        // ----------------------------------------------------
+        // FIX #3: Forward/backward for YOUR robot
+        // Positive motor = backward
+        // Negative motor = forward
+        // ----------------------------------------------------
+        double forward = -maxSpeed;   // negative = forward
+
+        if (reverse)
+            forward = +maxSpeed;      // positive = backward
+
+        // Slow down when turning sharply
+        forward *= (1.0 - fabs(turn) / 100.0);
+
+        // Minimum speed clamp
+        if (fabs(forward) < 10)
+            forward = (reverse ? +10 : -10);
+
+        // ----------------------------------------------------
+        // FIX #4: CORRECT MOTOR MIXING FOR YOUR ROBOT
+        // turn > 0 = LEFT
+        // left motor must go MORE NEGATIVE (more forward)
+        // ----------------------------------------------------
+        double left  = forward - turn;
+        double right = forward + turn;
+
+        Move(left, right);
+
+        wait(20, msec);
+    }
+
+    if (brake)
+        BStop();
+    else
+        CStop();
+}
+*/
 
 void PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake)
 {
-  // Reset odometry (LOCAL MODE)
-  globalX = 0;
-  globalY = 0;
-  prevAvg = 0;
-  Zeroing(true, false); // reset encoders only
+    // Reset odometry (LOCAL MODE)
+    globalX = 0;
+    globalY = 0;
+    prevAvg = 0;
+    Zeroing(true, false);
 
-  double dt = 0.02;
-  double I = 0;
-  double prevErr = 0;
+    double dt = 0.02;
+    double I = 0;
+    double prevErr = 0;
 
-  while (true)
-  {
-    ChassisDataSet S = ChassisUpdate();
-    Point robot = { S.X, S.Y };
+    while (true)
+    {
+        ChassisDataSet S = ChassisUpdate2();
+        Point robot = { S.X, S.Y };
 
-    // End condition
-    if (dist(robot, path.back()) < 2.0)
-      break;
+        // Distance to end
+        double d = dist(robot, path.back());
 
-    // Find lookahead point
-    Point target = findLookahead(robot, path, lookahead);
+        // ----------------------------------------------------
+        // DYNAMIC LOOKAHEAD (prevents spinning at the end)
+        // ----------------------------------------------------
+        double L = lookahead;
 
-    // Desired heading (forward mode)
-    double desired = atan2(target.y - robot.y, target.x - robot.x) * 180.0 / M_PI;
+        if (d > 24)
+            L = lookahead * 1.5;      // larger lookahead far away
 
-    // Reverse mode: flip heading by 180 degrees
-    if (reverse)
-      desired += 180.0;
+        if (d < 18)
+            L = std::max(12.0, d * 0.8);  // shrink but never below 12
 
-    // Normalize heading
-    while (desired > 180) desired -= 360;
-    while (desired < -180) desired += 360;
+        // Lookahead point using dynamic L
+        Point target = findLookahead(robot, path, L);
 
-    double err = S.HDG - desired;
-    if (err > 180) err -= 360;
-    if (err < -180) err += 360;
+        // Desired heading
+        double desired = atan2(target.y - robot.y, target.x - robot.x) * 180.0 / M_PI;
 
-    // Heading PID
-    double P = KTurn.kp * err;
-    I += KTurn.ki * err * dt;
-    double D = KTurn.kd * (err - prevErr) / dt;
-    prevErr = err;
+        if (reverse)
+            desired -= 180.0;
 
-    double turn = P + I + D;
+        while (desired > 180) desired -= 360;
+        while (desired < -180) desired += 360;
 
-    // Forward speed
-    double forward = maxSpeed;
+        // Correct heading error for your gyro
+        double err = desired + S.HDG;
 
-    // Reverse mode: invert forward speed
-    if (reverse)
-      forward = -maxSpeed;
+        if (err > 180) err -= 360;
+        if (err < -180) err += 360;
 
-    // Slow down when turning sharply
-    forward *= (1.0 - fabs(turn) / 100.0);
-    if (fabs(forward) < 10)
-      forward = (reverse ? -10 : 10);
+        double headingErrAbs = fabs(err);
 
-    Move(forward + turn, forward - turn);
+        // ----------------------------------------------------
+        // IMPROVED STOP CONDITION (kills end jerk)
+        // ----------------------------------------------------
+        if (d < 2.0 && headingErrAbs < 5.0)
+            break;
 
-    wait(20, msec);
-  }
+        // PID
+        double P = KTurn.kp * err;
+        I += KTurn.ki * err * dt;
+        double D = KTurn.kd * (err - prevErr) / dt;
+        prevErr = err;
 
-  // Apply braking or coasting
-  if (brake)
-    BStop();
-  else
-    CStop();
+        double turn = P + I + D;
+
+        // ----------------------------------------------------
+        // TURN FADE-OUT NEAR END (smooth finish)
+        // ----------------------------------------------------
+        double turnScale = 1.0;
+        if (d < 12.0) {
+            turnScale = d / 12.0;
+            if (turnScale < 0.2)
+                turnScale = 0.2;
+        }
+        turn *= turnScale;
+        // Limit max turn so it can't go crazy
+        if (turn > 25)  turn = 25;
+        if (turn < -25) turn = -25;
+
+        // ----------------------------------------------------
+        // TURN DEADBAND (kills tiny twitching)
+        // ----------------------------------------------------
+        if (fabs(turn) < 2.0)
+            turn = 0;
+
+        // ----------------------------------------------------
+        // POSITIVE SPEED = FORWARD
+        // NEGATIVE SPEED = BACKWARD
+        // Your robot: negative motor = forward
+        // ----------------------------------------------------
+        double forward = -maxSpeed;
+        if (reverse)
+            forward = +maxSpeed;
+
+        // Slow down when turning sharply
+        //forward *= (1.0 - fabs(turn) / 100.0);
+
+        // Minimum speed clamp
+        if (fabs(forward) < 10)
+            forward = (reverse ? +10 : -10);
+
+        // Motor mixing
+        double left  = forward - turn;
+        double right = forward + turn;
+
+        Move(left, right);
+
+        wait(20, msec);
+    }
+
+    if (brake)
+        BStop();
+    else
+        CStop();
 }

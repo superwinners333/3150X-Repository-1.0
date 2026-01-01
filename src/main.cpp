@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 9; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 4; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -140,12 +140,12 @@ void autonomous(void) {
 
   if(AutoSelectorVal==3)// left 3
   {
-    high_rush
+    high_rush();
   } 
 
   if(AutoSelectorVal==4)// left 4
   {
-    
+    mangoskills();
   }
 
   if(AutoSelectorVal==5)// right 1

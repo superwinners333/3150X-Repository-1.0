@@ -16,19 +16,19 @@ motor LM = motor(PORT16, ratio6_1, false);
 motor LB = motor(PORT9, ratio6_1, true); // flipped
 // RIGHT SIDE
 motor RF = motor(PORT2, ratio6_1, true);
-motor RM = motor(PORT11, ratio6_1, true);
-motor RB = motor(PORT20, ratio6_1, false); // flipped
+motor RM = motor(PORT12, ratio6_1, true);
+motor RB = motor(PORT13, ratio6_1, false); // flipped
 
 motor LeftRoller = motor(PORT15, ratio6_1, false);
 motor RightRoller = motor(PORT8, ratio6_1, true); // right
 // motor TopRoller = motor(PORT21, ratio18_1, true);
 
-digital_out Scrapper = digital_out(Brain.ThreeWirePort.E);
-digital_out Lift = digital_out(Brain.ThreeWirePort.C);
-digital_out DoubleP = digital_out(Brain.ThreeWirePort.H);
-digital_out Wings = digital_out(Brain.ThreeWirePort.B);
-digital_out LiftUp = digital_out(Brain.ThreeWirePort.F);
-digital_out LiftDown = digital_out(Brain.ThreeWirePort.A);
+digital_out Scrapper = digital_out(Brain.ThreeWirePort.G);
+digital_out Lift = digital_out(Brain.ThreeWirePort.A);
+digital_out DoubleP = digital_out(Brain.ThreeWirePort.F);
+digital_out Wings = digital_out(Brain.ThreeWirePort.H);
+digital_out LiftUp = digital_out(Brain.ThreeWirePort.D);
+digital_out LiftDown = digital_out(Brain.ThreeWirePort.E);
 
 inertial Gyro = inertial(PORT1);
 //Naming convention: 

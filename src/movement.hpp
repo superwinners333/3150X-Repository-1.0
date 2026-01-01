@@ -37,6 +37,7 @@ struct Point {
 
 extern void Zeroing(bool dist, bool HDG);
 extern ChassisDataSet ChassisUpdate();
+extern ChassisDataSet ChassisUpdate2();
 extern void Move(int left, int right);
 extern void BStop();
 extern void CStop();
