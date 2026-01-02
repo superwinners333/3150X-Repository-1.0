@@ -182,8 +182,8 @@ void RunIndex(int val)
 // its should be in the high or neutral position as default
 void MiddleScore(void)
 {
-  LiftUp.set(true);
-  LiftDown.set(false); // set this to false if its neutral default
+  LiftUp.set(false);
+  LiftDown.set(true); // set this to false if its neutral default
 }
 void NeutralScore(void)
 {
@@ -192,8 +192,8 @@ void NeutralScore(void)
 }
 void HighScore(void)
 {
-  LiftUp.set(false);
-  LiftDown.set(true); // set this to true if its neutral default
+  LiftUp.set(true);
+  LiftDown.set(false); // set this to true if its neutral default
 }
 
 int PrevE;//Error at t-1
@@ -364,78 +364,229 @@ if(fabs(CSpeed)<fabs((double)Speed))
   else CStop();
 }
 
-void MoveDistancePID(PIDDataSet KDist, PIDDataSet KTurn, double dist, double ABSHDG, bool brake)
+/** Distance PID that matches Alfred's drivetrain:
+ *  NEGATIVE speed = forward
+ *  POSITIVE speed = backward
+ *
+ * @param DistK   PID constants for distance
+ * @param HeadK   PID constants for heading
+ * @param dist    distance to travel (always positive inches)
+ * @param dir     1 = forward, -1 = backward
+ * @param MaxSpd  max speed magnitude (0–100)
+ * @param AccT    ramp time to max speed (seconds)
+ * @param ABSHDG  absolute heading to hold
+ * @param brake   true = brake, false = coast
+ */
+
+void MoveDistancePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, int dir, int MaxSpd, double AccT, double ABSHDG, bool brake)
 {
-    Zeroing(true, false);
-    ChassisDataSet SensorVals = ChassisUpdate();
+  // dir: 1 = forward, -1 = backward
+  if(dir != 1 && dir != -1) dir = 1;
 
-    // Distance PID variables
-    double dP = 0;
-    double dI = 0;
-    double dD = 0;
-    double prevDistErr = 0;
+  Zeroing(true, false);
+  ChassisDataSet SensorVals = ChassisUpdate();
 
-    // Heading PID variables
-    double hP = 0;
-    double hI = 0;
-    double hD = 0;
-    double prevHErr = 0;
+  // Encoder: forward = positive
+  // Motor: forward = negative
+  double targetDist = (dir == 1 ? fabs(dist) : -fabs(dist));
 
-    double Correction = 0;
-    double BasePower = 0;
+  double CSpeed = 0;
+  double D_P = 0, D_I = 0, D_D = 0;
+  double H_P = 0, H_I = 0, H_D = 0;
 
-    const double dt = 0.02; // 20ms loop
+  double prevDistErr = 0;
+  double prevHeadErr = 0;
 
-    while (fabs(SensorVals.Avg) < fabs(dist))
-    {
-        SensorVals = ChassisUpdate();
+  // --- OVERSHOOT DETECTION ---
+  bool overshot = false;
+  int lastSign = 0;
 
-        // -----------------------------
-        // DISTANCE PID
-        // -----------------------------
-        double distErr = dist - SensorVals.Avg;
+  while(true)
+  {
+    SensorVals = ChassisUpdate();
+    double currDist = SensorVals.Avg;
 
-        dP = KDist.kp * distErr;
-        dI += KDist.ki * distErr * dt;
-        dD = KDist.kd * (distErr - prevDistErr) / dt;
+    // --- DISTANCE PID ---
+    double distErr = targetDist - currDist;
 
-        BasePower = dP + dI + dD;
-        prevDistErr = distErr;
-
-        // -----------------------------
-        // HEADING PID
-        // -----------------------------
-        double HErr = SensorVals.HDG - ABSHDG;
-
-        if (HErr > 180) HErr -= 360;
-        if (HErr < -180) HErr += 360;
-
-        hP = KTurn.kp * HErr;
-        hI += KTurn.ki * HErr * dt;
-        hD = KTurn.kd * (HErr - prevHErr) / dt;
-
-        Correction = hP + hI + hD;
-        prevHErr = HErr;
-
-        // -----------------------------
-        // MOTOR OUTPUT
-        // -----------------------------
-        double left = BasePower + Correction;
-        double right = BasePower - Correction;
-
-        Move(left, right);
-
-        wait(20, msec);
+    // distance deadband
+    if (fabs(distErr) < 0.3) {
+      distErr = 0;
     }
 
-    if (brake)
-    {
-        BStop();
-        wait(120, msec);
+    // --- OVERSHOOT LOGIC ---
+    int signNow = (distErr > 0) - (distErr < 0);  // +1, -1, or 0
+
+    // Detect first overshoot
+    if (lastSign != 0 && signNow != 0 && signNow != lastSign) {
+        overshot = true;
     }
-    else CStop();
+
+    // If already overshot, do NOT allow crossing back
+    if (overshot && signNow != lastSign && signNow != 0) {
+        Move(0, 0);
+        break;
+    }
+
+    lastSign = signNow;
+
+    // --- PID CALC ---
+    D_P = DistK.kp * distErr;
+    D_I += DistK.ki * distErr * 0.02;
+    D_D = DistK.kd * (distErr - prevDistErr);
+
+    double distOut = D_P + D_I + D_D / 0.02;
+
+    // Clamp
+    if(distOut > MaxSpd) distOut = MaxSpd;
+    if(distOut < -MaxSpd) distOut = -MaxSpd;
+
+    // --- RAMPING ---
+    double step = (double)MaxSpd / (AccT * 0.5) * 0.02;  // 2x faster ramp
+    if(CSpeed < distOut) {
+      CSpeed += step;
+      if(CSpeed > distOut) CSpeed = distOut;
+    } else if(CSpeed > distOut) {
+      CSpeed -= step;
+      if(CSpeed < distOut) CSpeed = distOut;
+    }
+
+    // --- HEADING PID ---
+    double LGV = SensorVals.HDG - ABSHDG;
+    if(LGV > 180) LGV -= 360;
+    if(LGV < -180) LGV += 360;
+
+    H_P = HeadK.kp * LGV;
+    H_I += HeadK.ki * LGV * 0.02;
+    H_D = HeadK.kd * (LGV - prevHeadErr);
+
+    double Correction = H_P + H_I + H_D / 0.02;
+
+    // --- APPLY DRIVE ---
+    double motorCmd = -CSpeed;  // negative = forward
+    Move(motorCmd + Correction, motorCmd - Correction);
+
+    prevDistErr = distErr;
+    prevHeadErr = LGV;
+
+    // --- EXIT CONDITION ---
+    if (fabs(distErr) < 0.5 && fabs(CSpeed) < 10) {
+      Move(0, 0);
+      break;
+    }
+
+    wait(20, msec);
+  }
+
+  if(brake){
+    BStop();
+    wait(120, msec);
+  } else {
+    CStop();
+  }
 }
 
+
+ /*
+void MoveDistancePID(PIDDataSet DistK, PIDDataSet HeadK,
+                     double dist, int dir,
+                     int MaxSpd, double AccT,
+                     double ABSHDG, bool brake)
+{
+  // dir: 1 = forward, -1 = backward
+  if(dir != 1 && dir != -1) dir = 1;
+
+  Zeroing(true, false);
+  ChassisDataSet SensorVals = ChassisUpdate();
+
+  // Encoder: forward = positive
+  // Motor: forward = negative
+  //
+  // So target distance must match encoder sign:
+  double targetDist = (dir == 1 ? fabs(dist) : -fabs(dist));
+
+  double CSpeed = 0;
+  double D_P = 0, D_I = 0, D_D = 0;
+  double H_P = 0, H_I = 0, H_D = 0;
+
+  double prevDistErr = 0;
+  double prevHeadErr = 0;
+
+  while(true)
+  {
+    SensorVals = ChassisUpdate();
+    double currDist = SensorVals.Avg;
+
+    // --- DISTANCE PID ---
+    double distErr = targetDist - currDist;
+
+    // distance deadband: treat tiny error as zero
+    if (fabs(distErr) < 0.3) {
+      distErr = 0;
+    }
+    
+
+    D_P = DistK.kp * distErr;
+    D_I += DistK.ki * distErr * 0.02;
+    D_D = DistK.kd * (distErr - prevDistErr);
+
+    double distOut = D_P + D_I + D_D / 0.02;
+
+    // Clamp
+    if(distOut > MaxSpd) distOut = MaxSpd;
+    if(distOut < -MaxSpd) distOut = -MaxSpd;
+
+    // --- RAMPING ---
+    double step = (double)MaxSpd / (AccT * 0.5) * 0.02;  // 2x faster ramp
+    // double step = (double)MaxSpd / AccT * 0.02;
+    if(CSpeed < distOut) {
+      CSpeed += step;
+      if(CSpeed > distOut) CSpeed = distOut;
+    } else if(CSpeed > distOut) {
+      CSpeed -= step;
+      if(CSpeed < distOut) CSpeed = distOut;
+    }
+
+    // --- HEADING PID ---
+    double LGV = SensorVals.HDG - ABSHDG;
+    if(LGV > 180) LGV -= 360;
+    if(LGV < -180) LGV += 360;
+
+    H_P = HeadK.kp * LGV;
+    H_I += HeadK.ki * LGV * 0.02;
+    H_D = HeadK.kd * (LGV - prevHeadErr);
+
+    double Correction = H_P + H_I + H_D / 0.02;
+
+    // --- APPLY DRIVE ---
+    // INVERSION FIX:
+    // PID output: positive = forward
+    // Move(): negative = forward
+    double motorCmd = -CSpeed;
+
+    Move(motorCmd + Correction, motorCmd - Correction);
+
+    prevDistErr = distErr;
+    prevHeadErr = LGV;
+
+    // --- EXIT CONDITION ---
+    if (fabs(distErr) < 0.5 && fabs(CSpeed) < 10) {
+      CSpeed = 0;  // force zero command
+      Move(0, 0);
+      break;
+    }
+
+    wait(20, msec);
+  }
+
+  if(brake){
+    BStop();
+    wait(120, msec);
+  } else {
+    CStop();
+  }
+}
+*/
 
 
 

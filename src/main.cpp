@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 4; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 8; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -341,15 +341,12 @@ int PTask(void)
     //   Wings.set(true);
     // }
 
-    DownTaskActiv = 0;
-    if(Controller1.ButtonDown.pressing()&&DownTaskActiv==1)
+    if(Controller1.ButtonDown.pressing())
     {
       Wings.set(false);
-      DownTaskActiv = 0;
     }
-    else if(!Controller1.ButtonDown.pressing()&&DownTaskActiv==0) 
+    else if(!Controller1.ButtonDown.pressing()) 
     {
-      DownTaskActiv = false;
       Wings.set(true);
     }
   }

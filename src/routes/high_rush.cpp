@@ -15,7 +15,6 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet DrivePara={1.5,0.1,0.12};
     PIDDataSet PurePara={1.5,0.1,0.12};
 
-    MoveDistancePID(DrivePara, TurnPara, 10, 0, true);
 
     std::vector<Point> backCurve = {
     {0, 0},

@@ -36,7 +36,7 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, 20, 0.1, 0.4, 180,false); // mactchload
     MoveTimePID(TestPara, -60, 1, 0.6, 180,false); // move to long goal
     wait(100,msec);
-    HighScoree();
+    HighScore();
     MoveTimePID(TestPara, -10, 10, 0.4, 180,false); // score // (change time value back to 1 later)
     // RunRoller(0);
     // RunTopRoller(0);

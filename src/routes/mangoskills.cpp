@@ -6,26 +6,25 @@
 // TurnMaxTimePID(TestPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
 // MoveTimePID(TestPara, motor speed, time traveled (sec), time to full speed, heading, false);
 
-// MoveDistancePID(PIDDataSet KDist, PIDDataSet KTurn, double dist, double ABSHDG, bool brake)
+// MoveDistancePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, int dir, int MaxSpd, double AccT, double ABSHDG, bool brake)
 // PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake)
 
 void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     PIDDataSet TurnPara={1.5,0.1,0.12};
-    PIDDataSet DrivePara={1.5,0.1,0.12};
+    PIDDataSet DrivePara = {1.2, 0.0, 4.0};
+
+
+    // MoveDistancePID(DrivePara, TurnPara, 30, 1, 100, 0.5, 0, true);
 
     PIDDataSet PurePara={0.05,0.0,0.3};
+    // std::vector<Point> path = {
+    //     {0, 0},
+    //     {24, 0}   // 24 inches forward
+    // };
 
-    // MoveDistancePID(DrivePara, TurnPara, 10, 0, true);
-
-
-    std::vector<Point> path = {
-        {0, 0},
-        {24, 0}   // 24 inches forward
-    };
-
-    // Positive speed = forward
-    PurePursuitDrive(path, PurePara, 20, 60, false, true);
+    // // Positive speed = forward
+    // PurePursuitDrive(path, PurePara, 20, 60, false, true);
 
 
 

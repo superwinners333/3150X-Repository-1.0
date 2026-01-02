@@ -14,11 +14,12 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     // SIXSEVEEN 77777777777777777777
     MoveEncoderPID(TurnPara, -70, 19.7 , 0.3, 0,true); // drives to mathcloader
     Scrapper.set(true);
-    RunRoller(100);
+    RunIndex(100);
     TurnMaxTimePID(TurnPara, 90, 0.2, true); // turns to matchloader
     MoveTimePID(TurnPara, 50, 1.0 , 0.3, 90,false); // move into matchloader
     MoveTimePID(TurnPara, -70, 1.1, 0.3, 90,false); // move backwards to long goal
-    RunTopRoller(100);
+    HighScore();
+    RunIndex(100);
     MoveTimePID(TurnPara, -10, 1, 0.3, 90,false); // move to long goal
     RunRoller(0);
     RunTopRoller(0);
