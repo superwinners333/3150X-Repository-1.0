@@ -92,13 +92,13 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     RunIndex(100);
     MoveTimePID(TestPara, 45, 1.2 , 0.4, 180,false); // move into matchloader
     MoveTimePID(TestPara, 20, 0.8, 0.4, 180,false); // mactchload 
-    MoveEncoderPID(TestPara, 80, 21.9, 0.4, -204,true); // moves to beside goal
+    MoveEncoderPID(TestPara, 80, 22, 0.4, -204,true); // moves to beside goal
     RunIndex(41);
     TurnMaxTimePID(TestPara, 180, 0.3, true); // turns to face other side of the field
     MoveEncoderPID(TestPara, 100, 50, 0.4, 180, false); // goes to other side of the field 
     MoveEncoderPID(TestPara, 50, 9, 0.2, 180, true); // slows down
     wait(100,msec);
-    MoveEncoderPID(TestPara, 50, 8.75, 0.2, 242, true); // curve to aglin with long goal
+    MoveEncoderPID(TestPara, 50, 8.6, 0.2, 242, true); // curve to aglin with long goal
 
     // -------------- LAST QUARTER
     TurnMaxTimePID(TestPara, 0, 0.3, true); // turns to have back face long goal
@@ -119,7 +119,7 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
 
     MoveEncoderPID(TestPara, -60, 5, 0.2, 0, true); // move forward ----------------------------------------- park
     TurnMaxTimePID(TestPara, 90, 0.3, true); // turns to other side of field
-    MoveEncoderPID(TestPara, -80, 37, 0.2, 90, true); // move to park
+    MoveEncoderPID(TestPara, -80, 34, 0.2, 90, true); // move to park
     TurnMaxTimePID(TestPara, 0, 0.3, true); // turns to park
     MoveTimePID(TestPara, 60, 1.5, 0.2, 0,true); // park
 
