@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 8; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 9; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -230,7 +230,8 @@ int ATask(void)
 int ButtonPressingX,XTaskActiv;
 int ButtonPressingY,YTaskActiv;
 int ButtonPressingA,ATaskActiv; // Button Down
-int ButtonPressingB,BTaskActiv;
+int ButtonPressingB;
+int BTaskActiv=0;
 int ButtonPressingDown,DownTaskActiv;
 
 int PTask(void)
