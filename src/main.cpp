@@ -193,13 +193,16 @@ return 0;
 }
 int V;
 bool TopIntake = false;
+int UpTaskActiv,DownTaskActiv;
+
 int ATask(void)
 {
     while(true)
   {
     if (Controller1.ButtonR2.pressing()==1)
     {
-      RunIndex(100);
+      if (DownTaskActiv == 1) RunIndex(60);
+      else RunIndex(100);
       MiddleScore();
     }
     else if (Controller1.ButtonL2.pressing()==1)
@@ -229,10 +232,11 @@ int ATask(void)
 
 int ButtonPressingX,XTaskActiv;
 int ButtonPressingY,YTaskActiv;
-int ButtonPressingA,ATaskActiv; // Button Down
+int ButtonPressingA,ATaskActiv; 
 int ButtonPressingB;
 int BTaskActiv=0;
-int ButtonPressingDown,DownTaskActiv;
+int ButtonPressingDown;
+int ButtonPressingUp;
 
 int PTask(void)
 {
@@ -327,30 +331,43 @@ int PTask(void)
 
   // -------------------------------------- WINGS
     // Toggles WINGS
-    // if (DownTaskActiv == 0) Wings.set(true);
-    // if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    if (DownTaskActiv == 0) Wings.set(true);
+    if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    {
+      ButtonPressingDown=1;
+      DownTaskActiv=1;  
+    }
+    else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
+    else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    {
+      ButtonPressingDown=1;
+      DownTaskActiv=0;
+    }
+
+    // if(Controller1.ButtonDown.pressing())
     // {
-    //   ButtonPressingDown=1;
-    //   DownTaskActiv=1;
     //   Wings.set(false);
     // }
-    // else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
-    // else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+    // else if(!Controller1.ButtonDown.pressing()) 
     // {
-    //   ButtonPressingDown=1;
-    //   DownTaskActiv=0;
     //   Wings.set(true);
     // }
 
-    if(Controller1.ButtonDown.pressing())
-    {
-      Wings.set(false);
-    }
-    else if(!Controller1.ButtonDown.pressing()) 
-    {
-      Wings.set(true);
-    }
+  // if(UpTaskActiv==0&&Controller1.ButtonUp.pressing()&&ButtonPressingUp==0)
+  //   {
+  //     ButtonPressingUp=1;
+  //     UpTaskActiv=1;
+  //   }
+
+  //   else if(!Controller1.ButtonUp.pressing())ButtonPressingUp=0;
+
+  //   else if(UpTaskActiv==1&&Controller1.ButtonUp.pressing()&&ButtonPressingUp==0)
+  //   {
+  //     ButtonPressingUp=1;
+  //     UpTaskActiv=0;
+  //   }
   }
+
   return 0;
 }
 
