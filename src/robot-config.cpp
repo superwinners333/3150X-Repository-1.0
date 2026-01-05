@@ -19,7 +19,7 @@ motor RF = motor(PORT2, ratio6_1, true);
 motor RM = motor(PORT12, ratio6_1, true);
 motor RB = motor(PORT13, ratio6_1, false); // flipped
 
-motor LeftRoller = motor(PORT15, ratio6_1, false);
+motor LeftRoller = motor(PORT20, ratio6_1, false);
 motor RightRoller = motor(PORT8, ratio6_1, true); // right
 // motor TopRoller = motor(PORT21, ratio18_1, true);
 
@@ -30,7 +30,7 @@ digital_out Wings = digital_out(Brain.ThreeWirePort.H);
 digital_out LiftUp = digital_out(Brain.ThreeWirePort.D);
 digital_out LiftDown = digital_out(Brain.ThreeWirePort.E);
 
-inertial Gyro = inertial(PORT1);
+inertial Gyro = inertial(PORT11);
 //Naming convention: 
 // Important variables
 const double wheelDiam = 3.25;
