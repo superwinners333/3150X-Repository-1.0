@@ -14,4 +14,6 @@ extern void skills();
 extern void mangoskills();
 extern void high_rush();
 extern void low_rush();
+extern void high_middle_wing();
+extern void low_middle_wing();
 #endif

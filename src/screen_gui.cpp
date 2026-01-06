@@ -17,11 +17,11 @@ void fillTiltedRectangle(int centerX, int centerY, double width, double height);
 
 // NAMES OF AUTONS GO INSIDE OF HERE
 
-const char* leftAutos[] = {"3+6","9 Block","7 Wing",""}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
+const char* leftAutos[] = {"3+6","9 Block","7 Wing","","",""}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
 // autoselector values 1,2,3,4
 // high side
 
-const char* rightAutos[] = {"3+6","9 Block","Solo-AWP"," 7 Wing"}; // SAME FOR THIS ONE
+const char* rightAutos[] = {"3+6","9 Block","Solo-AWP"," 7 Wing","",""}; // SAME FOR THIS ONE
 
 // autoselector values 5,6,7,8 
 // low side
@@ -418,18 +418,26 @@ void AutoSelectionRefresh(void)
   Brain.Screen.setPenColor("#FFC0CB");
   Brain.Screen.setFillColor("#000000");
   Brain.Screen.setFont(monoM);
-  Brain.Screen.setCursor(7,37); // prints auto names
+  Brain.Screen.setCursor(7,37);
   Brain.Screen.print("CONFIRM");
 
-    // displaying stuff on the screen part
+  drawCurvedBorder(185,42,100,50,10,2,"e","e"); // draws rectangles for the buttons
+  drawCurvedBorder(35,42,100,50,10,2,"e","e");
+
+  drawCurvedBorder(185,144,100,50,10,2,"e","e");
+  drawCurvedBorder(35,144,100,50,10,2,"e","e");
+
+  // drawCurvedBorder(185,144,100,50,10,2,"e","e");
+  // drawCurvedBorder(35,144,100,50,10,2,"e","e");
+
+  // displaying stuff on the screen part
   if (corner == 1 || corner == 4)
   {
     option = 1; // just for knowing which auto to run
-    drawCurvedBorder(185,42,100,50,10,2,"e","e"); // draws rectangles for the buttons
-    drawCurvedBorder(35,42,100,50,10,2,"e","e");
-
-    drawCurvedBorder(185,144,100,50,10,2,"e","e");
-    drawCurvedBorder(35,144,100,50,10,2,"e","e");
+    // drawCurvedBorder(185,42,100,50,10,2,"e","e"); // draws rectangles for the buttons
+    // drawCurvedBorder(35,42,100,50,10,2,"e","e");
+    // drawCurvedBorder(185,144,100,50,10,2,"e","e");
+    // drawCurvedBorder(35,144,100,50,10,2,"e","e");
 
     Brain.Screen.setPenColor("#FFC0CB");
     Brain.Screen.setFillColor("#000000");
@@ -445,16 +453,19 @@ void AutoSelectionRefresh(void)
     Brain.Screen.print(leftAutos[2]);
     Brain.Screen.setCursor(9,21);
     Brain.Screen.print(leftAutos[3]);
+    // Brain.Screen.setCursor(9,21);
+    // Brain.Screen.print(leftAutos[4]);
+    // Brain.Screen.setCursor(9,21);
+    // Brain.Screen.print(leftAutos[5]);
   }
 
   if (corner == 2 || corner == 3)
   {
     option = 2; // just for deciding which auton
-    drawCurvedBorder(185,42,100,50,10,2,"#FFC0CB","#000000"); // draws rectangles for the border
-    drawCurvedBorder (35,42,100,50,10,2,"#FFC0CB","#000000");
-
-    drawCurvedBorder(185,144,100,50,10,2,"#FFC0CB","#000000");
-    drawCurvedBorder(35,144,100,50,10,2,"#FFC0CB","#000000");
+    // drawCurvedBorder(185,42,100,50,10,2,"#FFC0CB","#000000"); // draws rectangles for the border
+    // drawCurvedBorder (35,42,100,50,10,2,"#FFC0CB","#000000");
+    // drawCurvedBorder(185,144,100,50,10,2,"#FFC0CB","#000000");
+    // drawCurvedBorder(35,144,100,50,10,2,"#FFC0CB","#000000");
 
     Brain.Screen.setPenColor("#FFC0CB");
     Brain.Screen.setFillColor("#000000");
@@ -470,39 +481,38 @@ void AutoSelectionRefresh(void)
     Brain.Screen.print(rightAutos[2]);
     Brain.Screen.setCursor(9,21);
     Brain.Screen.print(rightAutos[3]);
+    // Brain.Screen.setCursor(9,6);
+    // Brain.Screen.print(rightAutos[4]);
+    // Brain.Screen.setCursor(9,21);
+    // Brain.Screen.print(rightAutos[5]);
   }
 }
 
 void AutoSelection(void) // displays auto selection screen
 {
-  // Brain.Screen.setCursor(10,40);
-  // Brain.Screen.print(confirmed2);
-  // Brain.Screen.setCursor(11,40); // debugging purposes
-  // Brain.Screen.print(Brain.Screen.xPosition());
-  // Brain.Screen.setCursor(12,40);
-  // Brain.Screen.print(Brain.Screen.yPosition());
-
-  // ---------------------------------------------------------------------------------------------
-  // button detection part -----------------------------------------------------------------------
-
   if (Brain.Screen.xPosition() > 345 && Brain.Screen.xPosition() < 445) // detects confirm button
-    {
-      if (Brain.Screen.yPosition() > 105 && Brain.Screen.yPosition() < 155) confirmed2 = true; // tells loop in main.cpp to exit
-    }
+  {
+    if (Brain.Screen.yPosition() > 105 && Brain.Screen.yPosition() < 155) confirmed2 = true; // tells loop in main.cpp to exit
+  }
 
   if (pressing && !Brain.Screen.pressing() && corner != 5) // corner 5 is skills so it auto confirms
   {
 
     if (Brain.Screen.yPosition() > 42 && Brain.Screen.yPosition() < 92) // detects the button that you pressed
-      {
-        if (Brain.Screen.xPosition() > 35 && Brain.Screen.xPosition() < 135) buttonPressed = 1;
-        if (Brain.Screen.xPosition() > 185 && Brain.Screen.xPosition() < 285) buttonPressed = 2;
-      }
-      else if (Brain.Screen.yPosition() > 144 && Brain.Screen.yPosition() < 194)
-      {
-        if (Brain.Screen.xPosition() > 35 && Brain.Screen.xPosition() < 135) buttonPressed = 3;
-        if (Brain.Screen.xPosition() > 185 && Brain.Screen.xPosition() < 285) buttonPressed = 4;
-      }
+    {
+      if (Brain.Screen.xPosition() > 35 && Brain.Screen.xPosition() < 135) buttonPressed = 1;
+      if (Brain.Screen.xPosition() > 185 && Brain.Screen.xPosition() < 285) buttonPressed = 2;
+    }
+    else if (Brain.Screen.yPosition() > 144 && Brain.Screen.yPosition() < 194)
+    {
+      if (Brain.Screen.xPosition() > 35 && Brain.Screen.xPosition() < 135) buttonPressed = 3;
+      if (Brain.Screen.xPosition() > 185 && Brain.Screen.xPosition() < 285) buttonPressed = 4;
+    }
+    // else if (Brain.Screen.yPosition() > 144 && Brain.Screen.yPosition() < 194) // change this value
+    // {
+    //   if (Brain.Screen.xPosition() > 35 && Brain.Screen.xPosition() < 135) buttonPressed = 5;
+    //   if (Brain.Screen.xPosition() > 185 && Brain.Screen.xPosition() < 285) buttonPressed = 6;
+    // }  
     pressing = false; // prevents this from immediately looping again
 
     AutoSelectionRefresh();
@@ -527,15 +537,14 @@ void AutoSelection(void) // displays auto selection screen
       if (buttonPressed > 0) Brain.Screen.print(rightAutos[buttonPressed-1]);
     }
   }
-  else if (corner == 5 || corner == 0) confirmed2 = true; // automatically confirmed for skills
 
+  else if (corner == 5 || corner == 0) confirmed2 = true; // automatically confirmed for skills
   pressing = Brain.Screen.pressing(); // detects button pressing
 }
 
 void AutonLogic(void) // shows confirmation and which auton is being run
 {
   Brain.Screen.clearScreen();
-  greyScreen();
   Brain.Screen.setFillColor(black);
   Brain.Screen.setFont(monoXL);
   Brain.Screen.setPenColor("#FFC0CB");
@@ -547,7 +556,7 @@ void AutonLogic(void) // shows confirmation and which auton is being run
   {
     // Brain.Screen.setCursor(4,10);
     Brain.Screen.print("SKILLS");
-    AutoSelectorVal = 9;
+    AutoSelectorVal = 13;
   }
   else if (option == 1 && buttonPressed > 0) // left side autos
   {
@@ -557,16 +566,20 @@ void AutonLogic(void) // shows confirmation and which auton is being run
       case 2: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 2; break;
       case 3: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 3; break;
       case 4: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 4; break;
+      case 5: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 5; break;
+      case 6: Brain.Screen.print(leftAutos[buttonPressed-1]); AutoSelectorVal = 6; break;
     }
   }
   else if (option == 2 && buttonPressed > 0) // left side autos
   {
     switch (buttonPressed) // may want to switch buttonPressed-1 with actual values
     {
-      case 1: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 5; break;
-      case 2: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 6; break;
-      case 3: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 7; break;
-      case 4: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 8; break;
+      case 1: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 7; break;
+      case 2: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 8; break;
+      case 3: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 9; break;
+      case 4: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 10; break;
+      case 5: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 11; break;
+      case 6: Brain.Screen.print(rightAutos[buttonPressed-1]); AutoSelectorVal = 12; break;
     }
   }
   
@@ -653,3 +666,15 @@ void fillTiltedRectangle(int centerX, int centerY, double width, double height)
         Brain.Screen.drawLine(Xs, Ys, Xe, Ye);
     }
 }
+
+
+
+  // Brain.Screen.setCursor(10,40);
+  // Brain.Screen.print(confirmed2);
+  // Brain.Screen.setCursor(11,40); // debugging purposes
+  // Brain.Screen.print(Brain.Screen.xPosition());
+  // Brain.Screen.setCursor(12,40);
+  // Brain.Screen.print(Brain.Screen.yPosition());
+
+  // ---------------------------------------------------------------------------------------------
+  // button detection part -----------------------------------------------------------------------

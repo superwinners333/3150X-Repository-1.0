@@ -12,48 +12,40 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TestPara={1.5,0.1,0.15};
     PIDDataSet TurnPara={1.5,0.1,0.12};
     // SIXSEVEEN 77777777777777777777
-    MoveEncoderPID(TurnPara, -70, 19.7 , 0.3, 0,true); // drives to mathcloader
+    NeutralScore();
+    MoveEncoderPID(TurnPara, -70, 19.5 , 0.3, 0,true); // drives to mathcloader
     Scrapper.set(true);
     RunIndex(100);
-    TurnMaxTimePID(TurnPara, 90, 0.2, true); // turns to matchloader
-    MoveTimePID(TurnPara, 50, 1.0 , 0.3, 90,false); // move into matchloader
+    TurnMaxTimePID(TurnPara, 90, 0.3, true); // turns to matchloader
+    MoveTimePID(TurnPara, 50, 0.8 , 0.3, 90,false); // move into matchloader
     MoveTimePID(TurnPara, -70, 1.1, 0.3, 90,false); // move backwards to long goal
     HighScore();
-    RunIndex(100);
     MoveTimePID(TurnPara, -10, 1, 0.3, 90,false); // move to long goal
-    RunRoller(0);
-    RunTopRoller(0);
     Scrapper.set(false);
     MoveEncoderPID(TurnPara, -70, 1.5 , 0.3, 90,true); // go back up from long goal 
     TurnMaxTimePID(TurnPara, -155, 0.2, false); // turns left
-    RunRoller(100);
     //MoveEncoderPID(TurnPara, -70, 7, 0.2, -180,true); // moves forward to get into a better position
     //TurnMaxTimePID(TurnPara, -140, 0.2, true); // turns to blocks
+    NeutralScore();
     MoveEncoderPID(TurnPara, -40, 20.5, 0.4, -155,true); // gets 3 blocks
     TurnMaxTimePID(TurnPara, -183, 0.2, false); // turns to other 3 blocks
     MoveEncoderPID(TestPara, -100, 24, 0.3, -183,false); // move to other side
-    MoveEncoderPID(TestPara, -40, 16.7, 0.3, -183,true); // pick up other 3 balls
+    MoveEncoderPID(TestPara, -40, 17, 0.3, -183,true); // pick up other 3 balls
     Scrapper.set(true); // activates scraper
     TurnMaxTimePID(TurnPara, 135, 0.2, true); // turns to middle goal
-    RunRoller(0); // stops intake
-    MoveEncoderPID(TurnPara, 60, 11.2, 0.3, 135,true); // move to middle goal
-    RunRoller(-100); // stop jam
-    wait(100,msec);
-    LiftUp.set(true); // lets us score on middle goal
-    RunRoller(100); // activates intake
-    RunTopRoller(67);
-    wait(750,msec);
-    LiftUp.set(false); // lets us score on long goal
-    RunTopRoller(-15);
-    MoveEncoderPID(TurnPara, -80, 38.7, 0.3, 135, true); // moves to between matchload tube and long goal
+    MoveTimePID(TurnPara, -40, 0.7 , 0.4, 135,false); // move into matchloader
+    RunIndex(70);
+    MiddleScore();
+    wait(800,msec);
+    NeutralScore();
+    MoveEncoderPID(TurnPara, -80, 40, 0.3, 135, true); // moves to between matchload tube and long goal
     TurnMaxTimePID(TurnPara, 90, 0.1, true); // turn so scraper faces matchload tube
-    RunTopRoller(0);
-    MoveTimePID(TurnPara, 50, 1.3 , 0.4, 90,false); // move into matchloader
+    NeutralScore();
+    MoveTimePID(TurnPara, 50, 1.2 , 0.4, 90,false); // move into matchloader
     MoveTimePID(TurnPara, -70, 1, 0.4, 90,false); // moves backwards into long goal
-    RunRoller(-100);
+    HighScore();
+    RunIndex(100);
     wait(75,msec);
-    RunRoller(100);
-    RunTopRoller(100);
     MoveTimePID(TurnPara, -10, 1.1, 0.4, 90,false); // moves further towards long goal
     Scrapper.set(false); // turns off scrapper in prep for driver
     wait(1000,msec);
