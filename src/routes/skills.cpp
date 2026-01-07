@@ -12,20 +12,27 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TestPara={1.5,0.1,0.12};
 
     RunIndex(60);
-    MoveTimePID(TestPara, 35, 1, 0.2, 0, false); // grab blocks in park
-    //TurnMaxTimePID(TestPara, 10, 0.1, false);
-    //TurnMaxTimePID(TestPara, -10, 0.1, false);
-    wait(1500,msec);
+    /*
+    MoveTimePID(TestPara, 80, 0.6, 0.2, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, 20, 1, 0.02, 0, false); // grab blocks in park
+    */
+    
+    MoveTimePID(TestPara, 55, 0.5, 0.2, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, -20, 0.3, 0.02, 0, false); // grab blocks in park
+    wait(250,msec);
+    MoveTimePID(TestPara, 20, 0.3, 0.02, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, -20, 0.3, 0.02, 0, false); // grab blocks in park
+    wait(250,msec);
+    MoveTimePID(TestPara, 20, 0.3, 0.02, 0, false); // grab blocks in park
     MoveTimePID(TestPara, 75, 1, 0.02, 0, false); // grab blocks in park
-    //TurnMaxTimePID(TestPara, 15, 0.1, false);
-    //TurnMaxTimePID(TestPara, -15, 0.1, false);
-    //TurnMaxTimePID(TestPara, 0, 0.1, false);
-    MoveTimePID(TestPara, -20, 0.4, 0.02, 0, false); // grab blocks in park
+    RunIndex(85);
+    MoveTimePID(TestPara, -20, 0.3, 0.02, 0, false); // grab blocks in park
+    TurnMaxTimePID(TestPara, 10, 0.1, true); // turn
+    TurnMaxTimePID(TestPara, -10, 0.1, true); // turn
+    MoveTimePID(TestPara, 20, 0.3, 0.02, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, -20, 0.3, 0.02, 0, false); // grab blocks in park
     wait(250,msec);
-    MoveTimePID(TestPara, 20, 0.4, 0.02, 0, false); // grab blocks in park
-    MoveTimePID(TestPara, -20, 0.4, 0.02, 0, false); // grab blocks in park
-    wait(250,msec);
-    MoveTimePID(TestPara, 20, 0.4, 0.02, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, 20, 0.3, 0.02, 0, false); // grab blocks in park
     //MoveTimePID(TestPara, -20, 0.4, 0.02, 0, false); // grab blocks in park
     //MoveTimePID(TestPara, 20, 0.4, 0.02, 0, false); // grab blocks in park
     // RunIndex(0); // stops intake to twitch it
@@ -35,50 +42,55 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -50, 0.8, 0.2, 0, true); // back out of park
     MoveTimePID(TestPara, 20, 1, 0.2, 0, true); // aglin with park
     Gyro.setHeading(0,degrees);
-    MoveEncoderPID(TestPara, 80, 14.6 , 0.3, 0, true); // back up 
+    MoveEncoderPID(TestPara, 80, 14.5 , 0.3, 0, true); // back up 
     TurnMaxTimePID(TestPara, 105, 0.4, true); // turns to 4 balls
     RunIndex(100);
-    MoveEncoderPID(TestPara, -60, 12 , 0.3, 105, true); // grab blue lock
+    MoveEncoderPID(TestPara, -60, 13.2 , 0.3, 105, true); // grab blue lock
+    wait(250,msec);
     TurnMaxTimePID(TestPara, 45, 0.3, true); // turns to face middle goal
     MoveTimePID(TestPara, -40, 0.6, 0.2, 45, false); // backs up into middle goal
     RunIndex(0);
-    wait(100,msec);
     MiddleScore();
-    RunIndex(90);
-    MoveTimePID(TestPara, -10, 0.4, 0.2, 45, false); // score
-    RunIndex(50);
-    MoveTimePID(TestPara, -10, 1.5, 0.2, 45, false); // score
-    RunIndex(30);
-    MoveTimePID(TestPara, -10, 1.5, 0.2, 45, false); // score
+    wait(100,msec);
+    RunIndex(65);
+    MoveTimePID(TestPara, -10, 0.5, 0.2, 45, false); // score
+    RunIndex(40);
+    MoveTimePID(TestPara, -10, 0.7, 0.2, 45, false); // score
+    RunIndex(25);
+    MoveTimePID(TestPara, -10, 2, 0.2, 45, false); // score
+    NeutralScore();
   
 
 
-    RunIndex(100);//------------------------------------------------------------------------------------long goal 1
-    MoveEncoderPID(TestPara, -80, 44.7, 0.4, 45,true); // drives to long goal
-    wait(750,msec);
+    //------------------------------------------------------------------------------------long goal 1
+    MiddleScore();
+    RunIndex(100);
+    MoveEncoderPID(TestPara, -80, 42, 0.4, 45,true); // drives to long goal
     TurnMaxTimePID(TestPara, 0, 0.2, true); // turns to matchloader
     Scrapper.set(true);
     NeutralScore();
     MoveTimePID(TestPara, 40, 1.3 , 0.4, 0,false); // move into matchloader
-    MoveTimePID(TestPara, 20, 1.3, 0.4, 0,false); // mactchload 
-    Gyro.setHeading(0,degrees);
-    MoveEncoderPID(TestPara, 80, 21.8, 0.4, -24,true); // moves to beside goal
+    MoveTimePID(TestPara, 20, 1.1, 0.4, 0,false); // mactchload 
+    MoveEncoderPID(TestPara, 80, 8, 0.4, 0,true); // move back
+    TurnMaxTimePID(TestPara, -45, 0.2, true); // turns to aglin with goal
+    MoveEncoderPID(TestPara, 80, 9.5, 0.4, -45,true); // moves to beside goal
     Scrapper.set(false);
     RunIndex(41);
-    TurnMaxTimePID(TestPara, 0, 0.3, true); // turns to face other side of the field
-    MoveEncoderPID(TestPara, 100, 50, 0.4, -1, false); // goes to other side of the field 
+    TurnMaxTimePID(TestPara, 0, 0.2, true); // turns to face other side of the field
+    MoveEncoderPID(TestPara, 100, 40, 0.4, -2, false); // goes to other side of the field 
     MoveEncoderPID(TestPara, 50, 9, 0.2, 0, true); // slows down
     wait(100,msec);
-    MoveEncoderPID(TestPara, 70, 8.75, 0.2, 67, true); // curve to aglin with long goal
+    TurnMaxTimePID(TestPara, 45, 0.2, true); // turns to aglin with goal
+    MoveEncoderPID(TestPara, 80, 8.5, 0.2, 45, true); // move to goal and matcjoader
 
     // -------------- SECOND QUARTER
     TurnMaxTimePID(TestPara, 180, 0.3, true); // turns to have back face long goal
 
-    MoveTimePID(TestPara, -60, 1, 0.6, 180,true); // move to long goal
+    MoveTimePID(TestPara, -80, 0.6, 0.6, 180,true); // move to long goal
     HighScore();
     wait(100,msec);
     RunIndex(100);
-    MoveTimePID(TestPara, -10, 1.95, 0.4, 180,true); // score
+    MoveTimePID(TestPara, -20, 1.95, 0.4, 180,true); // score
     NeutralScore();
     Scrapper.set(true);
     MoveTimePID(TestPara, 40, 1.4 , 0.4, 180,false); // move forward into matchloader
@@ -103,24 +115,24 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     //Scrapper.set(true);
     NeutralScore();
     RunIndex(100);
-    MoveTimePID(TestPara, 45, 1.2 , 0.4, 180,false); // move into matchloader
+    MoveTimePID(TestPara, 40, 1.3 , 0.4, 180,false); // move into matchloader
     MoveTimePID(TestPara, 20, 1.3, 0.4, 180,false); // mactchload 
-    MoveEncoderPID(TestPara, 80, 22, 0.4, -206,true); // moves to beside goal
+    MoveEncoderPID(TestPara, 80, 8, 0.4, 180,true); // move back
+    TurnMaxTimePID(TestPara, 135, 0.2, true); // turns to walll
+    MoveEncoderPID(TestPara, 80, 9.5, 0.4, 135 ,true); // moves to beside goal
     Scrapper.set(false);
     RunIndex(41);
-    TurnMaxTimePID(TestPara, 180, 0.3, true); // turns to face other side of the field
-    MoveEncoderPID(TestPara, 100, 50, 0.4, 180, false); // goes to other side of the field 
+    TurnMaxTimePID(TestPara, 180, 0.2, true); // turns to face other side of the field
+    MoveEncoderPID(TestPara, 100, 40, 0.4, 178, false); // goes to other side of the field 
     MoveEncoderPID(TestPara, 50, 9, 0.2, 180, true); // slows down
     wait(100,msec);
-    MoveEncoderPID(TestPara, 70, 7.6, 0.2, 248, true); // curve to aglin with long goal
-
-    // -------------- LAST QUARTER
+    TurnMaxTimePID(TestPara, -135, 0.2, true); // turns to aglin with goal
+    MoveEncoderPID(TestPara, 80, 8.3, 0.2, -135, true); // move to goal and matcjoader
     TurnMaxTimePID(TestPara, 0, 0.3, true); // turns to have back face long goal
-
-    MoveTimePID(TestPara, -60, 1, 0.6, 0,true); // move to long goal
+    MoveTimePID(TestPara, -80, 0.6, 0.6, 0,true); // move to long goal
     HighScore();
     RunIndex(100);
-    MoveTimePID(TestPara, -10, 1.95, 0.4, 0,true); // score
+    MoveTimePID(TestPara, -20, 1.95, 0.4, 0,true); // score
     NeutralScore();
     Scrapper.set(true);
     MoveTimePID(TestPara, 40, 1.3 , 0.4, 0,false); // move forward into matchloader
@@ -134,11 +146,11 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
 
     MoveEncoderPID(TestPara, -60, 5, 0.2, 0, true); // move forward ----------------------------------------- park
     TurnMaxTimePID(TestPara, 90, 0.3, true); // turns to other side of field
-    MoveEncoderPID(TestPara, -80, 34, 0.2, 90, true); // move to park
+    MoveEncoderPID(TestPara, -80, 28.5, 0.2, 90, false); // move to park
 
     TurnMaxTimePID(TestPara, 0, 0.3, true); // turns to park
     RunIndex(100);
-    MoveTimePID(TestPara, 80, 2, 0.2, 0,true); // park
+    MoveTimePID(TestPara, 80, 2.5, 0.2, 0,true); // park
     MoveTimePID(TestPara, 20, 20, 0.2, 0,true); // park
 
 

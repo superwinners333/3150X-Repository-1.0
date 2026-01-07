@@ -95,7 +95,6 @@ while(!confirmed2 && !EXIT) // waits for auto selection
   wait(20,msec); // gives a small cooldown before looping again
 }
 
-
 AutonLogic();
 
 // Brain.Screen.clearScreen();
@@ -109,7 +108,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 7; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 13; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -221,7 +220,7 @@ int ATask(void)
   {
     if (Controller1.ButtonR2.pressing()==1)
     {
-      if (DownTaskActiv == 1) RunIndex(50);
+      if (DownTaskActiv == 1) RunIndex(40);
       else RunIndex(100);
       MiddleScore();
     }
