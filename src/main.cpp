@@ -144,7 +144,7 @@ void autonomous(void) {
 
   if(AutoSelectorVal==4)// left 4
   {
-
+    high_middle_wing();
   }
 
   if(AutoSelectorVal==5)// left 5
@@ -179,7 +179,7 @@ void autonomous(void) {
 
   if(AutoSelectorVal==11)// left 5
   {
-
+    low_middle_wing();
   }
 
   if(AutoSelectorVal==12)// left 6

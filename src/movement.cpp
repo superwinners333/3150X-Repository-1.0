@@ -218,7 +218,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
   double LGV=0;//define local gyro variable.
   PrevE=0;
   double Correction=0;
-  Brain.Screen.clearScreen();
+  // Brain.Screen.clearScreen();
 
   while(fabs(SensorVals.Avg) <= fabs(dist))
   {
