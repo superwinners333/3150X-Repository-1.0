@@ -13,29 +13,30 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TurnPara={1.5,0.1,0.12};
     // SIXSEVEEN 77777777777777777777
     NeutralScore();
-    MoveEncoderPID(TurnPara, -70, 18.8, 0.3, 0,true); // drives to mathcloader
+    MoveEncoderPID(TurnPara, -80, 16, 0.3, 0,false); // drives to mathcloader
     Scrapper.set(true);
     RunIndex(70);
     TurnMaxTimePID(TurnPara, 90, 0.3, true); // turns to matchloader
-    MoveTimePID(TurnPara, 50, 0.9 , 0.3, 90,false); // move into matchloader
-    MoveTimePID(TurnPara, -70, 1, 0.3, 90,false); // move backwards to long goal
+    MoveTimePID(TurnPara, 45, 1.1 , 0.3, 90,false); // move into matchloader
+    MoveTimePID(TurnPara, -80, 1, 0.3, 90,false); // move backwards to long goal
     HighScore();
     MoveTimePID(TurnPara, -20, 1.25, 0.3, 90,false); // move into long goal
     Scrapper.set(false);
-    MoveEncoderPID(TurnPara, -70, 1.5 , 0.3, 90,true); // go back up from long goal 
-    TurnMaxTimePID(TurnPara, -155, 0.2, false); // turns left
+    MoveEncoderPID(TurnPara, -80, 1.5 , 0.3, 90,true); // back up from long goal 
+    TurnMaxTimePID(TurnPara, -152, 0.2, false); // turns left
     //MoveEncoderPID(TurnPara, -70, 7, 0.2, -180,true); // moves forward to get into a better position
     //TurnMaxTimePID(TurnPara, -140, 0.2, true); // turns to blocks
     NeutralScore();
-    MoveEncoderPID(TurnPara, -60, 26, 0.4, -155,true); // gets 3 blocks
+    MoveEncoderPID(TurnPara, -70, 23.8, 0.4, -152,false); // gets 3 blocks
     RunIndex(40);
-    MoveEncoderPID(TurnPara, -60, 6.9, 0.4, -137,true); // goes to low goal
+    TurnMaxTimePID(TurnPara, -135, 0.2, true); // tunr to boptlmtom foal;
+    MoveEncoderPID(TurnPara, -80, 6, 0.4, -135,true); // goes to low goal
     RunIndex(-40); // outakes
     wait(1000,msec);
-    MoveEncoderPID(TurnPara, 60, 22.5, 0.4, -145,true); // backs up to prepare wing
+    MoveEncoderPID(TurnPara, 80, 22.2, 0.4, -145,true); // backs up to prepare wing
     TurnMaxTimePID(TurnPara, -90, 0.2, true); // turns so wing is facing goal
     RunIndex(0);
     Wings.set(false);
-    MoveEncoderPID(TurnPara, -100, 11, 0.3, -90,false); // wing
+    MoveEncoderPID(TurnPara, -100, 11.2, 0.3, -90,false); // wing
     TurnMaxTimePID(TurnPara, -155, 0.2, false); // tturn
 }

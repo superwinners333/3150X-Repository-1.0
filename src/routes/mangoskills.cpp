@@ -14,10 +14,10 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TurnPara={1.5,0.1,0.12};
     PIDDataSet DrivePara = {1.2, 0.0, 4.0};
 
-
+    MoveEncoderPID(TurnPara, -40, 1.5, 0.3, 0, true);
     // MoveDistancePID(DrivePara, TurnPara, 30, 1, 100, 0.5, 0, true);
 
-    PIDDataSet PurePara={0.05,0.0,0.3};
+    // PIDDataSet PurePara={0.05,0.0,0.3};
     // std::vector<Point> path = {
     //     {0, 0},
     //     {24, 0}   // 24 inches forward

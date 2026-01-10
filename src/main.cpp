@@ -108,7 +108,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 1; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 11; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -154,7 +154,7 @@ void autonomous(void) {
 
   if(AutoSelectorVal==6)// left 6
   {
-
+    mangoskills();
   }
 
   if(AutoSelectorVal==7)// right 1
@@ -226,7 +226,7 @@ int ATask(void)
     }
     else if (Controller1.ButtonL2.pressing()==1)
     {
-      RunIndex(-100);
+      RunIndex(-80);
       NeutralScore();
     }
     else if (Controller1.ButtonR1.pressing()==1)

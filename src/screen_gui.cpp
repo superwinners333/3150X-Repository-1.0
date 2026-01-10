@@ -17,7 +17,7 @@ void fillTiltedRectangle(int centerX, int centerY, double width, double height);
 
 // NAMES OF AUTONS GO INSIDE OF HERE
 
-const char* leftAutos[] = {"3+6","9 Block","7 Wing","3+4","test","test"}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
+const char* leftAutos[] = {"3+6","9 Block","7 Wing","3+4","test","mangos"}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
 // autoselector values 1,2,3,4
 // high side
 
