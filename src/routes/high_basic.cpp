@@ -15,30 +15,34 @@ void high_basic() { // NEGATIVE TURNS TO THE LEFT
     
     //TurnMaxTimePID(TestPara, -20, 0.1, true); // turns to 3 balls
     RunIndex(100); // activates intake
-    MoveEncoderPID(TestPara, -70, 27.9 , 0.3,-30,false); // drives and turns towards the 3 blocks near center
+    MoveEncoderPID(TestPara, -70, 10.5 ,0.3,-30,false); // drives and turns towards the 3 blocks near center
+    // 27.9 is original value without scraper
+    Scrapper.set(true);
+    MoveEncoderPID(TestPara, -70, 18.9 ,0.2,-30,false);
+    Scrapper.set(false);
     //MoveEncoderPID(TestPara, -70, 5.9 , 0.3,-20,true); // drives towards line 
-    MoveEncoderPID(TestPara, -80, 10.5 , 0.3,-70,true); // curves to balls ynder logkn goal
+    MoveEncoderPID(TestPara, -80, 11.5 , 0.3,-70,true); // curves to balls under long goal
     Scrapper.set(true);
     //MoveEncoderPID(TestPara, -60, 2 , 0.3,-80,true); // moves forward a bit more
     wait(250,msec);
 
     //TurnMaxTimePID(TestPara, -70, 0.1, true); // turns away
-    MoveEncoderPID(TestPara, 80, 17.7, 0.3,-76,true); // move back to mis goal
+    MoveEncoderPID(TestPara, 80, 18.9, 0.3,-76,true); // move back to mid goal
     TurnMaxTimePID(TestPara, -135, 0.3, true); // turns to mid goal
     MoveEncoderPID(TestPara, 50, 1 , 0.2, -135,false); // drives backwards to middle goal
     RunIndex(50);    
     MiddleScore();
-    wait(550,msec);
+    wait(620,msec);
     RunIndex(0);
     NeutralScore();
     wait(50,msec);
-    MoveEncoderPID(TestPara, -80, 32.8, 0.4, -125,false); // drives to long goal
+    MoveEncoderPID(TestPara, -80, 32, 0.4, -125,false); // drives to long goal
     //MoveEncoderPID(TestPara, -60, 39.1, 0.4, -130,false); // drives to long goal
     TurnMaxTimePID(TestPara, 180, 0.3, true); // turns to matchloader
     RunIndex(100);
     MoveTimePID(TestPara, 45, 1.4 , 0.4, 180,false); // move into matchloader
     //MoveTimePID(TestPara, 20, 0.4, 0.4, 180,false); // mactchload
-    MoveTimePID(TestPara, -70, 0.8, 0.4, 180,false); // move to long goal
+    MoveTimePID(TestPara, -70, 0.85, 0.4, 180,false); // move to long goal
     Scrapper.set(false);
     HighScore();
     MoveTimePID(TestPara, -25, 1.5, 0.4, 180,false); // score
@@ -47,7 +51,7 @@ void high_basic() { // NEGATIVE TURNS TO THE LEFT
     wait(100,msec);
     MoveEncoderPID(TestPara, 100, 7.85, 0.4, -170, false); // goes to the side of long goal a bit
 
-    MoveEncoderPID(TestPara, 100, 10, 0.4, 178, false); // backs up to wing
+    MoveEncoderPID(TestPara, 100, 12.3, 0.6, 179, false); // backs up to wing
     //MoveTimePID(TestPara, -40, 0.6, 0.2, -175, false); // slows down
     wait(200,msec);
     Move(-30,0);

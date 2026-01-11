@@ -12,9 +12,29 @@
 void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     PIDDataSet TurnPara={1.5,0.1,0.12};
+    PIDDataSet TestPara={1.5,0.1,0.12};
     PIDDataSet DrivePara = {1.2, 0.0, 4.0};
 
+
+    // RunIndex(100);
+    // wait(1000,msec);
+    // RunIndex(0);
+    // MiddleScore();
+    // wait(100,msec);
+    // RunIndex(50);
+    // MoveTimePID(TestPara, -10, 0.5, 0.2, 0, false); // score
+    // RunIndex(40);
+    // MoveTimePID(TestPara, -10, 0.8, 0.2, 0, false); // score
+    // RunIndex(28);
+    // MoveTimePID(TestPara, -10, 2, 0.2, 0, false); // score
+    // NeutralScore();
+
+
     MoveEncoderPID(TurnPara, -40, 1.5, 0.3, 0, true);
+
+
+
+
     // MoveDistancePID(DrivePara, TurnPara, 30, 1, 100, 0.5, 0, true);
 
     // PIDDataSet PurePara={0.05,0.0,0.3};

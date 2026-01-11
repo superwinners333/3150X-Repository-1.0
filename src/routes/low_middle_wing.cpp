@@ -13,7 +13,7 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TurnPara={1.5,0.1,0.12};
     // SIXSEVEEN 77777777777777777777
     NeutralScore();
-    MoveEncoderPID(TurnPara, -80, 16, 0.3, 0,false); // drives to mathcloader
+    MoveEncoderPID(TurnPara, -80, 14, 0.3, 0,false); // drives to mathcloader
     Scrapper.set(true);
     RunIndex(70);
     TurnMaxTimePID(TurnPara, 90, 0.3, true); // turns to matchloader

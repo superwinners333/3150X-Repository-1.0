@@ -108,7 +108,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 11; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 9; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -199,12 +199,13 @@ int RV;
 int LV;
 
 bool middleActiv = false;
+double turnConst = 2.75/3.75;
 int DriveTask(void){
   while(true)
   {
     EXIT=true;
-    RV=-Controller1.Axis3.position(percent)+Controller1.Axis1.position(percent);
-    LV=-Controller1.Axis3.position(percent)-Controller1.Axis1.position(percent);
+    RV=-Controller1.Axis3.position(percent)+(Controller1.Axis1.position(percent)*turnConst);
+    LV=-Controller1.Axis3.position(percent)-(Controller1.Axis1.position(percent)*turnConst);
     Move(LV,RV);
   }
 

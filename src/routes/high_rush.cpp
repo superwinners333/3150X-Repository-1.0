@@ -12,19 +12,44 @@
 void high_rush() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     PIDDataSet TurnPara={1.5,0.1,0.12};
-    PIDDataSet DrivePara={1.5,0.1,0.12};
+    PIDDataSet TestPara={1.5,0.1,0.15};
     PIDDataSet PurePara={1.5,0.1,0.12};
 
+    RunIndex(100);
+    MoveEncoderPID(TurnPara, -100, 10, 0.2, -10, false); // goes forward
+    TurnMaxTimePID(TurnPara, -80, 0.33, false); // turn to 3 blocks
+    MoveEncoderPID(TurnPara, -100, 10.6, 0.2, -85, false); // goes into the 3 blocks
+    Scrapper.set(true);
+    TurnMaxTimePID(TurnPara, -130, 0.2, false); // turns to between long goal and matchload tube
 
-    std::vector<Point> backCurve = {
-    {0, 0},
-    {-12, -6},
-    {-24, -6},
-    {-36, 0}
-    };
+    MoveEncoderPID(TurnPara, -80, 16.3, 0.4, -130, true); // goes between there
 
-    PurePursuitDrive(backCurve, PurePara, 10, 80, true, false);
+    TurnMaxTimePID(TurnPara, -170, 0.35, false); // turns to matchload
+    MoveTimePID(TurnPara, 100, 0.5, 0.5, -178, false); // goes into matchload
+    MoveTimePID(TurnPara, 40, 0.75, 0.2, 180, false); // slows down
+    
+    // MoveEncoderPID(TurnPara, 50, 1, 0.1, 180, false); // moves backwards very little so we have room to adjust
 
+    MoveTimePID(TurnPara, -80, 0.9, 1, 180, false); // goes backwards into long goal
+    HighScore(); // activates long goal scoring
+    wait(100,msec);
+    MoveTimePID(TurnPara, -50, 1.7, 0.2, 180, false); // pushes into long goal
+
+    // wing code
+    MoveEncoderPID(TestPara, -90, 9.5, 0.4, 158, false); // goes away from long goal
+    Wings.set(false); // lowers wings
+    wait(100,msec);
+    MoveEncoderPID(TestPara, 100, 7.85, 0.4, -170, false); // goes to the side of long goal a bit
+
+    MoveEncoderPID(TestPara, 100, 12.3, 0.6, 179, false); // backs up to wing
+    //MoveTimePID(TestPara, -40, 0.6, 0.2, -175, false); // slows down
+    wait(200,msec);
+    Move(-30,0);
+    wait(100,msec);
+    //Move(-30,0); // turns to lock
+    wait(2000,msec);
+    //Move(0,0);
+    //BStop();
 
     int screenheading = Gyro.heading(degrees);
     Brain.Screen.clearScreen();

@@ -49,7 +49,6 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     RunIndex(100);
     MoveEncoderPID(TestPara, -60, 13.6 , 0.3, 105, true); // grab blue lock
     wait(400,msec);
-    Scrapper.set(true);
     TurnMaxTimePID(TestPara, 45, 0.3, true); // turns to face middle goal
     MoveTimePID(TestPara, -40, 0.55, 0.2, 45, false); // backs up into middle goal
     RunIndex(0);
@@ -67,6 +66,7 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
 
     //------------------------------------------------------------------------------------long goal 1
     MiddleScore();
+    Scrapper.set(true);
     RunIndex(100);
     MoveEncoderPID(TestPara, -80, 40, 0.3, 45,true); // drives to long goal
     TurnMaxTimePID(TestPara, 0, 0.2, true); // turns to matchloader
@@ -95,10 +95,10 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -25, 1.95, 0.4, 180,true); // score
     NeutralScore();
     Scrapper.set(true);
-    MoveTimePID(TestPara, 40, 1.5 , 0.3, 180,false); // move forward into matchloader
-    MoveTimePID(TestPara, 20, 1.2, 0.2, 180,false); // mactchload
+    MoveTimePID(TestPara, 43, 1.5 , 0.3, 180,false); // move forward into matchloader
+    MoveTimePID(TestPara, 20, 1.3, 0.2, 180,false); // mactchload
 
-    MoveTimePID(TestPara, -80, 0.6, 0.1, 180,true); // move to long goal
+    MoveTimePID(TestPara, -75, 0.7, 0.1, 180,true); // move to long goal
     HighScore();
     MoveTimePID(TestPara, -25, 2, 0.4, 180,true); // score
     Scrapper.set(false);
@@ -117,8 +117,8 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     Scrapper.set(true);
     NeutralScore();
     RunIndex(100);
-    MoveTimePID(TestPara, 40, 1.3 , 0.4, 180,false); // move into matchloader
-    MoveTimePID(TestPara, 20, 1.3, 0.4, 180,false); // mactchload 
+    MoveTimePID(TestPara, 43, 1.3 , 0.4, 180,false); // move into matchloader
+    MoveTimePID(TestPara, 20, 1.2, 0.4, 180,false); // mactchload 
     MoveEncoderPID(TestPara, 80, 8, 0.4, 180,true); // move back
     TurnMaxTimePID(TestPara, 135, 0.2, true); // turns to walll
     MoveEncoderPID(TestPara, 80, 9.4, 0.4, 135 ,true); // moves to beside goal
@@ -129,7 +129,7 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, 50, 9, 0.2, 180, true); // slows down
     wait(100,msec);
     TurnMaxTimePID(TestPara, -135, 0.2, true); // turns to aglin with goal
-    MoveEncoderPID(TestPara, 80, 7.8, 0.2, -135, true); // move to goal and matcjoader
+    MoveEncoderPID(TestPara, 80, 8, 0.2, -135, true); // move to goal and matcjoader
     TurnMaxTimePID(TestPara, 0, 0.5, true); // turns to have back face long goal
     MoveTimePID(TestPara, -80, 0.4, 0.1, 0,true); // move to long goal
     HighScore();
@@ -137,10 +137,10 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -25, 1.95, 0.4, 0,true); // score
     NeutralScore();
     Scrapper.set(true);
-    MoveTimePID(TestPara, 40, 1.3 , 0.4, 0,false); // move forward into matchloader
+    MoveTimePID(TestPara, 43, 1.3 , 0.4, 0,false); // move forward into matchloader
     MoveTimePID(TestPara, 20, 1.3, 0.4, 0,false); // mactchload
 
-    MoveTimePID(TestPara, -80, 0.8, 0.1, 0,true); // move to long goal
+    MoveTimePID(TestPara, -75, 0.7, 0.1, 0,true); // move to long goal
     HighScore();
     MoveTimePID(TestPara, -25, 2, 0.4, 0,true); // score
     Scrapper.set(false);
