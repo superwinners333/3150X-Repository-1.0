@@ -108,7 +108,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 9; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 1; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -149,7 +149,7 @@ void autonomous(void) {
 
   if(AutoSelectorVal==5)// left 5
   {
-
+    high_four();
   }
 
   if(AutoSelectorVal==6)// left 6
@@ -184,7 +184,7 @@ void autonomous(void) {
 
   if(AutoSelectorVal==12)// left 6
   {
-
+    low_four();
   }
 
   if(AutoSelectorVal==13) // PROGRAMMING SKILLS GO HERE

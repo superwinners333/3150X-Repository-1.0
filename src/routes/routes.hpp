@@ -16,4 +16,6 @@ extern void high_rush();
 extern void low_rush();
 extern void high_middle_wing();
 extern void low_middle_wing();
+extern void low_four();
+extern void high_four();
 #endif

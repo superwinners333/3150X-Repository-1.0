@@ -30,8 +30,7 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     // NeutralScore();
 
 
-    MoveEncoderPID(TurnPara, -40, 1.5, 0.3, 0, true);
-
+    MoveEncoderPID(TurnPara, -40, 2.5, 0.3, 0, true);
 
 
 

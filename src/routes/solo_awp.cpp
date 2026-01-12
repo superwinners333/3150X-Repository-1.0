@@ -20,7 +20,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TurnPara, 50, 0.9 , 0.3, 90,false); // move into matchloader
     MoveTimePID(TurnPara, -70, 1.1, 0.3, 90,false); // move backwards to long goal
     HighScore();
-    MoveTimePID(TurnPara, -10, 1, 0.3, 90,false); // move to long goal
+    MoveTimePID(TurnPara, -10, 1, 0.3, 90,false); // move into long goal
     Scrapper.set(false);
     MoveEncoderPID(TurnPara, -70, 1.5 , 0.3, 90,true); // go back up from long goal 
     TurnMaxTimePID(TurnPara, -155, 0.2, false); // turns left
