@@ -122,9 +122,9 @@ Discarded input sections
                 0x00000000      0x1d0 build/src/movement.o
  .ARM.exidx.text._Z21MaxTimePIDTurnOneSide10PIDDataSetddb
                 0x00000000        0x8 build/src/movement.o
- .text._Z15MoveDistancePID10PIDDataSetS_diiddb
-                0x00000000      0x368 build/src/movement.o
- .ARM.exidx.text._Z15MoveDistancePID10PIDDataSetS_diiddb
+ .text._Z7MovePID10PIDDataSetS_diddb
+                0x00000000       0x78 build/src/movement.o
+ .ARM.exidx.text._Z7MovePID10PIDDataSetS_diddb
                 0x00000000        0x8 build/src/movement.o
  .text._Z4dist5PointS_
                 0x00000000       0x58 build/src/movement.o

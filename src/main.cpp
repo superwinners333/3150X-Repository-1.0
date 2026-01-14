@@ -126,7 +126,6 @@ void autonomous(void) {
   PIDDataSet TestPara={4,0.1,0.2};
   Zeroing(true,true);
 
-  //Put Auto route function into if statements to use autoselector
   if(AutoSelectorVal==1)// left 1
   {
     high_basic();

@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 using namespace vex;
 
@@ -364,7 +365,42 @@ if(fabs(CSpeed)<fabs((double)Speed))
   else CStop();
 }
 
-/** Distance PID that matches Alfred's drivetrain:
+void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, int Speed, double extraTime, double ABSHDG, bool brake)
+{
+  double CSpeed=0;
+  Zeroing(true,false);
+  ChassisDataSet SensorVals;
+  SensorVals=ChassisUpdate();
+  double P_heading=0; // pid values
+  double I_heading=0;
+  double D_heading=0;
+  double P_dist=0;
+  double I_dist=0;
+  double D_dist=0;
+  double E_heading=0; // heading error
+  double E_dist=0; // distance error
+  double PrevE_heading=0; // previous errors
+  double PrevE_dist=0;
+
+  double Correction=0;
+  double DPS = (600*wheelToMotorRatio*wheelDiam*M_PI)/60; // distance per sec (inches)
+
+  Brain.Timer.reset();
+  
+  while (Brain.Timer.value() <= ((dist/DPS)+0.1+extraTime)) {
+    SensorVals=ChassisUpdate();
+    E_dist = dist-SensorVals.Avg;
+  }
+
+
+  if(brake){BStop(); // braking logic
+  wait(200,msec);}
+  else CStop();
+}
+
+
+
+/** Distance PID
  *  NEGATIVE speed = forward
  *  POSITIVE speed = backward
  *
@@ -378,113 +414,113 @@ if(fabs(CSpeed)<fabs((double)Speed))
  * @param brake   true = brake, false = coast
  */
 
-void MoveDistancePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, int dir, int MaxSpd, double AccT, double ABSHDG, bool brake)
-{
-  // dir: 1 = forward, -1 = backward
-  if(dir != 1 && dir != -1) dir = 1;
+// void MoveDistancePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, int dir, int MaxSpd, double AccT, double ABSHDG, bool brake)
+// {
+//   // dir: 1 = forward, -1 = backward
+//   if(dir != 1 && dir != -1) dir = 1;
 
-  Zeroing(true, false);
-  ChassisDataSet SensorVals = ChassisUpdate();
+//   Zeroing(true, false);
+//   ChassisDataSet SensorVals = ChassisUpdate();
 
-  // Encoder: forward = positive
-  // Motor: forward = negative
-  double targetDist = (dir == 1 ? fabs(dist) : -fabs(dist));
+//   // Encoder: forward = positive
+//   // Motor: forward = negative
+//   double targetDist = (dir == 1 ? fabs(dist) : -fabs(dist));
 
-  double CSpeed = 0;
-  double D_P = 0, D_I = 0, D_D = 0;
-  double H_P = 0, H_I = 0, H_D = 0;
+//   double CSpeed = 0;
+//   double D_P = 0, D_I = 0, D_D = 0;
+//   double H_P = 0, H_I = 0, H_D = 0;
 
-  double prevDistErr = 0;
-  double prevHeadErr = 0;
+//   double prevDistErr = 0;
+//   double prevHeadErr = 0;
 
-  // --- OVERSHOOT DETECTION ---
-  bool overshot = false;
-  int lastSign = 0;
+//   // --- OVERSHOOT DETECTION ---
+//   bool overshot = false;
+//   int lastSign = 0;
 
-  while(true)
-  {
-    SensorVals = ChassisUpdate();
-    double currDist = SensorVals.Avg;
+//   while(true)
+//   {
+//     SensorVals = ChassisUpdate();
+//     double currDist = SensorVals.Avg;
 
-    // --- DISTANCE PID ---
-    double distErr = targetDist - currDist;
+//     // --- DISTANCE PID ---
+//     double distErr = targetDist - currDist;
 
-    // distance deadband
-    if (fabs(distErr) < 0.3) {
-      distErr = 0;
-    }
+//     // distance deadband
+//     if (fabs(distErr) < 0.3) {
+//       distErr = 0;
+//     }
 
-    // --- OVERSHOOT LOGIC ---
-    int signNow = (distErr > 0) - (distErr < 0);  // +1, -1, or 0
+//     // --- OVERSHOOT LOGIC ---
+//     int signNow = (distErr > 0) - (distErr < 0);  // +1, -1, or 0
 
-    // Detect first overshoot
-    if (lastSign != 0 && signNow != 0 && signNow != lastSign) {
-        overshot = true;
-    }
+//     // Detect first overshoot
+//     if (lastSign != 0 && signNow != 0 && signNow != lastSign) {
+//         overshot = true;
+//     }
 
-    // If already overshot, do NOT allow crossing back
-    if (overshot && signNow != lastSign && signNow != 0) {
-        Move(0, 0);
-        break;
-    }
+//     // If already overshot, do NOT allow crossing back
+//     if (overshot && signNow != lastSign && signNow != 0) {
+//         Move(0, 0);
+//         break;
+//     }
 
-    lastSign = signNow;
+//     lastSign = signNow;
 
-    // --- PID CALC ---
-    D_P = DistK.kp * distErr;
-    D_I += DistK.ki * distErr * 0.02;
-    D_D = DistK.kd * (distErr - prevDistErr);
+//     // --- PID CALC ---
+//     D_P = DistK.kp * distErr;
+//     D_I += DistK.ki * distErr * 0.02;
+//     D_D = DistK.kd * (distErr - prevDistErr);
 
-    double distOut = D_P + D_I + D_D / 0.02;
+//     double distOut = D_P + D_I + D_D / 0.02;
 
-    // Clamp
-    if(distOut > MaxSpd) distOut = MaxSpd;
-    if(distOut < -MaxSpd) distOut = -MaxSpd;
+//     // Clamp
+//     if(distOut > MaxSpd) distOut = MaxSpd;
+//     if(distOut < -MaxSpd) distOut = -MaxSpd;
 
-    // --- RAMPING ---
-    double step = (double)MaxSpd / (AccT * 0.5) * 0.02;  // 2x faster ramp
-    if(CSpeed < distOut) {
-      CSpeed += step;
-      if(CSpeed > distOut) CSpeed = distOut;
-    } else if(CSpeed > distOut) {
-      CSpeed -= step;
-      if(CSpeed < distOut) CSpeed = distOut;
-    }
+//     // --- RAMPING ---
+//     double step = (double)MaxSpd / (AccT * 0.5) * 0.02;  // 2x faster ramp
+//     if(CSpeed < distOut) {
+//       CSpeed += step;
+//       if(CSpeed > distOut) CSpeed = distOut;
+//     } else if(CSpeed > distOut) {
+//       CSpeed -= step;
+//       if(CSpeed < distOut) CSpeed = distOut;
+//     }
 
-    // --- HEADING PID ---
-    double LGV = SensorVals.HDG - ABSHDG;
-    if(LGV > 180) LGV -= 360;
-    if(LGV < -180) LGV += 360;
+//     // --- HEADING PID ---
+//     double LGV = SensorVals.HDG - ABSHDG;
+//     if(LGV > 180) LGV -= 360;
+//     if(LGV < -180) LGV += 360;
 
-    H_P = HeadK.kp * LGV;
-    H_I += HeadK.ki * LGV * 0.02;
-    H_D = HeadK.kd * (LGV - prevHeadErr);
+//     H_P = HeadK.kp * LGV;
+//     H_I += HeadK.ki * LGV * 0.02;
+//     H_D = HeadK.kd * (LGV - prevHeadErr);
 
-    double Correction = H_P + H_I + H_D / 0.02;
+//     double Correction = H_P + H_I + H_D / 0.02;
 
-    // --- APPLY DRIVE ---
-    double motorCmd = -CSpeed;  // negative = forward
-    Move(motorCmd + Correction, motorCmd - Correction);
+//     // --- APPLY DRIVE ---
+//     double motorCmd = -CSpeed;  // negative = forward
+//     Move(motorCmd + Correction, motorCmd - Correction);
 
-    prevDistErr = distErr;
-    prevHeadErr = LGV;
+//     prevDistErr = distErr;
+//     prevHeadErr = LGV;
 
-    // --- EXIT CONDITION ---
-    if (fabs(distErr) < 0.5 && fabs(CSpeed) < 10) {
-      Move(0, 0);
-      break;
-    }
+//     // --- EXIT CONDITION ---
+//     if (fabs(distErr) < 0.5 && fabs(CSpeed) < 10) {
+//       Move(0, 0);
+//       break;
+//     }
 
-    wait(20, msec);
-  }
+//     wait(20, msec);
+//   }
 
-  if(brake){
-    BStop();
-    wait(120, msec);
-  } else {
-    CStop();
-  }
-}
+//   if(brake){
+//     BStop();
+//     wait(120, msec);
+//   } else {
+//     CStop();
+//   }
+// }
 
 
  /*
