@@ -10,14 +10,15 @@ extern int PX;
 extern int JX;
 
 struct ChassisDataSet{
-  int Left;
-  int Right;
+  double Left;
+  double Right;
   double Avg;   // Average between left and right of the drive train
   int Diff;     // Left - Right
   double HDG;   // Robot heading
 
-  double X; // for odom
-  double Y;
+  double backD;
+  double leftD;
+  double rightD;
 
 };
 
@@ -53,7 +54,9 @@ extern void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT,
 extern void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake);
 void MaxTimePIDTurnOneSide(PIDDataSet KVals,double DeltaAngle,double TE, bool brake);
 void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake);
-extern void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, int Speed, int timeout, double ABSHDG, bool brake);
+extern void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake);
+extern void WallBackPID(PIDDataSet DistK, PIDDataSet HeadK, double distFromWall, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake);
+
 
 extern void MoveDistancePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, int dir, int MaxSpd, double AccT, double ABSHDG, bool brake);
 extern void PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake);

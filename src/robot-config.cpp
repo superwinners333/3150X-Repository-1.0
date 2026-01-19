@@ -31,10 +31,13 @@ digital_out LiftUp = digital_out(Brain.ThreeWirePort.D);
 digital_out LiftDown = digital_out(Brain.ThreeWirePort.E);
 
 inertial Gyro = inertial(PORT11);
-//Naming convention: 
+distance backSensor = distance(PORT19);
+distance leftSensor = distance(PORT15);
+distance rightSensor = distance(PORT14);
+
 // Important variables
 const double wheelDiam = 3.25;
-const double wheelToMotorRatio = 36/48.0; // make sure one of the numbers is a decimal so it stays a float
+const double wheelToMotorRatio = 36.0/48.0; // make sure one of the numbers is a decimal so it stays a float
 
 
 // VEXcode generated functions

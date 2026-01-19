@@ -18,9 +18,12 @@ extern digital_out LiftUp;
 extern digital_out LiftDown;
 extern digital_out DoubleP;
 extern digital_out Wings;
-extern motor PU;
 extern inertial Gyro;
 extern digital_out Lift;
+
+extern distance backSensor;
+extern distance leftSensor;
+extern distance rightSensor;
 
 extern const double wheelDiam;
 extern const double wheelToMotorRatio;
