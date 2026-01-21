@@ -17,7 +17,7 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet DrivePara = {1.2, 0.0, 4.0};
 
     PIDDataSet APara = {2.65,0.011,0.25};
-    PIDDataSet BPara = {2.7,1.0,150.0};
+    PIDDataSet BPara = {3.5,1.0,0.28};
 
 
     

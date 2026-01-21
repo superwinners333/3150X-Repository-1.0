@@ -95,10 +95,8 @@ while(!confirmed2 && !EXIT) // waits for auto selection
   wait(20,msec); // gives a small cooldown before looping again
 }
 
-AutonLogic();
-
-// Brain.Screen.clearScreen();
-// NewField();
+// determines which auto to run and creates confirm menu
+AutonLogic(); 
 
 
   // All activities that occur before the competition starts

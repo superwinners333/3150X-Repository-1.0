@@ -63,7 +63,6 @@ ChassisDataSet ChassisUpdate()
 
   CDS.Avg=(CDS.Left+CDS.Right)/2;
 
-
   CDS.Diff=CDS.Left-CDS.Right;
   CDS.HDG=Gyro.heading(degrees);
 
@@ -198,19 +197,19 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
   {
     if(fabs(CSpeed)<fabs((double)Speed))
     {
-      CSpeed+=Speed/AccT*0.02;
+      CSpeed+=Speed/AccT*0.02; // acceleration logic
     }
 
-    SensorVals=ChassisUpdate();
-    LGV=SensorVals.HDG-ABSHDG;
-    if(LGV>180) LGV=LGV-360;
+    SensorVals=ChassisUpdate(); 
+    LGV=SensorVals.HDG-ABSHDG; // gyro error
+    if(LGV>180) LGV=LGV-360; 
     PVal=KVals.kp*LGV;
     IVal=IVal+KVals.ki*LGV*0.02;
     DVal=KVals.kd*(LGV-PrevE);
 
-    Correction=PVal+IVal+DVal/0.02;
+    Correction=PVal+IVal+DVal/0.02; 
 
-    Move(CSpeed+Correction,CSpeed-Correction);
+    Move(CSpeed+Correction,CSpeed-Correction); 
     PrevE=LGV;
     wait(20, msec);
   }
@@ -721,17 +720,19 @@ void notPID(PIDDataSet DistK, PIDDataSet HeadK, double distFromWall, double maxA
     D_dist = (PrevE_dist - E_dist)/travelDistance; // percent of (change in error / starting error)
 
     // max speed
-    outputSpeed = (E_dist/travelDistance)*Speed; // output is equal to % of distance travelled
     double percentTravelled = E_dist/travelDistance; // percent travelled
     double outputSign = (E_dist/(fabs(E_dist))); // gets the sign of the error
+    outputSpeed = (E_dist/travelDistance)*100.0 + 50.0; // output is equal to % of distance travelled + 50
+    if (fabs(outputSpeed) > Speed) outputSpeed = outputSign * Speed; // caps outputSpeed at Speed
 
     double speedCap = Speed; 
-    if (fabs(E_dist) <= exitError) speedCap = 10; // this should be changed to include the braking mechanism
-    else if (fabs(E_dist) <= 4.0) speedCap = 30;
-    else if (fabs(E_dist) <= 8.0) speedCap = 70;
+    if (fabs(E_dist) <= exitError) speedCap = 0.0; 
+    else if (fabs(E_dist) <= 2.0) speedCap = 25.0;
+    else if (fabs(E_dist) <= 4.0) speedCap = 40.0;
+    else if (fabs(E_dist) <= 8.0) speedCap = 70.0;
+    else if (fabs(E_dist) <= 12.0) speedCap = 90.0;
 
-    if (speedCap > Speed) speedCap = Speed; // clamps speedCap at speed
-    outputSpeed = outputSign * speedCap;
+    if (speedCap < fabs(outputSpeed)) outputSpeed = speedCap * outputSign;
     
 
     /* 

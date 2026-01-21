@@ -287,7 +287,7 @@ void drawField(void)
   Brain.Screen.drawRectangle(240,106,2,25);
   Brain.Screen.drawRectangle(240,106,24,2);
 
-  Brain.Screen.setPenColor("#000000ff");
+  Brain.Screen.setPenColor("#000000ff"); // labels the corners
   Brain.Screen.setFillColor("#808080");
   Brain.Screen.setFont(monoM);
   Brain.Screen.setCursor(4,6);
@@ -301,7 +301,7 @@ void drawField(void)
 
   // bottom right is at (159,107);
   // 240x480
-  drawCurvedBorder(310,50,140,50,10,2,"e","e");
+  drawCurvedBorder(310,50,140,50,10,2,"e","e"); // adds a confirm button
   Brain.Screen.setPenColor("#FFC0CB");
   Brain.Screen.setFillColor("#000000");
   Brain.Screen.setFont(mono30);
@@ -309,7 +309,7 @@ void drawField(void)
   Brain.Screen.print("Confirm");
   Brain.Screen.setFont(monoM);
 
-  drawSkillsCorner(false);
+  drawSkillsCorner(false); // draws the skills button
   
   Brain.Screen.setPenColor("#dadada");
   Brain.Screen.setFillColor("#dadada");
@@ -354,11 +354,6 @@ void drawSkillsCorner(bool SkillsCorner)
 }
 void confirmCorner(void)
 {
-  // Brain.Screen.setPenColor("#FFC0CB");
-  // Brain.Screen.setFillColor("#000000");
-  // drawCurvedBorder(325,95,100,50,10,2,"e","e");
-  // Brain.Screen.drawRectangle(325,95,100,50);
-
   if (pressing) // just to prevent the previous menu pressing from affecting this menu
   {
     if (Brain.Screen.yPosition() < 120) // detects which corner you pressed
@@ -384,7 +379,6 @@ void confirmCorner(void)
 
   if (OLDcorner != corner){ // makes sure that it the field doesn't constantly update
     Brain.Screen.clearScreen();
-    greyScreen();
     drawField(); 
     drawSkillsCorner(false);
     Brain.Screen.setPenColor("#FFC0CB");
@@ -395,11 +389,6 @@ void confirmCorner(void)
     else if (corner == 5) drawSkillsCorner(true);
     OLDcorner = corner;
   }
-
-  // Brain.Screen.setPenColor("#FFC0CB");
-  // Brain.Screen.setFillColor("#000000");
-  // Brain.Screen.setCursor(11,40);
-  // Brain.Screen.print(corner);
 
   pressing = Brain.Screen.pressing();
 }
@@ -434,10 +423,6 @@ void AutoSelectionRefresh(void)
   if (corner == 1 || corner == 4)
   {
     option = 1; // just for knowing which auto to run
-    // drawCurvedBorder(185,42,100,50,10,2,"e","e"); // draws rectangles for the buttons
-    // drawCurvedBorder(35,42,100,50,10,2,"e","e");
-    // drawCurvedBorder(185,144,100,50,10,2,"e","e");
-    // drawCurvedBorder(35,144,100,50,10,2,"e","e");
 
     Brain.Screen.setPenColor("#FFC0CB");
     Brain.Screen.setFillColor("#000000");
@@ -462,10 +447,6 @@ void AutoSelectionRefresh(void)
   if (corner == 2 || corner == 3)
   {
     option = 2; // just for deciding which auton
-    // drawCurvedBorder(185,42,100,50,10,2,"#FFC0CB","#000000"); // draws rectangles for the border
-    // drawCurvedBorder (35,42,100,50,10,2,"#FFC0CB","#000000");
-    // drawCurvedBorder(185,144,100,50,10,2,"#FFC0CB","#000000");
-    // drawCurvedBorder(35,144,100,50,10,2,"#FFC0CB","#000000");
 
     Brain.Screen.setPenColor("#FFC0CB");
     Brain.Screen.setFillColor("#000000");
