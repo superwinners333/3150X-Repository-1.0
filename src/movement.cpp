@@ -76,53 +76,53 @@ ChassisDataSet ChassisUpdate()
 
 void Move(int left, int right)
 {
-LF.setMaxTorque(100,percent);
-LM.setMaxTorque(100,percent);
-LB.setMaxTorque(100,percent);
-RF.setMaxTorque(100,percent);
-RM.setMaxTorque(100,percent);
-RB.setMaxTorque(100,percent);
+  LF.setMaxTorque(100,percent);
+  LM.setMaxTorque(100,percent);
+  LB.setMaxTorque(100,percent);
+  RF.setMaxTorque(100,percent);
+  RM.setMaxTorque(100,percent);
+  RB.setMaxTorque(100,percent);
 
-LF.spin(forward,(double)left/100.0*11,volt);
-LM.spin(forward,(double)left/100.0*11,volt);
-LB.spin(forward,(double)left/100.0*11,volt);
-RF.spin(forward,(double)right/100.0*11,volt);
-RM.spin(forward,(double)right/100.0*11,volt);
-RB.spin(forward,(double)right/100.0*11,volt);
+  LF.spin(forward,(double)left/100.0*11,volt);
+  LM.spin(forward,(double)left/100.0*11,volt);
+  LB.spin(forward,(double)left/100.0*11,volt);
+  RF.spin(forward,(double)right/100.0*11,volt);
+  RM.spin(forward,(double)right/100.0*11,volt);
+  RB.spin(forward,(double)right/100.0*11,volt);
 }
 
 void BStop()
 {
-LF.setStopping(brake);
-LM.setStopping(brake);
-LB.setStopping(brake);
-RF.setStopping(brake);
-RM.setStopping(brake);
-RB.setStopping(brake);
+  LF.setStopping(brake);
+  LM.setStopping(brake);
+  LB.setStopping(brake);
+  RF.setStopping(brake);
+  RM.setStopping(brake);
+  RB.setStopping(brake);
 
-LF.stop();
-LM.stop();
-LB.stop();
-RF.stop();
-RM.stop();
-RB.stop();
+  LF.stop();
+  LM.stop();
+  LB.stop();
+  RF.stop();
+  RM.stop();
+  RB.stop();
 }
 
 void CStop()
 {
-LF.setStopping(coast);
-LM.setStopping(coast);
-LB.setStopping(coast);
-RF.setStopping(coast);
-RM.setStopping(coast);
-RB.setStopping(coast);
+  LF.setStopping(coast);
+  LM.setStopping(coast);
+  LB.setStopping(coast);
+  RF.setStopping(coast);
+  RM.setStopping(coast);
+  RB.setStopping(coast);
 
-LF.stop();
-LM.stop();
-LB.stop();
-RF.stop();
-RM.stop();
-RB.stop();
+  LF.stop();
+  LM.stop();
+  LB.stop();
+  RF.stop();
+  RM.stop();
+  RB.stop();
 }
 
 
@@ -172,7 +172,7 @@ void HighScore(void)
 int PrevE;//Error at t-1
 
 /** Moves the robot forward or backward. Negative speed moves
- * the robot forward. Positive value moves it backward. (Ik it's fucked up)
+ * the robot forward. Positive value moves it backward. 
  * @param KVals the PID constants
  * @param Speed the speed, from -100 to 100
  * @param dist distance travelled, in inches
@@ -221,7 +221,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
 }
 
 /** Moves the robot forward or backward. Negative speed moves
- * the robot forward. Positive value moves it backward. (Ik it's fucked up)
+ * the robot forward. Positive value moves it backward.
  * @param KVals the PID constants
  * @param DeltaAngle the absolute heading to turn to
  * @param TE time to calculate turn (not time to turn)
@@ -299,7 +299,7 @@ if(RV>=0)RV=0;
 }
 
 
-void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake){
+void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake) {
   double CSpeed=0;
   Zeroing(true,false);
   ChassisDataSet SensorVals;
@@ -337,6 +337,22 @@ void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHD
   else CStop();
 }
 
+
+
+
+
+
+/** function makes the bot travel the specified distance
+*   (negative values for speed to make the bot go backwards) 
+* @param DistK PID constants for distance
+* @param HeadK PID constants for heading
+* @param dist distance to travel (inches)
+* @param maxAccel max increase of voltage % per loop (every 20 ms)
+* @param Speed max speed that the bot can travel. Untested with values other than 100. 
+* @param timeout max time the function can run for before giving up
+* @param ABSHDG heading relative to the starting position of the bot
+* @param brake true for braking, false for coasting
+*/
 void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
 {
   Zeroing(true,false);
@@ -441,6 +457,19 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
 
 
 
+
+
+
+/** function makes the bot travel the specified distance
+* @param DistK PID constants for distance
+* @param HeadK PID constants for heading
+* @param distFromWall how far to end up away from the wall (inches)
+* @param maxAccel max increase of voltage % per loop (every 20 ms)
+* @param Speed max speed that the bot can travel. Untested with values other than 100
+* @param timeout max time the function can run for before giving up
+* @param ABSHDG heading relative to the starting position of the bot
+* @param brake true for braking, false for coasting
+*/
 void WallBackPID(PIDDataSet DistK, PIDDataSet HeadK, double distFromWall, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
 {
   Zeroing(true,false);
@@ -812,3 +841,196 @@ void notPID(PIDDataSet DistK, PIDDataSet HeadK, double distFromWall, double maxA
   wait(200,msec);}
   else CStop();
 }
+
+
+/** function to compare two values
+* returns true if compared values are within range
+* @param range range to compare within
+* @param target item 1 to compare
+* @param check item 2 to compare
+*/
+bool inRangeOf(double range, double target, double check) {
+  double upper = target+range;
+  double lower = target-range;
+
+  if (check < upper && check > lower) return true;
+  else return false;
+}
+
+
+
+
+
+// COORDINATE SYSTEM
+const double BDC = 0.0; // distance from edge of the bot to the center
+const double LDC = 0.0;
+const double RDC = 0.0;
+const double FDC = 0.0;
+
+double globalHeading = 0; // should be zero when front of the bot faces the side with the other park
+
+Point CPos; // current position
+
+Point StartingPosition(void) {
+  Point SP;
+  ChassisDataSet SenVals = ChassisUpdate();
+  SP.confidence = 1;
+
+  // distance from wall to center of the bot in the starting pos when front of bot is facing wall
+  double xwallConst = 0.0; 
+  double ywallConst = 0.0;
+  double swallConst = 0.0;
+
+  if (corner == 1 || corner == 4) { // left autos
+    if (globalHeading == -90.0) {
+      SP.x = xwallConst;
+      SP.y = SenVals.leftD + LDC;
+    }
+    else if (globalHeading == 0.0) {
+      SP.x = SenVals.leftD + LDC;
+      SP.y = SenVals.backD + BDC;
+    }
+    else if (globalHeading == 90.0) {
+      SP.x = SenVals.backD + BDC;
+      SP.y = SenVals.rightD + RDC;
+    }
+    else if (globalHeading == 180.0 || globalHeading == -180) {
+      SP.x = SenVals.rightD + RDC;
+      SP.y = ywallConst;
+    }
+  }
+  else if (corner == 2 || corner == 3) { // right autos
+    if (globalHeading == -90.0) {
+      SP.x = 144.0 - (SenVals.backD + BDC);
+      SP.y = SenVals.leftD + LDC;
+    }
+    else if (globalHeading == 0.0) {
+      SP.x = 144.0 - (SenVals.rightD + RDC);
+      SP.y = SenVals.backD + BDC;
+    }
+    else if (globalHeading == 90.0) {
+      SP.x = 144.0 - xwallConst;
+      SP.y = SenVals.rightD + RDC;
+    }
+    else if (globalHeading == 180.0 || globalHeading == -180) {
+      SP.x = 144.0 - (SenVals.leftD + LDC);
+      SP.y = ywallConst;
+    }
+  }
+  else { // skills
+    SP.x = ((SenVals.leftD + LDC) + (144.0 - (SenVals.rightD + RDC)))/2.0;
+    SP.y = swallConst;
+  }
+  return SP;
+}
+
+/** function returns distance to specified wall
+* @param TH is the trueHeading value of the bot
+* @param side is the wall that you want the distance to
+*/
+double getWallDist(double TH, double side) { 
+  // side values are:
+  // 1 = left
+  // 2 = right
+  // 3 = near
+  // 4= far
+  
+  double wallDist = 0.0;
+  
+  if (side == 1) {
+    wallDist = 1.0;
+  }
+
+  return wallDist;
+}
+
+
+Point resetPosition(Point EP) {
+  Point NP;
+  ChassisDataSet SenVals = ChassisUpdate();
+
+  double trueHeading = globalHeading + SenVals.HDG; // gets true heading relative to the field
+  if (trueHeading > 180.0) trueHeading -= 360.0;
+  else if (trueHeading < -180.0) trueHeading += 360.0;
+  NP = EP;
+  
+  // get coords of NP and then check if they are similar to NP
+
+
+  return NP;
+}
+
+
+// returns a new position of the bot
+/** @param EP encoder predicted position
+*/
+Point longGoalReset(Point EP) { // resets base on long goal position
+  Point LG; // long goal point
+  ChassisDataSet SenVals = ChassisUpdate();
+  double trueHeading = globalHeading + SenVals.HDG;
+  if (trueHeading > 180.0) trueHeading -= 360.0;
+  else if (trueHeading < -180.0) trueHeading += 360.0;
+
+  LG.y = EP.y; // just creates something to output if we are unable to reset
+  LG.x = EP.x;
+  LG.confidence = EP.confidence;
+  
+  // resets x vals
+  if (SenVals.leftD <= SenVals.rightD) {
+    if (inRangeOf(1.0,180.0,trueHeading)) LG.x = 144.0 - (SenVals.leftD + LDC); // close right
+    else if (inRangeOf(1.0,0.0,trueHeading)) LG.x = SenVals.leftD + LDC;
+  }
+  else if (SenVals.rightD < SenVals.leftD) {
+    if (inRangeOf(1.0,180.0,trueHeading)) LG.x = SenVals.rightD + RDC;
+    else if (inRangeOf(1.0,0.0,trueHeading)) LG.x = 144.0 - (SenVals.rightD + RDC);
+  }
+
+  // resets y vals with constants 
+  // the value of the constant should be the distance from the wall to the center of the bot when the bot is scoring on the long goal
+  double LGConst = 0.0;
+  if (inRangeOf(1.0,180.0,trueHeading)) LG.y = LGConst; 
+  else if (inRangeOf(1.0,0.0,trueHeading)) LG.y = 144.0 - LGConst;
+
+  return LG;
+}
+
+
+
+// only meant for resetting against the left and right walls
+Point wallReset(Point EP, bool botBack) { // if back == true, then the back of our bot is facing the wall
+  Point NP;
+  ChassisDataSet SenVals = ChassisUpdate();
+
+  double trueHeading = globalHeading + SenVals.HDG; // gets true heading relative to the field
+  if (trueHeading > 180.0) trueHeading -= 360.0;
+  else if (trueHeading < -180.0) trueHeading += 360.0;
+
+  NP = EP;
+
+  if (botBack) { // if back of bot is facing wall
+    if (EP.x > 132) NP.x = 144 - (SenVals.backD + BDC);
+    else if (EP.x < 12) NP.x = SenVals.backD + BDC;
+  }
+  else { // if front of bot is facing wall
+    if (EP.x > 132) NP.x = 144 - FDC;
+    else if (EP.x < 12) NP.x = FDC;
+  }
+
+  if (SenVals.leftD <= SenVals.rightD) { // if left side is closer to the wall
+    if (inRangeOf(1.0,90.0,trueHeading)) NP.y = 144.0 - (SenVals.leftD + LDC); // close right
+    else if (inRangeOf(1.0,-90.0,trueHeading)) NP.y = SenVals.leftD + LDC;
+  }
+  else if (SenVals.rightD < SenVals.leftD) { // if right side is closer to the wall
+    if (inRangeOf(1.0,90.0,trueHeading)) NP.y = SenVals.rightD + RDC;
+    else if (inRangeOf(1.0,-90.0,trueHeading)) NP.y = 144.0 - (SenVals.rightD + RDC);
+  }
+
+  return NP;
+}
+
+Point resetBack(Point EP);
+Point resetLeft(Point EP);
+Point resetRight(Point EP);
+
+// use negative distance values for moving backwards?
+Point triangulatePos(Point EP, double dist, double trueHeading);

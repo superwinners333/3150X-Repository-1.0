@@ -35,34 +35,34 @@ void DisplayAutoSelector(void)
   Brain.Screen.clearScreen();
   greyScreen();
 
-//auton selector
-Brain.Screen.setFont(monoM);
-Brain.Screen.setFillColor(black);
-Brain.Screen.setCursor(1,1);
-Brain.Screen.setPenWidth(3);
-Brain.Screen.setPenColor("#FFC0CB");
-Brain.Screen.drawRectangle(1,25,100,50);
+  //auton selector
+  Brain.Screen.setFont(monoM);
+  Brain.Screen.setFillColor(black);
+  Brain.Screen.setCursor(1,1);
+  Brain.Screen.setPenWidth(3);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.drawRectangle(1,25,100,50);
 
-Brain.Screen.setPenColor("#FFC0CB");
-Brain.Screen.drawRectangle(375,25,100,50);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.drawRectangle(375,25,100,50);
 
-Brain.Screen.setPenColor("#FFC0CB");
-Brain.Screen.drawRectangle(1,100,100,50);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.drawRectangle(1,100,100,50);
 
-Brain.Screen.setPenColor("#FFC0CB");
-Brain.Screen.drawRectangle(375,100,100,50);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.drawRectangle(375,100,100,50);
 
-Brain.Screen.setPenColor("#FFC0CB");
-Brain.Screen.drawRectangle(1,175,100,50);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.drawRectangle(1,175,100,50);
 
-Brain.Screen.setPenColor("#FFC0CB");
-Brain.Screen.drawRectangle(375,175,100,50);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.drawRectangle(375,175,100,50);
 
-Brain.Screen.setPenColor("#FFC0CB");
-Brain.Screen.drawRectangle(187,25,100,50);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.drawRectangle(187,25,100,50);
 
-Brain.Screen.setPenColor("#FFC0CB");
-Brain.Screen.drawRectangle(187,175,100,50);
+  Brain.Screen.setPenColor("#FFC0CB");
+  Brain.Screen.drawRectangle(187,175,100,50);
 }
 
 void DisplayWords(void)

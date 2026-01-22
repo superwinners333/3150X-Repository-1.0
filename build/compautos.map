@@ -127,8 +127,32 @@ Discarded input sections
  .ARM.exidx.text._Z9SensorPID10PIDDataSetS_ddiddb
                 0x00000000        0x8 build/src/movement.o
  .text._Z6notPID10PIDDataSetS_ddiddb
-                0x00000000      0x5c0 build/src/movement.o
+                0x00000000      0x630 build/src/movement.o
  .ARM.exidx.text._Z6notPID10PIDDataSetS_ddiddb
+                0x00000000        0x8 build/src/movement.o
+ .text._Z9inRangeOfddd
+                0x00000000       0x3c build/src/movement.o
+ .ARM.exidx.text._Z9inRangeOfddd
+                0x00000000        0x8 build/src/movement.o
+ .text._Z16StartingPositionv
+                0x00000000      0x228 build/src/movement.o
+ .ARM.exidx.text._Z16StartingPositionv
+                0x00000000        0x8 build/src/movement.o
+ .text._Z11getWallDistdd
+                0x00000000       0x20 build/src/movement.o
+ .ARM.exidx.text._Z11getWallDistdd
+                0x00000000        0x8 build/src/movement.o
+ .text._Z13resetPosition5Point
+                0x00000000       0x50 build/src/movement.o
+ .ARM.exidx.text._Z13resetPosition5Point
+                0x00000000        0x8 build/src/movement.o
+ .text._Z13longGoalReset5Point
+                0x00000000      0x1f0 build/src/movement.o
+ .ARM.exidx.text._Z13longGoalReset5Point
+                0x00000000        0x8 build/src/movement.o
+ .text._Z9wallReset5Pointb
+                0x00000000      0x258 build/src/movement.o
+ .ARM.exidx.text._Z9wallReset5Pointb
                 0x00000000        0x8 build/src/movement.o
  .data.turninverse
                 0x00000000        0x4 build/src/movement.o
@@ -137,6 +161,9 @@ Discarded input sections
  .bss.globalX   0x00000000        0x8 build/src/movement.o
  .bss.globalY   0x00000000        0x8 build/src/movement.o
  .bss.prevAvg   0x00000000        0x8 build/src/movement.o
+ .bss.globalHeading
+                0x00000000        0x8 build/src/movement.o
+ .bss.CPos      0x00000000       0x18 build/src/movement.o
  .llvm_addrsig  0x00000000       0x18 build/src/movement.o
  .text          0x00000000        0x0 build/src/helper_functions.o
  .llvm_addrsig  0x00000000        0x3 build/src/helper_functions.o

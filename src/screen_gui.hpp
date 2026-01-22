@@ -5,6 +5,8 @@ extern int AutoSelectorVal;
 extern bool confirmed;
 extern bool confirmed2;
 
+extern int corner;
+
 extern void DisplayAutoSelector();
 extern void DisplayWords();
 extern void UpdateDynamic();

@@ -29,12 +29,16 @@ struct PIDDataSet{
 };
 
 
-// for odom
+// bottom left corner of the field is 0,0
 struct Point {
-  double x;
-  double y;
+  double x; // left and right of the field
+  double y; // forward and backwards
+  int confidence;
 };
+extern double globalHeading;
+extern Point Cpos;
 
+extern bool inRangeOf(double range, double target, double check);
 
 extern void Zeroing(bool dist, bool HDG);
 extern ChassisDataSet ChassisUpdate();
