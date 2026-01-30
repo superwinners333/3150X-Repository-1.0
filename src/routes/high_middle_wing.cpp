@@ -1,6 +1,7 @@
 #include "../movement.hpp"
 #include "../helper_functions.hpp"
 #include "vex.h"
+#include <iostream>
 //PID Straight and turn arguments:
 // MoveEncoderPID(TurnPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
 // TurnMaxTimePID(TurnPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
@@ -8,13 +9,43 @@
 
 void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
-    //PIDDataSet TurnPara={4,0.1,0.2};
-    PIDDataSet TestPara={1.5,0.1,0.15};
     PIDDataSet TurnPara={1.5,0.1,0.12};
-    // SIXSEVEEN 77777777777777777777
-    NeutralScore();
-    MoveEncoderPID(TurnPara, -70, 19.5 , 0.3, 0,true);
-    Scrapper.set(true);
+    PIDDataSet TestPara={1.5,0.1,0.15};
+    PIDDataSet PurePara={1.5,0.1,0.12};
+
+    timer stopwatch;
+
     RunIndex(100);
-    TurnMaxTimePID(TurnPara, 90, 0.3, true); 
+    MoveEncoderPID(TurnPara, -100, 10.0, 0.2, -30, false); // goes forward
+    Scrapper.set(true);
+    TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
+
+    MoveEncoderPID(TurnPara, -80, 26.1, 0.2, -125, true); // goes between there
+
+    TurnMaxTimePID(TurnPara, -175, 0.4, false); // turns to matchload
+    MoveTimePID(TurnPara, 100, 0.25, 0.2, -178, false); // goes into matchload
+    MoveTimePID(TurnPara, 60, 0.8, 0.2, -178, false); // slows down
+
+    MoveTimePID(TurnPara, -80, 0.7, 0.2, -178, false); // goes backwards into long goal
+    HighScore(); // activates long goal scoring
+    wait(50,msec);
+    MoveTimePID(TurnPara, -50, 0.55, 0.2, -178, false); // pushes into long goal
+    NeutralScore();
+    wait(100,msec);
+    MoveEncoderPID(TestPara, -60, 12, 0.1, -178, false); // moves forward
+    TurnMaxTimePID(TurnPara, -135, 0.4, false); // turns to face middle
+    MoveEncoderPID(TestPara, 100, 40, 0.3, -135, false); // moves back into middle goal
+    MoveTimePID(TestPara, -40, 0.4, 0.1, -135, false);
+    MiddleScore();
+    wait(500,msec);
+    MoveEncoderPID(TestPara, -100, 20, 0.3, -135, false); // moves forward into wing position
+
+    TurnMaxTimePID(TurnPara, 179, 0.4, false); // turns to wing
+    Wings.set(false);
+    wait(50,msec);
+    MoveEncoderPID(TestPara, 100, 13.0, 0.6, 179, false); // backs up to wing
+    wait(200,msec);
+    Move(-30,0);
+    wait(100,msec);
+    std::cout<<stopwatch/1000.0<<std::endl;
 }

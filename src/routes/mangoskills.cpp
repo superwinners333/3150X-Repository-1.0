@@ -11,14 +11,14 @@
 
 void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
-    PIDDataSet TurnPara={1.9,0.0,0.053};
+    PIDDataSet TurnPara={1.9,0.0,0.053}; // movement pid
+    PIDDataSet MovePara={4.0,0.0,0.17}; // movement pid 
+
     PIDDataSet TestPara={1.5,0.1,0.12};
-    PIDDataSet MovePara={4.0,0.0,0.18};
-    PIDDataSet DrivePara = {1.2, 0.0, 4.0};
+    PIDDataSet DrivePara = {1.2, 0.0, 4.0}; 
 
     PIDDataSet APara = {2.65,0.011,0.25};
     PIDDataSet BPara = {3.5,1.0,0.28};
-
 
     
     // RunIndex(100);
@@ -34,8 +34,8 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     // MoveTimePID(TestPara, -10, 2, 0.2, 0, false); // score
     // NeutralScore();
 
-    WallBackPID(APara, TurnPara, 15.0, 10.0, 100.0, 5.0, 0, true);
-    // MovePID(MovePara, TurnPara, 48.0, 10.0, -100, 5.0, 0, true);
+    // WallBackPID(APara, TurnPara, 15.0, 10.0, 100.0, 5.0, 0, true);
+    MovePID(MovePara, TurnPara, 5.0, 10.0, 100, 5.0, 0, true);
 
     // wait(50,msec);
     // TurnMaxTimePID(TurnPara,90,0.5,true);

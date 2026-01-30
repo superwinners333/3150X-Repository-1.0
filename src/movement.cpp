@@ -373,12 +373,14 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
 
   // TUNEABLE EXIT VARIABLES
   double exitError = 0.2;        // how close to target before stopping
-  double exitDerivative = 4.0;   // how still the robot must be
+  double exitDerivative = 2.5;   // how still the robot must be
   int exitTime = 150;              // ms required to be stable
   // int timeout = 0;               // ms max runtime
 
   if (timeout <= 0) timeout = (dist/DPS)*1000*3; // creates a default exit time 
   bool settled = false, timedOut = false;
+
+  double speedSign = Speed / (fabs(Speed));
 
   // Brain.Timer.value() <= ((dist/DPS)+0.1+extraTime) 
 
@@ -386,7 +388,7 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
   // ------------------------ main PID loop ------------------------
   // ---------------------------------------------------------------
   while (!settled && !timedOut) {
-    SensorVals=ChassisUpdate(); // gets drivetrain values
+    SensorVals = ChassisUpdate(); // gets drivetrain values
     
     // distance PID calculations
     E_dist = dist - SensorVals.Avg;
@@ -397,6 +399,9 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
     // std::cout << D_dist << std::endl;
 
     rawSpeed = P_dist + I_dist + D_dist; // output speed
+    if (dist <= 8.0) {
+      rawSpeed += (E_dist * 3.20 * speedSign); // increases the P value for small distances
+    }
     if (Speed < 0) rawSpeed = rawSpeed * -1.0;
     if (abs(rawSpeed) > abs(Speed)) { // clamps outputSpeed at max speed
       if (Speed >= 0 && rawSpeed >= 0) rawSpeed = Speed;
@@ -429,6 +434,7 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
 
     // distance exit conditions calculations
     bool errorSmall = fabs(dist-((SensorVals.Avg+0.95336)/(1.01514))) <= exitError;
+    if (dist <= 8.0) errorSmall = fabs(dist-(0.768092*(SensorVals.Avg)+1.33073)) <= exitError;
     bool derivativeSmall = fabs(D_dist) <= exitDerivative;
 
     if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
@@ -442,7 +448,8 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
     std::cout << "Timer: " << Brain.Timer.value() << std::endl;
     std::cout << "distance: " << SensorVals.Avg << std::endl;
     std::cout << "error: " << E_dist << std::endl;
-    std::cout << "predicted: " << (SensorVals.Avg+0.95336)/(1.01514) << std::endl;
+    // std::cout << "predicted: " << (SensorVals.Avg+0.95336)/(1.01514) << std::endl;
+    std::cout << "small: predicted: " << 0.768092*(SensorVals.Avg)+1.33073 << std::endl;
 
     if (settled || timedOut) break; // if either exit condition is met, exit
 
@@ -874,7 +881,6 @@ Point CPos; // current position
 Point StartingPosition(void) {
   Point SP;
   ChassisDataSet SenVals = ChassisUpdate();
-  SP.confidence = 1;
 
   // distance from wall to center of the bot in the starting pos when front of bot is facing wall
   double xwallConst = 0.0; 
@@ -921,24 +927,32 @@ Point StartingPosition(void) {
     SP.x = ((SenVals.leftD + LDC) + (144.0 - (SenVals.rightD + RDC)))/2.0;
     SP.y = swallConst;
   }
+  SP.h = globalHeading;
   return SP;
 }
 
 /** function returns distance to specified wall
 * @param TH is the trueHeading value of the bot
 * @param side is the wall that you want the distance to
+* @param EP is the estimated position that we are at
 */
-double getWallDist(double TH, double side) { 
+double getWallDist(double TH, double side, Point EP) { 
+  ChassisDataSet SenVals = ChassisUpdate();
   // side values are:
   // 1 = left
   // 2 = right
   // 3 = near
   // 4= far
   
-  double wallDist = 0.0;
+  double wallDist = 0.0; // distance from specified wall
   
   if (side == 1) {
-    wallDist = 1.0;
+    if (inRangeOf(1.5,0.0,TH)) {
+      wallDist = SenVals.leftD + LDC;
+    }
+    else if (inRangeOf(1.5,90.0,TH)) {
+      wallDist = 0;
+    }
   }
 
   return wallDist;
@@ -971,18 +985,16 @@ Point longGoalReset(Point EP) { // resets base on long goal position
   if (trueHeading > 180.0) trueHeading -= 360.0;
   else if (trueHeading < -180.0) trueHeading += 360.0;
 
-  LG.y = EP.y; // just creates something to output if we are unable to reset
-  LG.x = EP.x;
-  LG.confidence = EP.confidence;
+  LG = EP; // creates values to output in case the bot thinks our position is too innacurate
   
   // resets x vals
   if (SenVals.leftD <= SenVals.rightD) {
-    if (inRangeOf(1.0,180.0,trueHeading)) LG.x = 144.0 - (SenVals.leftD + LDC); // close right
-    else if (inRangeOf(1.0,0.0,trueHeading)) LG.x = SenVals.leftD + LDC;
+    if (inRangeOf(1.5,180.0,trueHeading)) LG.x = 144.0 - (SenVals.leftD + LDC); // close right
+    else if (inRangeOf(1.5,0.0,trueHeading)) LG.x = SenVals.leftD + LDC;
   }
   else if (SenVals.rightD < SenVals.leftD) {
-    if (inRangeOf(1.0,180.0,trueHeading)) LG.x = SenVals.rightD + RDC;
-    else if (inRangeOf(1.0,0.0,trueHeading)) LG.x = 144.0 - (SenVals.rightD + RDC);
+    if (inRangeOf(1.5,180.0,trueHeading)) LG.x = SenVals.rightD + RDC;
+    else if (inRangeOf(1.5,0.0,trueHeading)) LG.x = 144.0 - (SenVals.rightD + RDC);
   }
 
   // resets y vals with constants 

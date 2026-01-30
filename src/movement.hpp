@@ -33,7 +33,7 @@ struct PIDDataSet{
 struct Point {
   double x; // left and right of the field
   double y; // forward and backwards
-  int confidence;
+  double h;
 };
 extern double globalHeading;
 extern Point Cpos;

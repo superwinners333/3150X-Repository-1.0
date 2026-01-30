@@ -33,13 +33,13 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, -40, 15.7, 0.3, -181,true); // pick up other 3 balls
     Scrapper.set(true); // activates scraper
     TurnMaxTimePID(TurnPara, 135, 0.2, true); // turns to middle goal
-    MoveTimePID(TurnPara, -40, 0.8 , 0.4, 135,false); // move into matchloader
+    MoveTimePID(TurnPara, -40, 0.79 , 0.3, 135,false); // move into matchloader
     RunIndex(60);
     MiddleScore();
-    wait(700,msec);
+    wait(800,msec);
     NeutralScore();
-    MoveEncoderPID(TurnPara, -80, 40, 0.3, 135, true); // moves to between matchload tube and long goal
-    TurnMaxTimePID(TurnPara, 90, 0.1, true); // turn so scraper faces matchload tube
+    MoveEncoderPID(TurnPara, -80, 40.6, 0.3, 135, true); // moves to between matchload tube and long goal
+    TurnMaxTimePID(TurnPara, 90, 0.2, true); // turn so scraper faces matchload tube
     NeutralScore();
     MoveTimePID(TurnPara, 50, 1.2 , 0.4, 90,false); // move into matchloader
     MoveTimePID(TurnPara, -70, 1, 0.4, 90,false); // moves backwards into long goal
