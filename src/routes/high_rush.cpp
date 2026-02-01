@@ -19,7 +19,7 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     timer stopwatch;
 
     RunIndex(100);
-    MoveEncoderPID(TurnPara, -100, 10.0, 0.2, -30, false); // goes forward
+    MoveEncoderPID(TurnPara, -100, 10.5, 0.2, -30, false); // goes forward
     Scrapper.set(true);
     TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
@@ -35,12 +35,12 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TurnPara, -50, 1.7, 0.2, -178, false); // pushes into long goal
 
     // wing code
-    MoveEncoderPID(TestPara, -90, 9.5, 0.4, 158, false); // goes away from long goal
+    MoveEncoderPID(TestPara, -90, 10, 0.4, 178, false); // goes away from long goal
     Wings.set(false); // lowers wings
     wait(100,msec);
-    MoveEncoderPID(TestPara, 100, 7.85, 0.4, -170, false); // goes to the side of long goal a bit
+    MoveEncoderPID(TestPara, 100, 8.65, 0.4, -160, false); // goes to the side of long goal a bit
 
-    MoveEncoderPID(TestPara, 100, 13.0, 0.6, 179, false); // backs up to wing
+    MoveEncoderPID(TestPara, 100, 14.5, 0.6, 179, false); // backs up to wing
     wait(200,msec);
     Move(-30,0);
     wait(100,msec);

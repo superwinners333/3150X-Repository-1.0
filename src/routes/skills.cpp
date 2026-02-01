@@ -26,7 +26,7 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -20, 0.3, 0.02, 0, false); // grab blocks in park
     wait(250,msec);
     MoveTimePID(TestPara, 20, 0.3, 0.02, 0, false); // grab blocks in park
-    MoveTimePID(TestPara, 80, 1.2, 0.02, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, 80, 1.3, 0.02, 0, false); // grab blocks in park
     RunIndex(75);
     MoveTimePID(TestPara, -20, 0.3, 0.02, 0, false); // grab blocks in park
     TurnMaxTimePID(TestPara, 10, 0.1, true); // turn
@@ -40,9 +40,19 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     // RunIndex(0); // stops intake to twitch it
     // wait(50,msec);
     // RunIndex(70); // starts rerunning intake
+
+    HighScore();
+    wait(500,msec);
+    MoveTimePID(TestPara, 30, 0.3, 0.02, 0, false);
+    MoveTimePID(TestPara, -20, 0.1, 0.02, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, 30, 0.3, 0.02, 0, false);
+    MoveTimePID(TestPara, -20, 0.1, 0.02, 0, false); // grab blocks in park
+
+    wait(1000,sec);
+
     wait(250,msec);
-    MoveTimePID(TestPara, -50, 0.8, 0.2, 0, true); // back out of park
-    MoveTimePID(TestPara, 20, 1, 0.2, 0, true); // aglin with park
+    MoveTimePID(TestPara, -60, 1.0, 0.2, 0, true); // back out of park
+    MoveTimePID(TestPara, 25, 1.1, 0.2, 0, true); // align with park
     Gyro.setHeading(0,degrees);
     MoveEncoderPID(TestPara, 80, 14.2 , 0.3, 0, true); // back up 
     TurnMaxTimePID(TestPara, 105, 0.4, true); // turns to 4 balls

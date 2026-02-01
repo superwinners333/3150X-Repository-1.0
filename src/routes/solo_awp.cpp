@@ -22,14 +22,14 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     HighScore();
     MoveTimePID(TurnPara, -10, 1, 0.3, 90,false); // move into long goal
     Scrapper.set(false);
-    MoveEncoderPID(TurnPara, -70, 2 , 0.3, 90,true); // go back up from long goal 
+    MoveEncoderPID(TurnPara, -70, 2.5 , 0.3, 90,true); // go back up from long goal 
     TurnMaxTimePID(TurnPara, -155, 0.2, false); // turns left
     //MoveEncoderPID(TurnPara, -70, 7, 0.2, -180,true); // moves forward to get into a better position
     //TurnMaxTimePID(TurnPara, -140, 0.2, true); // turns to blocks
     NeutralScore();
     MoveEncoderPID(TurnPara, -40, 23, 0.4, -155,true); // gets 3 blocks
     TurnMaxTimePID(TurnPara, -181, 0.2, false); // turns to other 3 blocks
-    MoveEncoderPID(TestPara, -100, 24, 0.3, -181,false); // move to other side
+    MoveEncoderPID(TestPara, -100, 27, 0.3, -181,false); // move to other side
     MoveEncoderPID(TestPara, -40, 15.7, 0.3, -181,true); // pick up other 3 balls
     Scrapper.set(true); // activates scraper
     TurnMaxTimePID(TurnPara, 135, 0.2, true); // turns to middle goal

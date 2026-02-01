@@ -106,7 +106,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 4; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 3; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -219,7 +219,7 @@ int ATask(void)
     if (Controller1.ButtonR2.pressing()==1)
     {
       if (DownTaskActiv == 1) RunIndex(40);
-      else RunIndex(100);
+      else RunIndex(100); // 50
       MiddleScore();
     }
     else if (Controller1.ButtonL2.pressing()==1)
