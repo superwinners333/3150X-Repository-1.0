@@ -839,7 +839,7 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
     std::cout << "Timer: " << Brain.Timer.value() << std::endl;
     std::cout << "distance: " << dist_moved << std::endl;
     std::cout << "error: " << E_dist << std::endl;
-    std::cout << "predicted: " << (dist_moved+0.95336)/(1.01514) << std::endl;
+    std::cout << "percent: " << percent_dist << std::endl;
 
     if (settled || timedOut) break; // if either exit condition is met, exit
 
