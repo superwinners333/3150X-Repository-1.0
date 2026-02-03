@@ -182,7 +182,7 @@ int PrevE;//Error at t-1
  */
 void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double ABSHDG,bool brake){
   double CSpeed=0;
-  Zeroing(true,false);
+  // Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -192,8 +192,9 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
   PrevE=0;
   double Correction=0;
   // Brain.Screen.clearScreen();
-
-  while(fabs(SensorVals.Avg) <= fabs(dist))
+  double startAvg = SensorVals.Avg;
+  double dist_moved = startAvg - SensorVals.Avg;
+  while(fabs(dist_moved) <= fabs(dist))
   {
     if(fabs(CSpeed)<fabs((double)Speed))
     {
@@ -201,6 +202,8 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
     }
 
     SensorVals=ChassisUpdate(); 
+    dist_moved = startAvg - SensorVals.Avg;
+
     LGV=SensorVals.HDG-ABSHDG; // gyro error
     if(LGV>180) LGV=LGV-360; 
     PVal=KVals.kp*LGV;
@@ -229,7 +232,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
  */
 void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
   double CSpeed=0;
-  Zeroing(true,false);
+  // Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -263,7 +266,7 @@ void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
 
 void MaxTimePIDTurnOneSide(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
   double CSpeed=0;
-  Zeroing(true,false);
+  // Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -301,7 +304,7 @@ if(RV>=0)RV=0;
 
 void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake) {
   double CSpeed=0;
-  Zeroing(true,false);
+  // Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -311,6 +314,7 @@ void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHD
   PrevE=0;
   double Correction=0;
   Brain.Timer.reset();
+
 
   while(Brain.Timer.value() <= TE)
   {
@@ -355,7 +359,7 @@ void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHD
 */
 void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
 {
-  Zeroing(true,false);
+  // Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double outputSpeed = 0.0;
@@ -382,6 +386,8 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
 
   double speedSign = Speed / (fabs(Speed));
 
+  double startAvg = SensorVals.Avg;
+
   // Brain.Timer.value() <= ((dist/DPS)+0.1+extraTime) 
 
   // ---------------------------------------------------------------
@@ -390,8 +396,10 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
   while (!settled && !timedOut) {
     SensorVals = ChassisUpdate(); // gets drivetrain values
     
+    double dist_moved = startAvg - SensorVals.Avg;
+
     // distance PID calculations
-    E_dist = dist - SensorVals.Avg;
+    E_dist = dist - dist_moved;
     P_dist = DistK.kp*E_dist;
     I_dist += DistK.ki*E_dist*(dt/1000.0);
     D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
@@ -400,7 +408,7 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
 
     rawSpeed = P_dist + I_dist + D_dist; // output speed
     if (dist <= 8.0) {
-      rawSpeed += (E_dist * 3.20 * speedSign); // increases the P value for small distances
+      rawSpeed += (E_dist * 3.20); // increases the P value for small distances
     }
     if (Speed < 0) rawSpeed = rawSpeed * -1.0;
     if (abs(rawSpeed) > abs(Speed)) { // clamps outputSpeed at max speed
@@ -433,8 +441,8 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
 
 
     // distance exit conditions calculations
-    bool errorSmall = fabs(dist-((SensorVals.Avg+0.95336)/(1.01514))) <= exitError;
-    if (dist <= 8.0) errorSmall = fabs(dist-(0.768092*(SensorVals.Avg)+1.33073)) <= exitError;
+    bool errorSmall = fabs(dist-((dist_moved+0.95336)/(1.01514))) <= exitError;
+    if (dist <= 8.0) errorSmall = fabs(dist-(0.768092*(dist_moved)+1.33073)) <= exitError;
     bool derivativeSmall = fabs(D_dist) <= exitDerivative;
 
     if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
@@ -446,10 +454,10 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
     timedOut = Brain.Timer.value() >= timeout;
 
     std::cout << "Timer: " << Brain.Timer.value() << std::endl;
-    std::cout << "distance: " << SensorVals.Avg << std::endl;
+    std::cout << "distance: " << dist_moved << std::endl;
     std::cout << "error: " << E_dist << std::endl;
     // std::cout << "predicted: " << (SensorVals.Avg+0.95336)/(1.01514) << std::endl;
-    std::cout << "small: predicted: " << 0.768092*(SensorVals.Avg)+1.33073 << std::endl;
+    std::cout << "small: predicted: " << 0.768092*(dist_moved)+1.33073 << std::endl;
 
     if (settled || timedOut) break; // if either exit condition is met, exit
 
@@ -467,387 +475,7 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
 
 
 
-/** function makes the bot travel the specified distance
-* @param DistK PID constants for distance
-* @param HeadK PID constants for heading
-* @param distFromWall how far to end up away from the wall (inches)
-* @param maxAccel max increase of voltage % per loop (every 20 ms)
-* @param Speed max speed that the bot can travel. Untested with values other than 100
-* @param timeout max time the function can run for before giving up
-* @param ABSHDG heading relative to the starting position of the bot
-* @param brake true for braking, false for coasting
-*/
-void WallBackPID(PIDDataSet DistK, PIDDataSet HeadK, double distFromWall, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
-{
-  Zeroing(true,false);
-  ChassisDataSet SensorVals;
-  SensorVals=ChassisUpdate();
-  double outputSpeed = 0.0;
 
-  double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
-  double P_dist=0.0, I_dist=0.0, D_dist=0.0, E_dist=0.0, PrevE_dist=0.0; // distance PID variables
-
-  double rawSpeed=0.0, Correction=0.0; // motor input variables
-  double dt = 20.0; // how often the PID error checks loops in ms
-
-  double DPS = (600*wheelToMotorRatio*wheelDiam*M_PI)/60; // distance per sec (inches)
-  Brain.Timer.reset(); // resets brain timer for exit
-
-  int settledTime = 200; // exit variable
-
-  // TUNEABLE EXIT VARIABLES
-  double exitError = 0.41;        // how close to target before stopping
-  double exitDerivative = 5.0;   // how still the robot must be
-  int exitTime = 90;              // ms required to be stable
-
-  double originalD = SensorVals.backD;
-  if (timeout <= 0) timeout = ((SensorVals.backD-distFromWall)/DPS)*1000*3; // creates a default exit time 
-  bool settled = false, timedOut = false;
-
-  if (Speed < 0) Speed = -Speed; // makes sure speed is positive
-
-  // ---------------------------------------------------------------
-  // ------------------------ main PID loop ------------------------
-  // ---------------------------------------------------------------
-  while (!settled && !timedOut) {
-    SensorVals=ChassisUpdate(); // gets drivetrain values
-    
-    // distance PID calculations
-    E_dist = SensorVals.backD - distFromWall;
-    P_dist = DistK.kp*E_dist;
-    I_dist += DistK.ki*E_dist*(dt/1000.0);
-    D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
-
-    // max speed
-    rawSpeed = (E_dist * 10.0); // output speed
-    if (rawSpeed > Speed && rawSpeed >= 0) rawSpeed = Speed; // clamps rawSpeed to max speed
-    else if (rawSpeed < -Speed && rawSpeed < 0) rawSpeed = -Speed;
-
-
-    // acceleration 
-    double speedChange = rawSpeed - outputSpeed; // gets change in speed
-    if (speedChange > maxAccel) speedChange = maxAccel;
-    if (speedChange < -maxAccel) speedChange = -maxAccel;
-    outputSpeed += speedChange; // accelerates
-
-
-    // deceleration
-    double slowDownDist = 9.0; // distance at which PID is forced to slow down
-    double slowDownScale = fabs(E_dist) / slowDownDist; 
-    if (slowDownScale > 1.0) slowDownScale = 1.0;
-    else if (slowDownScale < 0.4) slowDownScale = 0.4;
-
-    double maxOutput = Speed * slowDownScale; // gets max speed
-    if (outputSpeed > maxOutput) outputSpeed = maxOutput; // clamps outputSpeed at the max speed
-    else if (outputSpeed < -maxOutput) outputSpeed = -maxOutput; 
-
-
-    // heading PID adjustment calculations
-    E_heading = SensorVals.HDG-ABSHDG;
-    if (E_heading > 180.0) E_heading -= 360.0;
-    else if (E_heading < -180.0) E_heading += 360.0;
-    P_heading = HeadK.kp*E_heading;
-    I_heading += HeadK.ki*E_heading*(dt/1000.0);
-    D_heading = (HeadK.kd*(E_heading-PrevE_heading)) / (dt/1000.0);
-
-    Correction = P_heading + I_heading + D_heading; // correction
-
-
-
-    // tells the bot how much to run each side
-    if (fabs(E_dist) < 10.0 && fabs(E_dist) > 4.0){
-      Move((outputSpeed+Correction)/3,(outputSpeed-Correction)/3);
-    } 
-    else if (fabs(E_dist) <= 4.0){
-      Move((outputSpeed+Correction)/5,(outputSpeed-Correction)/5);
-    }
-    else {
-      Move(outputSpeed+Correction,outputSpeed-Correction);
-    }
-    
-    PrevE_heading = E_heading; // updates previous headings
-    PrevE_dist = E_dist;
-
-
-    // distance based exit conditions calculations
-    bool errorSmall = fabs(SensorVals.backD-distFromWall) <= exitError;
-    bool derivativeSmall = fabs(D_dist) <= exitDerivative;
-
-    if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
-    else settledTime = 0; // if we start adjusting again, stop counting
-
-
-    // exit condition checks
-    settled = settledTime >= exitTime; 
-    timedOut = Brain.Timer.value() >= timeout;
-
-    std::cout << "Timer: " << Brain.Timer.value() << std::endl;
-    std::cout << "distance: " << SensorVals.backD << std::endl;
-    std::cout << "error: " << E_dist << std::endl;
-    std::cout << "total travelled: " << originalD-SensorVals.backD << std::endl;
-
-
-    if (settled || timedOut) break; // if either exit condition is met, exit
-
-    wait(20,msec); // wait to stop constant looping
-  }
-
-  std::cout << "exit" << std::endl;
-  if(brake){BStop(); // braking logic
-  wait(200,msec);}
-  else CStop();
-}
-
-
-void SensorPID(PIDDataSet DistK, PIDDataSet HeadK, double distFromWall, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
-{
-  Zeroing(true,false);
-  ChassisDataSet SensorVals;
-  SensorVals=ChassisUpdate();
-  double outputSpeed = 0.0;
-
-  double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
-  double P_dist=0.0, I_dist=0.0, D_dist=0.0, E_dist=0.0, PrevE_dist=0.0; // distance PID variables
-
-  double rawSpeed=0.0, Correction=0.0; // motor input variables
-  double dt = 20.0; // how often the PID error checks loops in ms
-
-  double DPS = (600*wheelToMotorRatio*wheelDiam*M_PI)/60; // distance per sec (inches)
-  Brain.Timer.reset(); // resets brain timer for exit
-
-  int settledTime = 200; // exit variable
-
-  // TUNEABLE EXIT VARIABLES
-  double exitError = 0.41;        // how close to target before stopping
-  double exitDerivative = 5.0;   // how still the robot must be
-  int exitTime = 90;              // ms required to be stable
-
-  double originalD = SensorVals.backD;
-  if (timeout <= 0) timeout = ((SensorVals.backD-distFromWall)/DPS)*1000*3; // creates a default exit time 
-  bool settled = false, timedOut = false;
-
-  if (Speed < 0) Speed = -Speed; // makes sure speed is positive
-
-  // ---------------------------------------------------------------
-  // ------------------------ main PID loop ------------------------
-  // ---------------------------------------------------------------
-  while (!settled && !timedOut) {
-    SensorVals=ChassisUpdate(); // gets drivetrain values
-    
-    // distance PID calculations
-    E_dist = SensorVals.backD - distFromWall;
-    P_dist = DistK.kp*E_dist;
-    I_dist += DistK.ki*E_dist*(dt/1000.0);
-    D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
-
-    // std::cout << D_dist << std::endl;
-
-    // max speed
-    rawSpeed = P_dist + I_dist + D_dist + (E_dist * 3.8); // output speed
-    if (rawSpeed > Speed && rawSpeed >= 0) rawSpeed = Speed; // clamps rawSpeed to max speed
-    else if (rawSpeed < -Speed && rawSpeed < 0) rawSpeed = -Speed;
-
-
-    // acceleration 
-    double speedChange = rawSpeed - outputSpeed; // gets change in speed
-    if (speedChange > maxAccel) speedChange = maxAccel;
-    if (speedChange < -maxAccel) speedChange = -maxAccel;
-    outputSpeed += speedChange; // accelerates
-
-
-    // deceleration
-    double slowDownDist = 9.0; // distance at which PID is forced to slow down
-    double slowDownScale = fabs(E_dist) / slowDownDist; 
-    if (slowDownScale > 1.0) slowDownScale = 1.0;
-    else if (slowDownScale < 0.4) slowDownScale = 0.4;
-
-    double maxOutput = Speed * slowDownScale; // gets max speed
-    if (outputSpeed > maxOutput) outputSpeed = maxOutput; // clamps outputSpeed at the max speed
-    else if (outputSpeed < -maxOutput) outputSpeed = -maxOutput; 
-
-
-    // heading PID adjustment calculations
-    E_heading = SensorVals.HDG-ABSHDG;
-    if (E_heading > 180.0) E_heading -= 360.0;
-    else if (E_heading < -180.0) E_heading += 360.0;
-    P_heading = HeadK.kp*E_heading;
-    I_heading += HeadK.ki*E_heading*(dt/1000.0);
-    D_heading = (HeadK.kd*(E_heading-PrevE_heading)) / (dt/1000.0);
-
-    Correction = P_heading + I_heading + D_heading; // correction
-
-
-
-    // tells the bot how much to run each side
-    Move(outputSpeed+Correction,outputSpeed-Correction);
-    
-    PrevE_heading = E_heading; // updates previous headings
-    PrevE_dist = E_dist;
-
-
-    // distance based exit conditions calculations
-    bool errorSmall = fabs(SensorVals.backD-distFromWall) <= exitError;
-    bool derivativeSmall = fabs(D_dist) <= exitDerivative;
-
-    if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
-    else settledTime = 0; // if we start adjusting again, stop counting
-
-
-    // exit condition checks
-    settled = settledTime >= exitTime; 
-    timedOut = Brain.Timer.value() >= timeout;
-
-    std::cout << "Timer: " << Brain.Timer.value() << std::endl;
-    std::cout << "distance: " << SensorVals.backD << std::endl;
-    std::cout << "error: " << E_dist << std::endl;
-    std::cout << "total travelled: " << originalD-SensorVals.backD << std::endl;
-
-
-    if (settled || timedOut) break; // if either exit condition is met, exit
-
-    wait(20,msec); // wait to stop constant looping
-  }
-
-  std::cout << "exit" << std::endl;
-  if(brake){BStop(); // braking logic
-  wait(200,msec);}
-  else CStop();
-}
-
-
-void notPID(PIDDataSet DistK, PIDDataSet HeadK, double distFromWall, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
-{
-  Zeroing(true,false);
-  ChassisDataSet SensorVals;
-  SensorVals=ChassisUpdate();
-  double outputSpeed = 0.0;
-
-  double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
-  double P_dist=0.0, I_dist=0.0, D_dist=0.0, E_dist=0.0, PrevE_dist=0.0; // distance PID variables
-
-  double rawSpeed=0.0, Correction=0.0; // motor input variables
-  double dt = 20.0; // how often the PID error checks loops in ms
-
-  double DPS = (600*wheelToMotorRatio*wheelDiam*M_PI)/60; // distance per sec (inches)
-  Brain.Timer.reset(); // resets brain timer for exit
-
-  int settledTime = 200; // exit variable
-
-  // TUNEABLE EXIT VARIABLES
-  double exitError = 0.3;        // how close to target before stopping
-  double exitDerivative = 5.0;   // how still the robot must be
-  int exitTime = 90;              // ms required to be stable
-
-  double originalD = SensorVals.backD;
-  double travelDistance = originalD - distFromWall;
-  if (timeout <= 0) timeout = ((SensorVals.backD-distFromWall)/DPS)*1000*3; // creates a default exit time 
-  bool settled = false, timedOut = false;
-
-  if (Speed < 0) Speed = -Speed; // makes sure speed is positive
-
-  // ---------------------------------------------------------------
-  // ------------------------ main PID loop ------------------------
-  // ---------------------------------------------------------------
-  while (!settled && !timedOut) {
-    SensorVals=ChassisUpdate(); // gets drivetrain values
-    
-    // distance PID calculations
-    E_dist = SensorVals.backD - distFromWall; // distance to be travelled
-    D_dist = (PrevE_dist - E_dist)/travelDistance; // percent of (change in error / starting error)
-
-    // max speed
-    double percentTravelled = E_dist/travelDistance; // percent travelled
-    double outputSign = (E_dist/(fabs(E_dist))); // gets the sign of the error
-    outputSpeed = (E_dist/travelDistance)*100.0 + 50.0; // output is equal to % of distance travelled + 50
-    if (fabs(outputSpeed) > Speed) outputSpeed = outputSign * Speed; // caps outputSpeed at Speed
-
-    double speedCap = Speed; 
-    if (fabs(E_dist) <= exitError) speedCap = 0.0; 
-    else if (fabs(E_dist) <= 2.0) speedCap = 25.0;
-    else if (fabs(E_dist) <= 4.0) speedCap = 40.0;
-    else if (fabs(E_dist) <= 8.0) speedCap = 70.0;
-    else if (fabs(E_dist) <= 12.0) speedCap = 90.0;
-
-    if (speedCap < fabs(outputSpeed)) outputSpeed = speedCap * outputSign;
-    
-
-    /* 
-    to be added:
-
-    a section where the speedcap is based off of the percent travelled and the distance from target
-    - deceleration should be based off of distance from target
-    - deceleration should also take into account lower distances 
-    a section where the speedcap is decreased based on percent of change in error
-    - (lower changes in error = lower speed)
-    - this will be the braking mechanism
-
-    low starting distance + lower change in error at the start
-    = higher speed as not as much deceleration will be neeeded
-
-    starting speed = acceleration
-    starting speed should be as high as possible
-
-    if change in error value is low and distance from target is low, bot should attempt to brake
-    change in error = distance from target * constant + minimum speed
-    */
-
-
-    // deceleration
-    // double slowDownDist = 9.0; // distance at which PID is forced to slow down
-    // double slowDownScale = fabs(E_dist) / slowDownDist; 
-    // if (slowDownScale > 1.0) slowDownScale = 1.0;
-    // else if (slowDownScale < 0.4) slowDownScale = 0.4;
-
-    // double maxOutput = Speed * slowDownScale; // gets max speed
-    // if (outputSpeed > maxOutput) outputSpeed = maxOutput; // clamps outputSpeed at the max speed
-    // else if (outputSpeed < -maxOutput) outputSpeed = -maxOutput; 
-
-
-    // heading PID adjustment calculations
-    E_heading = SensorVals.HDG-ABSHDG;
-    if (E_heading > 180.0) E_heading -= 360.0;
-    else if (E_heading < -180.0) E_heading += 360.0;
-    P_heading = HeadK.kp*E_heading;
-    I_heading += HeadK.ki*E_heading*(dt/1000.0);
-    D_heading = (HeadK.kd*(E_heading-PrevE_heading)) / (dt/1000.0);
-
-    Correction = P_heading + I_heading + D_heading; // correction
-
-    // tells the bot how much to run each side
-    Move(outputSpeed+Correction,outputSpeed-Correction);
-    
-    PrevE_heading = E_heading; // updates previous headings
-    PrevE_dist = E_dist;
-
-
-    // distance based exit conditions calculations
-    bool errorSmall = fabs(E_dist) <= exitError;
-    bool derivativeSmall = fabs(PrevE_dist-E_dist) <= exitDerivative;
-
-    if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
-    else settledTime = 0; // if we start adjusting again, stop counting
-
-
-    // exit condition checks
-    settled = settledTime >= exitTime; 
-    timedOut = Brain.Timer.value() >= timeout;
-
-    std::cout << "Timer: " << Brain.Timer.value() << std::endl;
-    std::cout << "distance: " << SensorVals.backD << std::endl;
-    std::cout << "error: " << E_dist << std::endl;
-    std::cout << "total travelled: " << originalD-SensorVals.backD << std::endl;
-
-
-    if (settled || timedOut) break; // if either exit condition is met, exit
-
-    wait(20,msec); // wait to stop constant looping
-  }
-
-  std::cout << "exit" << std::endl;
-  if(brake){BStop(); // braking logic
-  wait(200,msec);}
-  else CStop();
-}
 
 
 /** function to compare two values
@@ -863,8 +491,6 @@ bool inRangeOf(double range, double target, double check) {
   if (check < upper && check > lower) return true;
   else return false;
 }
-
-
 
 
 
@@ -975,6 +601,7 @@ Point resetPosition(Point EP) {
 }
 
 
+
 // returns a new position of the bot
 /** @param EP encoder predicted position
 */
@@ -1045,4 +672,182 @@ Point resetLeft(Point EP);
 Point resetRight(Point EP);
 
 // use negative distance values for moving backwards?
-Point triangulatePos(Point EP, double dist, double trueHeading);
+
+
+
+void degToRad(double deg) {
+  double rad = deg * M_PI / 180.0;
+  return rad;
+}
+
+double dist_between_wheels = 10.728346; // distance between the wheels in inches
+
+// odom function
+void OdomUpdate(){
+  Zeroing(true,true);
+
+  
+  double prev_heading_rad = 0;
+  double prev_left_in = 0, prev_right_in = 0;
+  double d_local_y_in = 0;
+
+  while (true) {
+    ChassisDataSet SensorVals = ChassisUpdate();
+    double heading_rad = degToRad(SensorVals.HDG);
+    double left_in = SensorVals.Left; // distance travelled in inches
+    double right_in = SensorVals.Right;
+    double d_heading_rad = heading_rad - prev_heading_rad; // change in heading
+    double d_left_in = left_in - prev_left_in; // change in left and right distances
+    double d_right_in = right_in - prev_right_in;
+
+    // checks if there is change in heading
+    if (fabs(d_heading_rad) < 1e-6) {
+      // if no change, assume we moved in a straight line
+      d_local_y_in = (d_left_in + d_right_in) / 2.0; // gets distance moved
+    }
+    else { 
+      // calculate movement per wheel
+      // gets chord length when multiplied with radius
+      double sin_multiplier = 2.0 * sin(d_heading_rad / 2.0); // ratio of radius to chord length
+      // gets chord length by multiplying the ratio and radius (coming from arc length)
+      // d_left_in / d_heading_rad gives arc length
+      // this gives straight line movement
+      double d_local_y_left_in = sin_multiplier * (d_left_in / d_heading_rad + dist_between_wheels / 2.0);
+      double d_local_y_right_in = sin_multiplier * (d_right_in / d_heading_rad + dist_between_wheels / 2.0);
+
+      d_local_y_in = (d_local_y_left_in + d_local_y_right_in) / 2.0; // averages the distance
+    }
+
+    // updates global position using polar coordinates
+    double polar_angle_rad = prev_heading_rad + d_heading_rad / 2.0; // polar angle
+    double polar_radius_in = d_local_y_in; // polar radius
+
+    Cpos.x += polar_radius_in * sin(polar_angle_rad);
+    Cpos.y += polar_radius_in * cos(polar_angle_rad);
+
+    
+    prev_heading_rad = heading_rad; // updates prev values
+    prev_left_in = left_in;
+    prev_right_in = right_in;
+
+    wait(20,msec);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
+{
+  // Zeroing(true,false);
+  ChassisDataSet SensorVals;
+  SensorVals=ChassisUpdate();
+  double outputSpeed = 0.0;
+
+  double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
+  double P_dist=0.0, I_dist=0.0, D_dist=0.0, E_dist=0.0, PrevE_dist=0.0; // distance PID variables
+
+  double rawSpeed=0.0, Correction=0.0; // motor input variables
+  double dt = 20.0; // how often the PID error checks loops in ms
+
+  double DPS = (600*wheelToMotorRatio*wheelDiam*M_PI)/60; // distance per sec (inches)
+  Brain.Timer.reset(); // resets brain timer for exit
+
+  int settledTime = 200; // exit variable
+
+  // TUNEABLE EXIT VARIABLES
+  double exitError = 0.9;        // how close to target before stopping
+  double exitDerivative = 2.5;   // how still the robot must be
+  int exitTime = 150;              // ms required to be stable
+  // int timeout = 0;               // ms max runtime
+
+  if (timeout <= 0) timeout = (dist/DPS)*1000*3; // creates a default exit time 
+  bool settled = false, timedOut = false;
+
+  double speedSign = Speed / (fabs(Speed));
+
+  double startAvg = SensorVals.Avg;
+
+  // ---------------------------------------------------------------
+  // ------------------------ main PID loop ------------------------
+  // ---------------------------------------------------------------
+  while (!settled && !timedOut) {
+    SensorVals = ChassisUpdate(); // gets drivetrain values
+    
+    double dist_moved = startAvg - SensorVals.Avg;
+    double percent_dist = (dist_moved / dist) * 100.0;
+
+    // distance PID calculations
+    E_dist = 100.0 - percent_dist;
+    P_dist = DistK.kp*E_dist;
+    I_dist += DistK.ki*E_dist*(dt/1000.0);
+    D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
+
+    // std::cout << D_dist << std::endl;
+
+    rawSpeed = P_dist + I_dist + D_dist + 0.10; // output speed
+
+    if (Speed < 0) rawSpeed = rawSpeed * -1.0;
+    if (fabs(rawSpeed) > fabs(Speed)) { // clamps outputSpeed at max speed
+      if (Speed >= 0 && rawSpeed >= 0) rawSpeed = Speed;
+      else if (Speed < 0 && rawSpeed < 0) rawSpeed = Speed;
+    }
+
+    double speedChange = rawSpeed - outputSpeed; // gets change in speed
+    if (speedChange > maxAccel) speedChange = maxAccel;
+    if (speedChange < -maxAccel) speedChange = -maxAccel;
+    outputSpeed += speedChange; // accelerates
+
+
+    // heading PID adjustment calculations
+    E_heading = SensorVals.HDG-ABSHDG;
+    if (E_heading > 180) E_heading -= 360;
+    else if (E_heading < -180) E_heading += 360;
+    P_heading = HeadK.kp*E_heading;
+    I_heading += HeadK.ki*E_heading*(dt/1000.0);
+    D_heading = (HeadK.kd*(E_heading-PrevE_heading)) / (dt/1000.0);
+
+    Correction = P_heading + I_heading + D_heading; // correction
+
+
+    // tells the bot how much to run each side
+    Move(-outputSpeed+Correction,-outputSpeed-Correction);
+    
+    PrevE_heading = E_heading; // updates previous headings
+    PrevE_dist = E_dist;
+
+
+    // distance exit conditions calculations
+    // (dist_moved+0.95336)/(1.01514)
+    bool errorSmall = fabs(E_dist) <= exitError;
+    bool derivativeSmall = fabs(D_dist) <= exitDerivative;
+
+    if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
+    else settledTime = 0; // if we start adjusting again, stop counting
+
+
+    // exit condition checks
+    settled = settledTime >= exitTime; 
+    timedOut = Brain.Timer.value() >= timeout;
+
+    std::cout << "Timer: " << Brain.Timer.value() << std::endl;
+    std::cout << "distance: " << dist_moved << std::endl;
+    std::cout << "error: " << E_dist << std::endl;
+    std::cout << "predicted: " << (dist_moved+0.95336)/(1.01514) << std::endl;
+
+    if (settled || timedOut) break; // if either exit condition is met, exit
+
+    wait(20,msec); // wait to stop constant looping
+  }
+
+  std::cout << "exit" << std::endl;
+  if(brake){BStop(); // braking logic
+  wait(200,msec);}
+  else CStop();
+}

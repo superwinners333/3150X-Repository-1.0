@@ -73,6 +73,7 @@ Zeroing(true,true);
 
 wait(100,msec); // just a small delay
 
+thread Odom = thread(OdomUpdate); // runs the odom stuff
 
 
 Brain.Screen.clearScreen();

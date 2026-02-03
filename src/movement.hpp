@@ -61,8 +61,7 @@ void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHD
 extern void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake);
 extern void WallBackPID(PIDDataSet DistK, PIDDataSet HeadK, double distFromWall, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake);
 
+extern void OdomUpdate();
 
-extern void MoveDistancePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, int dir, int MaxSpd, double AccT, double ABSHDG, bool brake);
-extern void PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake);
-
+extern void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake);
 #endif
