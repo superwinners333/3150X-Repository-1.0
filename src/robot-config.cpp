@@ -13,7 +13,7 @@ controller Controller1 = controller(primary);
 // LEFT SIDE
 motor LF = motor(PORT10, ratio6_1, false);
 motor LM = motor(PORT16, ratio6_1, false);
-motor LB = motor(PORT9, ratio6_1, true); // flipped
+motor LB = motor(PORT19, ratio6_1, true); // flipped
 // RIGHT SIDE
 motor RF = motor(PORT2, ratio6_1, true);
 motor RM = motor(PORT12, ratio6_1, true);
@@ -31,7 +31,7 @@ digital_out LiftUp = digital_out(Brain.ThreeWirePort.D);
 digital_out LiftDown = digital_out(Brain.ThreeWirePort.E);
 
 inertial Gyro = inertial(PORT11);
-distance backSensor = distance(PORT19);
+distance backSensor = distance(PORT18);
 distance leftSensor = distance(PORT15);
 distance rightSensor = distance(PORT14);
 

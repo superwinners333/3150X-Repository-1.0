@@ -66,7 +66,7 @@ ChassisDataSet ChassisUpdate()
   CDS.Diff=CDS.Left-CDS.Right;
   CDS.HDG=Gyro.heading(degrees);
 
-  CDS.backD = backSensor.objectDistance(inches) - 4.3; // distance - distance of distance sensor from the edge of the bot
+  CDS.backD = backSensor.objectDistance(inches) - 4.2; // distance - distance of distance sensor from the edge of the bot
   CDS.leftD = leftSensor.objectDistance(inches);
   CDS.rightD = rightSensor.objectDistance(inches);
 
@@ -396,7 +396,7 @@ void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, i
   while (!settled && !timedOut) {
     SensorVals = ChassisUpdate(); // gets drivetrain values
     
-    double dist_moved = startAvg - SensorVals.Avg;
+    double dist_moved = SensorVals.Avg - startAvg;
 
     // distance PID calculations
     E_dist = dist - dist_moved;
@@ -675,7 +675,7 @@ Point resetRight(Point EP);
 
 
 
-void degToRad(double deg) {
+double degToRad(double deg) {
   double rad = deg * M_PI / 180.0;
   return rad;
 }
@@ -687,13 +687,14 @@ void OdomUpdate(){
   Zeroing(true,true);
 
   
-  double prev_heading_rad = 0;
+  double prev_heading_rad = globalHeading;
   double prev_left_in = 0, prev_right_in = 0;
   double d_local_y_in = 0;
 
   while (true) {
     ChassisDataSet SensorVals = ChassisUpdate();
-    double heading_rad = degToRad(SensorVals.HDG);
+    double true_heading = globalHeading+SensorVals.HDG;
+    double heading_rad = degToRad(true_heading);
     double left_in = SensorVals.Left; // distance travelled in inches
     double right_in = SensorVals.Right;
     double d_heading_rad = heading_rad - prev_heading_rad; // change in heading
@@ -722,8 +723,8 @@ void OdomUpdate(){
     double polar_angle_rad = prev_heading_rad + d_heading_rad / 2.0; // polar angle
     double polar_radius_in = d_local_y_in; // polar radius
 
-    Cpos.x += polar_radius_in * sin(polar_angle_rad);
-    Cpos.y += polar_radius_in * cos(polar_angle_rad);
+    CPos.x += polar_radius_in * sin(polar_angle_rad);
+    CPos.y += polar_radius_in * cos(polar_angle_rad);
 
     
     prev_heading_rad = heading_rad; // updates prev values
@@ -735,7 +736,11 @@ void OdomUpdate(){
 }
 
 
-
+// things to do
+/*
+* change starting position reset logic
+* 
+*/
 
 
 
@@ -762,8 +767,8 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
   int settledTime = 200; // exit variable
 
   // TUNEABLE EXIT VARIABLES
-  double exitError = 0.9;        // how close to target before stopping
-  double exitDerivative = 2.5;   // how still the robot must be
+  double exitError = 1.0;        // how close to target before stopping
+  double exitDerivative = 1.5;   // how still the robot must be
   int exitTime = 150;              // ms required to be stable
   // int timeout = 0;               // ms max runtime
 
@@ -780,18 +785,18 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
   while (!settled && !timedOut) {
     SensorVals = ChassisUpdate(); // gets drivetrain values
     
-    double dist_moved = startAvg - SensorVals.Avg;
+    double dist_moved = SensorVals.Avg - startAvg;
     double percent_dist = (dist_moved / dist) * 100.0;
 
     // distance PID calculations
-    E_dist = 100.0 - percent_dist;
+    E_dist = -(100.0 - percent_dist);
     P_dist = DistK.kp*E_dist;
     I_dist += DistK.ki*E_dist*(dt/1000.0);
     D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
 
     // std::cout << D_dist << std::endl;
 
-    rawSpeed = P_dist + I_dist + D_dist + 0.10; // output speed
+    rawSpeed = P_dist + I_dist + D_dist + ((dist/240.0) * (E_dist / fabs(E_dist))); // output speed
 
     if (Speed < 0) rawSpeed = rawSpeed * -1.0;
     if (fabs(rawSpeed) > fabs(Speed)) { // clamps outputSpeed at max speed
@@ -817,7 +822,7 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
 
 
     // tells the bot how much to run each side
-    Move(-outputSpeed+Correction,-outputSpeed-Correction);
+    Move(outputSpeed+Correction,outputSpeed-Correction);
     
     PrevE_heading = E_heading; // updates previous headings
     PrevE_dist = E_dist;
@@ -825,7 +830,7 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
 
     // distance exit conditions calculations
     // (dist_moved+0.95336)/(1.01514)
-    bool errorSmall = fabs(E_dist) <= exitError;
+    bool errorSmall = fabs(dist - dist_moved) <= exitError;
     bool derivativeSmall = fabs(D_dist) <= exitDerivative;
 
     if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
@@ -840,6 +845,7 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
     std::cout << "distance: " << dist_moved << std::endl;
     std::cout << "error: " << E_dist << std::endl;
     std::cout << "percent: " << percent_dist << std::endl;
+    std::cout << " " << std::endl;
 
     if (settled || timedOut) break; // if either exit condition is met, exit
 
@@ -847,6 +853,7 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
   }
 
   std::cout << "exit" << std::endl;
+  std::cout << "actual: " << SensorVals.backD <<std::endl;
   if(brake){BStop(); // braking logic
   wait(200,msec);}
   else CStop();
