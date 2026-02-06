@@ -193,7 +193,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
   double Correction=0;
   // Brain.Screen.clearScreen();
   double startAvg = SensorVals.Avg;
-  double dist_moved = startAvg - SensorVals.Avg;
+  double dist_moved = SensorVals.Avg - startAvg;
   while(fabs(dist_moved) <= fabs(dist))
   {
     if(fabs(CSpeed)<fabs((double)Speed))
@@ -202,7 +202,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
     }
 
     SensorVals=ChassisUpdate(); 
-    dist_moved = startAvg - SensorVals.Avg;
+    dist_moved = SensorVals.Avg - startAvg;
 
     LGV=SensorVals.HDG-ABSHDG; // gyro error
     if(LGV>180) LGV=LGV-360; 
@@ -768,7 +768,7 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
 
   // TUNEABLE EXIT VARIABLES
   double exitError = 1.0;        // how close to target before stopping
-  double exitDerivative = 1.5;   // how still the robot must be
+  double exitDerivative = 2.0;   // how still the robot must be
   int exitTime = 150;              // ms required to be stable
   // int timeout = 0;               // ms max runtime
 
@@ -791,12 +791,12 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
     // distance PID calculations
     E_dist = -(100.0 - percent_dist);
     P_dist = DistK.kp*E_dist;
-    I_dist += DistK.ki*E_dist*(dt/1000.0);
+    I_dist += (DistK.ki+(dist/1000.0))*E_dist*(dt/1000.0);
     D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
 
     // std::cout << D_dist << std::endl;
 
-    rawSpeed = P_dist + I_dist + D_dist + ((dist/240.0) * (E_dist / fabs(E_dist))); // output speed
+    rawSpeed = P_dist + I_dist + D_dist + ((dist/4.3) * (E_dist / fabs(E_dist))); // output speed
 
     if (Speed < 0) rawSpeed = rawSpeed * -1.0;
     if (fabs(rawSpeed) > fabs(Speed)) { // clamps outputSpeed at max speed

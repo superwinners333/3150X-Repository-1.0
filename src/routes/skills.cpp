@@ -41,14 +41,15 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     // wait(50,msec);
     // RunIndex(70); // starts rerunning intake
 
-    HighScore();
-    wait(500,msec);
-    MoveTimePID(TestPara, 30, 0.3, 0.02, 0, false);
-    MoveTimePID(TestPara, -20, 0.1, 0.02, 0, false); // grab blocks in park
-    MoveTimePID(TestPara, 30, 0.3, 0.02, 0, false);
-    MoveTimePID(TestPara, -20, 0.1, 0.02, 0, false); // grab blocks in park
+    
+    // HighScore();
+    // wait(500,msec);
+    // MoveTimePID(TestPara, 30, 0.3, 0.02, 0, false);
+    // MoveTimePID(TestPara, -20, 0.1, 0.02, 0, false); // grab blocks in park
+    // MoveTimePID(TestPara, 30, 0.3, 0.02, 0, false);
+    // MoveTimePID(TestPara, -20, 0.1, 0.02, 0, false); // grab blocks in park
 
-    wait(1000,sec);
+    // wait(1000,sec);
 
     wait(250,msec);
     MoveTimePID(TestPara, -60, 1.0, 0.2, 0, true); // back out of park
