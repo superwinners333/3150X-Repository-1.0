@@ -52,25 +52,27 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     // wait(1000,sec);
 
     wait(250,msec);
-    MoveTimePID(TestPara, -60, 1.0, 0.2, 0, true); // back out of park
-    MoveTimePID(TestPara, 25, 1.1, 0.2, 0, true); // align with park
+    MoveTimePID(TestPara, -60, 0.7, 0.2, 0, true); // back out of park
+    MoveTimePID(TestPara, 25, 0.8, 0.2, 0, true); // align with park
     Gyro.setHeading(0,degrees);
-    MoveEncoderPID(TestPara, 80, 14.2 , 0.3, 0, true); // back up 
+    MoveEncoderPID(TestPara, 80, 13.4 , 0.3, 0, true); // back up 
     TurnMaxTimePID(TestPara, 105, 0.4, true); // turns to 4 balls
     RunIndex(100);
-    MoveEncoderPID(TestPara, -60, 13.6 , 0.3, 105, true); // grab blue lock
+    MoveEncoderPID(TestPara, -60, 15.3 , 0.3, 105, true); // grab blue block
     wait(400,msec);
     TurnMaxTimePID(TestPara, 45, 0.3, true); // turns to face middle goal
     MoveTimePID(TestPara, -40, 0.55, 0.2, 45, false); // backs up into middle goal
     RunIndex(0);
     MiddleScore();
     wait(100,msec);
-    RunIndex(50);
+    RunIndex(70);
+    MoveTimePID(TestPara, -10, 0.3, 0.2, 45, false); // score
+    RunIndex(60);
     MoveTimePID(TestPara, -10, 0.5, 0.2, 45, false); // score
-    RunIndex(40);
-    MoveTimePID(TestPara, -10, 0.8, 0.2, 45, false); // score
-    RunIndex(28);
-    MoveTimePID(TestPara, -10, 2, 0.2, 45, false); // score
+    RunIndex(50);
+    MoveTimePID(TestPara, -10, 0.7, 0.2, 45, false); // score
+    RunIndex(30);
+    MoveTimePID(TestPara, -10, 1.5, 0.2, 45, false); // score
     NeutralScore();
   
 
@@ -78,19 +80,20 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     //------------------------------------------------------------------------------------long goal 1
     MiddleScore();
     Scrapper.set(true);
+    wait(100,msec);
     RunIndex(100);
-    MoveEncoderPID(TestPara, -80, 40, 0.3, 45,true); // drives to long goal
+    MoveEncoderPID(TestPara, -80, 41, 0.3, 45,true); // drives to long goal
     TurnMaxTimePID(TestPara, 0, 0.2, true); // turns to matchloader
     NeutralScore();
     MoveTimePID(TestPara, 40, 1.4 , 0.3, 0,false); // move into matchloader
     MoveTimePID(TestPara, 20, 1.1, 0.2, 0,false); // mactchload 
     MoveEncoderPID(TestPara, 80, 8, 0.4, 0,true); // move back
     TurnMaxTimePID(TestPara, -45, 0.2, true); // turns to aglin with goal
-    MoveEncoderPID(TestPara, 80, 9.7, 0.4, -45,true); // moves to beside goal
+    MoveEncoderPID(TestPara, 80, 10.2, 0.4, -45,true); // moves to beside goal
     Scrapper.set(false);
     RunIndex(41);
     TurnMaxTimePID(TestPara, 0, 0.3, true); // turns to face other side of the field
-    MoveEncoderPID(TestPara, 75, 40, 0.4, 0, false); // goes to other side of the field 
+    MoveEncoderPID(TestPara, 75, 41, 0.4, 0, false); // goes to other side of the field 
     MoveEncoderPID(TestPara, 50, 9, 0.2, 0, true); // slows down
     wait(100,msec);
     TurnMaxTimePID(TestPara, 45, 0.2, true); // turns to aglin with goal
@@ -119,7 +122,7 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -50, 1.5, 0.4, -90,true); // align for heading
     Gyro.setHeading(-90,degrees);
     wait(10,msec);
-    MoveEncoderPID(TestPara, -89, 85, 0.2, -90, false); // move to other side of field
+    MoveEncoderPID(TestPara, -89, 87, 0.2, -90, false); // move to other side of field
     MoveEncoderPID(TestPara, -50, 15, 0.2, -90, true); // slows down
 
 

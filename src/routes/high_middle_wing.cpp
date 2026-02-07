@@ -16,34 +16,35 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
     timer stopwatch;
 
     RunIndex(100);
-    MoveEncoderPID(TurnPara, -100, 10.0, 0.2, -30, false); // goes forward
+    MoveEncoderPID(TurnPara, -100, 10.5, 0.2, -30, false); // goes forward
     Scrapper.set(true);
     TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 26.1, 0.2, -125, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 27.75, 0.2, -125, true); // goes between there
 
     TurnMaxTimePID(TurnPara, -175, 0.4, false); // turns to matchload
     MoveTimePID(TurnPara, 100, 0.25, 0.2, -178, false); // goes into matchload
-    MoveTimePID(TurnPara, 60, 0.8, 0.2, -178, false); // slows down
+    MoveTimePID(TurnPara, 50, 0.87, 0.2, -178, false); // slows down
 
-    MoveTimePID(TurnPara, -80, 0.7, 0.2, -178, false); // goes backwards into long goal
+    MoveTimePID(TurnPara, -70, 0.7, 0.2, -178, false); // goes backwards into long goal
     HighScore(); // activates long goal scoring
     wait(50,msec);
-    MoveTimePID(TurnPara, -50, 0.55, 0.2, -178, false); // pushes into long goal
+    MoveTimePID(TurnPara, -50, 0.65, 0.2, -178, false); // pushes into long goal
     NeutralScore();
-    wait(100,msec);
-    MoveEncoderPID(TestPara, -60, 12, 0.1, -178, false); // moves forward
+    wait(50,msec);
+    MoveEncoderPID(TestPara, -60, 15, 0.1, -178, false); // moves forward
     TurnMaxTimePID(TurnPara, -135, 0.4, false); // turns to face middle
-    MoveEncoderPID(TestPara, 100, 40, 0.3, -135, false); // moves back into middle goal
-    MoveTimePID(TestPara, -40, 0.4, 0.1, -135, false);
+    MoveEncoderPID(TestPara, 100, 28, 0.3, -135, false); // moves back into middle goal
+    MoveTimePID(TestPara, -40, 0.5, 0.1, -135, false); // slows down
     MiddleScore();
-    wait(500,msec);
-    MoveEncoderPID(TestPara, -100, 20, 0.3, -135, false); // moves forward into wing position
+    wait(600,msec);
+    NeutralScore();
+    MoveEncoderPID(TestPara, -100, 17, 0.3, -135, false); // moves forward into wing position
 
     TurnMaxTimePID(TurnPara, 179, 0.4, false); // turns to wing
     Wings.set(false);
     wait(50,msec);
-    MoveEncoderPID(TestPara, 100, 13.0, 0.6, 179, false); // backs up to wing
+    MoveEncoderPID(TestPara, 100, 7.0, 0.6, 179, false); // backs up to wing
     wait(200,msec);
     Move(-30,0);
     wait(100,msec);

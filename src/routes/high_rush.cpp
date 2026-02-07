@@ -23,11 +23,11 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     Scrapper.set(true);
     TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 26.0, 0.2, -125, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 26.8, 0.2, -125, true); // goes between there
 
     TurnMaxTimePID(TurnPara, -175, 0.4, false); // turns to matchload
     MoveTimePID(TurnPara, 100, 0.25, 0.2, -178, false); // goes into matchload
-    MoveTimePID(TurnPara, 50, 0.92, 0.2, -178, false); // slows down
+    MoveTimePID(TurnPara, 50, 0.87, 0.2, -178, false); // slows down
 
     MoveTimePID(TurnPara, -80, 0.7, 0.2, -178, false); // goes backwards into long goal
     HighScore(); // activates long goal scoring
@@ -38,13 +38,14 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, -90, 10, 0.4, 178, false); // goes away from long goal
     Wings.set(false); // lowers wings
     wait(100,msec);
+    NeutralScore(); // stops rolling block violations
     MoveEncoderPID(TestPara, 100, 8.65, 0.4, -160, false); // goes to the side of long goal a bit
 
     MoveEncoderPID(TestPara, 100, 14.5, 0.6, 179, false); // backs up to wing
     wait(200,msec);
     Move(-30,0);
     wait(100,msec);
-    std::cout<<stopwatch/1000.0<<std::endl;
+    std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
     wait(2000,msec);
 
     int screenheading = Gyro.heading(degrees);

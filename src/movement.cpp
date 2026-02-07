@@ -182,7 +182,7 @@ int PrevE;//Error at t-1
  */
 void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double ABSHDG,bool brake){
   double CSpeed=0;
-  // Zeroing(true,false);
+  Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -192,9 +192,9 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
   PrevE=0;
   double Correction=0;
   // Brain.Screen.clearScreen();
-  double startAvg = SensorVals.Avg;
-  double dist_moved = SensorVals.Avg - startAvg;
-  while(fabs(dist_moved) <= fabs(dist))
+  // double startAvg = SensorVals.Avg;
+  // double dist_moved = SensorVals.Avg - startAvg;
+  while(fabs(SensorVals.Avg) <= fabs(dist))
   {
     if(fabs(CSpeed)<fabs((double)Speed))
     {
@@ -202,7 +202,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
     }
 
     SensorVals=ChassisUpdate(); 
-    dist_moved = SensorVals.Avg - startAvg;
+    // dist_moved = SensorVals.Avg - startAvg;
 
     LGV=SensorVals.HDG-ABSHDG; // gyro error
     if(LGV>180) LGV=LGV-360; 
