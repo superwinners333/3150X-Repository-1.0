@@ -7,11 +7,11 @@
 /*                                                                            */
 /*----------------------------------------------------------------------------*/
 
-//#include "STDLib.cpp"
 #include "vex.h"
 
 #include "screen_gui.hpp"
 #include "movement.hpp"
+#include "odom.hpp"
 #include "routes/routes.hpp"
 
 using namespace vex;
@@ -107,7 +107,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 13; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 3; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -220,7 +220,7 @@ int ATask(void)
     if (Controller1.ButtonR2.pressing()==1)
     {
       if (DownTaskActiv == 1) RunIndex(40);
-      else RunIndex(100); // 50
+      else RunIndex(100); // 40
       MiddleScore();
     }
     else if (Controller1.ButtonL2.pressing()==1)

@@ -20,7 +20,7 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
     Scrapper.set(true);
     TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 27.75, 0.2, -125, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 27.8, 0.2, -125, true); // goes between there
 
     TurnMaxTimePID(TurnPara, -175, 0.4, false); // turns to matchload
     MoveTimePID(TurnPara, 100, 0.25, 0.2, -178, false); // goes into matchload
@@ -39,7 +39,7 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
     MiddleScore();
     wait(600,msec);
     NeutralScore();
-    MoveEncoderPID(TestPara, -100, 17, 0.3, -135, false); // moves forward into wing position
+    MoveEncoderPID(TestPara, -100, 24.5, 0.3, -135, false); // moves forward into wing position
 
     TurnMaxTimePID(TurnPara, 179, 0.4, false); // turns to wing
     Wings.set(false);

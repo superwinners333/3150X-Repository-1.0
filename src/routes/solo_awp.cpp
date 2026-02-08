@@ -13,23 +13,23 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TurnPara={1.5,0.1,0.12};
     // SIXSEVEEN 77777777777777777777
     NeutralScore();
-    MoveEncoderPID(TurnPara, -70, 19.3 , 0.3, 0,true); // drives to mathcloader
+    MoveEncoderPID(TurnPara, -70, 19.1, 0.3, 0,true); // drives to mathcloader
     Scrapper.set(true);
     RunIndex(100);
     TurnMaxTimePID(TurnPara, 90, 0.3, true); // turns to matchloader
     MoveTimePID(TurnPara, 50, 0.92 , 0.3, 90,false); // move into matchloader
     MoveTimePID(TurnPara, -75, 0.9, 0.3, 90,false); // move backwards to long goal
     HighScore();
-    MoveTimePID(TurnPara, -10, 1, 0.3, 90,false); // move into long goal
+    MoveTimePID(TurnPara, -10, 1.0, 0.3, 90,false); // move into long goal
     Scrapper.set(false);
-    MoveEncoderPID(TurnPara, -70, 0.15, 0.3, 90,true); // go away from long goal 
+    MoveEncoderPID(TurnPara, -70, 2.5, 0.3, 90,true); // go away from long goal 
     TurnMaxTimePID(TurnPara, -155, 0.2, false); // turns left
 
 
     NeutralScore();
-    MoveEncoderPID(TurnPara, -40, 26.3, 0.3, -155,true); // gets 3 blocks
+    MoveEncoderPID(TurnPara, -40, 25, 0.3, -155,true); // gets 3 blocks
     TurnMaxTimePID(TurnPara, 178, 0.2, false); // turns to other 3 blocks
-    MoveEncoderPID(TestPara, -100, 28, 0.3, 178,false); // move to other side
+    MoveEncoderPID(TestPara, -100, 27, 0.3, 178,false); // move to other side
     MoveEncoderPID(TestPara, -40, 14.0, 0.3, 178,true); // pick up other 3 balls
     Scrapper.set(true); // activates scraper
     TurnMaxTimePID(TurnPara, 135, 0.2, true); // turns to middle goal
@@ -38,7 +38,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     MiddleScore();
     wait(790,msec);
     NeutralScore();
-    MoveEncoderPID(TurnPara, -80, 39.7, 0.3, 135, true); // moves to between matchload tube and long goal
+    MoveEncoderPID(TurnPara, -80, 41, 0.3, 135, true); // moves to between matchload tube and long goal
     TurnMaxTimePID(TurnPara, 90, 0.2, true); // turn so scraper faces matchload tube
     NeutralScore();
     MoveTimePID(TurnPara, 50, 1.2 , 0.4, 90,false); // move into matchloader
