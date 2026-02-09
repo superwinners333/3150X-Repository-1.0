@@ -1,5 +1,6 @@
 #include "../movement.hpp"
 #include "../helper_functions.hpp"
+#include "../odom.hpp"
 #include "vex.h"
 //PID Straight and turn arguments:
 // MoveEncoderPID(TestPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
@@ -11,37 +12,33 @@
 
 void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
-    PIDDataSet TurnPara={1.9,0.0,0.053}; // movement pid
-    PIDDataSet MovePara={4.0,0.0,0.17}; // movement pid 
+    PIDDataSet MovePara={1.75,0.0,0.26}; // accurate pid distK values
+    PIDDataSet TurnPara={1.9,0.0,0.053}; // accurate pid headK values
 
     PIDDataSet TestPara={1.5,0.1,0.12};
     PIDDataSet DrivePara = {1.2, 0.0, 4.0}; 
 
-    PIDDataSet APara = {1.75,0.0,0.26};
-    PIDDataSet BPara = {3.5,1.0,0.28};
+    PIDDataSet APara = {1.2,0.5,0.26};
+    PIDDataSet BPara = {1.0,0.0,0.0};
+    PIDDataSet CPara = {1.3,0.0,0.1};
 
+
+    // AccuratePID(MovePara, TurnPara, 1.0, 5.0, 100, 5.0, 0, true);
+    globalHeading = 0;
+    Point target = {-24.0,24.0};
+
+    Point places[4] = {{-6.0,12.0},{-8.0,11.0},{-28.0,0.0},{-29.0,-7.0}}; // creates an array of points
+    double placelength = sizeof(places) / sizeof(places[0]); // gets number of elements in the array
+
+    startTracking({0.0,0.0});
+
+    // MoveToPoint(APara,BPara, places[0], 100.0, 5.0, 1.0, false);
+    // MoveToPoint(APara,BPara, places[1], 100.0, 5.0, 1.0, false);
+    // MoveToPoint(APara,BPara, places[2], 100.0, 5.0, 1.0, false);
+    MoveToPoint(APara,CPara, target, 100.0, 5.0, 1.0, true);
+    // MoveToPoint3(4, BPara, places, 40.0, 100.0, 0.8, true);
     
-    // RunIndex(100);
-    // wait(1000,msec);
-    // RunIndex(0);
-    // MiddleScore();
-    // wait(100,msec);
-    // RunIndex(50);
-    // MoveTimePID(TestPara, -10, 0.5, 0.2, 0, false); // score
-    // RunIndex(40);
-    // MoveTimePID(TestPara, -10, 0.8, 0.2, 0, false); // score
-    // RunIndex(28);
-    // MoveTimePID(TestPara, -10, 2, 0.2, 0, false); // score
-    // NeutralScore();
-
-    // WallBackPID(APara, TurnPara, 15.0, 10.0, 100.0, 5.0, 0, true);
-    AccuratePID(APara, TurnPara, 1.0, 5.0, 100, 5.0, 0, true);
-
-    // wait(50,msec);
-    // TurnMaxTimePID(TurnPara,90,0.5,true);
-    // MovePID(APara, TurnPara, 24, -100, 10.0, 90, true);
-
-    // MoveEncoderPID(TurnPara, -40, 2.5, 0.3, 0, true);
+    wait(50,msec);
 
 
 

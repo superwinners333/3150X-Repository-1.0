@@ -6,6 +6,7 @@
 #include "movement.hpp"
 #include "odom.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <math.h>
@@ -42,8 +43,8 @@ double radToDeg(double rad) {
     return deg;
 }
 
-double pointDist(Point a, point b) {
-    double dist = sqrt((a.x-b.x)^2 + (a.y-b.y)^2);
+double pointDist(Point a, Point b) {
+    double dist = hypot(a.x-b.x,a.y-b.y);
     return dist;
 }
 
@@ -54,8 +55,9 @@ double pointHeading(Point current, Point target) {
     double hyp = pointDist(current, target);
 
     double heading = 0;
-    if (dx >= 0) heading = 90.0 - radToDeg(asin(dy/hyp));
-    else heading = -90.0 + radToDeg(asin(dy/hyp));
+    // if (dx >= 0) heading = 90.0 - radToDeg(asin(dy/hyp));
+    // else heading = -90.0 + radToDeg(asin(dy/hyp));
+    heading = radToDeg(atan2(dx,dy));
 
     return heading;
 }
@@ -102,6 +104,8 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
   double speedSign = Speed / (fabs(Speed));
 
   double startAvg = SensorVals.Avg;
+  double startL = SensorVals.Left; // gets starting left side encoder movement
+  double startR = SensorVals.Right; // gets starting right side encoder movement
 
   // ---------------------------------------------------------------
   // ------------------------ main PID loop ------------------------
@@ -109,7 +113,10 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
   while (!settled && !timedOut) {
     SensorVals = ChassisUpdate(); // gets drivetrain values
     
-    double dist_moved = SensorVals.Avg - startAvg;
+    double left_moved = SensorVals.Left - startL; // gets distance that left side moved
+    double right_moved = SensorVals.Right - startR; // gets distance that right side moved
+
+    double dist_moved = (left_moved + right_moved) / 2.0; // averages left moved and right moved
     double percent_dist = (dist_moved / dist) * 100.0;
 
     // distance PID calculations
@@ -273,23 +280,6 @@ double getWallDist(double TH, double side, Point EP) {
 }
 
 
-Point resetPosition(Point EP) {
-  Point NP;
-  ChassisDataSet SenVals = ChassisUpdate();
-
-  double trueHeading = globalHeading + SenVals.HDG; // gets true heading relative to the field
-  if (trueHeading > 180.0) trueHeading -= 360.0;
-  else if (trueHeading < -180.0) trueHeading += 360.0;
-  NP = EP;
-  
-  // get coords of NP and then check if they are similar to NP
-
-
-  return NP;
-}
-
-
-
 // returns a new position of the bot
 /** @param EP encoder predicted position
 */
@@ -365,6 +355,8 @@ Point resetRight(Point EP);
 double dist_between_wheels = 10.728346; // distance between the wheels in inches
 
 // odom function
+bool odomTracking = true;
+
 void OdomUpdate(){
   Zeroing(true,true);
 
@@ -373,7 +365,7 @@ void OdomUpdate(){
   double prev_left_in = 0, prev_right_in = 0;
   double d_local_y_in = 0;
 
-  while (true) {
+  while (odomTracking) {
     ChassisDataSet SensorVals = ChassisUpdate();
     double true_heading = globalHeading+SensorVals.HDG;
     double heading_rad = degToRad(true_heading);
@@ -446,9 +438,9 @@ void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed,
   int settledTime = 200; // exit variable
 
   // TUNEABLE EXIT VARIABLES
-  double exitError = 1.0;        // how close to target before stopping
-  double exitDerivative = 2.0;   // how still the robot must be
-  int exitTime = 150;              // ms required to be stable
+  double exitError = 2.0;        // how close to target before stopping
+  double exitDerivative = 5.0;   // how still the robot must be
+  int exitTime = 50;              // ms required to be stable
   // int timeout = 0;               // ms max runtime
 
   if (timeout <= 0) timeout = 5.0;
@@ -458,27 +450,30 @@ void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed,
 
   double startdist = pointDist(CPos, target);
   Point startpoint = CPos;
-  double maxAccel = 5.0;
+  double maxAccel = 4.0;
+
+  double prevCorrection = 0.0, FCorrection = 0.0;
 
   // ---------------------------------------------------------------
   // ------------------------ main PID loop ------------------------
   // ---------------------------------------------------------------
-  while (!settled && !timedOut) {
+  bool errorSmall = false;
+  while (!settled && !timedOut && !errorSmall) {
     SensorVals = ChassisUpdate(); // gets drivetrain values
 
-    double dist = pointDist(CPos, target); // gets distance from target
-    double dist_moved = dist - startdist;
+    double dist = pointDist(CPos, target); // gets current distance from target
+    double dist_moved = startdist - dist; // gets total distance theoretically travelled
     double percent_dist = (dist_moved / startdist) * 100.0;
 
     // distance PID calculations
-    E_dist = -(100.0 - percent_dist);
+    E_dist = -(100.0 - percent_dist); // sets error as percent left to travel
     P_dist = DistK.kp*E_dist;
     I_dist += (DistK.ki)*E_dist*(dt/1000.0);
     D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
 
     // std::cout << D_dist << std::endl;
 
-    rawSpeed = P_dist + I_dist + D_dist;
+    rawSpeed = P_dist + I_dist + D_dist + 10.0;
 
     if (Speed < 0) rawSpeed = rawSpeed * -1.0;
     if (fabs(rawSpeed) > fabs(Speed)) { // clamps outputSpeed at max speed
@@ -493,7 +488,13 @@ void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed,
 
 
     // heading PID adjustment calculations
-    E_heading = SensorVals.HDG-pointHeading(CPos, target);
+    double targetHeading = pointHeading(CPos, target);
+    double relativeHeading = targetHeading - SensorVals.HDG;
+    // if (fabs(relativeHeading) > 90.0) {
+    //     targetHeading += 180;
+    //     outputSpeed *= -1;
+    // }
+    E_heading = SensorVals.HDG-targetHeading;
     while (E_heading > 180) E_heading -= 360;
     while (E_heading < -180) E_heading += 360;
     P_heading = HeadK.kp*E_heading;
@@ -503,16 +504,20 @@ void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed,
     Correction = P_heading + I_heading + D_heading; // correction
     Correction *= curveFactor; // adjusts correction power for curve aggressiveness tuning
 
+    double correctionChange = Correction - FCorrection;
+    if (correctionChange > 20.0) correctionChange = 20.0;
+    else if (correctionChange < 20.0) correctionChange = -20.0;
+    FCorrection += correctionChange;
+
     // tells the bot how much to run each side
-    Move(outputSpeed+Correction,outputSpeed-Correction);
+    Move(outputSpeed+FCorrection,outputSpeed-FCorrection);
     
     PrevE_heading = E_heading; // updates previous headings
     PrevE_dist = E_dist;
-
+    prevCorrection = Correction;
 
     // distance exit conditions calculations
-    // (dist_moved+0.95336)/(1.01514)
-    bool errorSmall = fabs(dist - dist_moved) <= exitError;
+    errorSmall = fabs(pointDist(CPos,target)) <= exitError;
     bool derivativeSmall = fabs(D_dist) <= exitDerivative;
 
     if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
@@ -524,9 +529,12 @@ void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed,
     timedOut = Brain.Timer.value() >= timeout;
 
     std::cout << "Timer: " << Brain.Timer.value() << std::endl;
-    std::cout << "distance: " << dist_moved << std::endl;
-    std::cout << "error: " << E_dist << std::endl;
-    std::cout << "percent: " << percent_dist << std::endl;
+    std::cout << "target dist: " << dist << std::endl;
+    std::cout << "target heading: " << targetHeading << std::endl;
+    double Pheading = SensorVals.HDG;
+    if (SensorVals.HDG > 180) Pheading -= 360.0;
+    std::cout << "current heading: " << Pheading << std::endl;
+    std::cout << "CPos: " << CPos.x << "," << CPos.y <<std::endl;
     std::cout << " " << std::endl;
 
     if (settled || timedOut) break; // if either exit condition is met, exit
@@ -535,12 +543,284 @@ void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed,
   }
 
   std::cout << "exit" << std::endl;
+  std::cout << CPos.x << std::endl;
+  std::cout << CPos.y << std::endl;
+  std::cout << pointDist(CPos,target) << std::endl;
   if(brake){BStop(); // braking logic
   wait(100,msec);}
   else CStop();
 }
 
-void startTracking(void) {
+void startTracking(Point start) {
+    CPos = start;
     wait(50,msec);
     thread odom_tracking = thread(OdomUpdate);
 }
+
+
+void MoveToPoint2(PIDDataSet DistK, PIDDataSet HeadK, Point target[], double Speed, double timeout, double curveFactor, bool brake)
+{
+  ChassisDataSet SensorVals;
+  SensorVals=ChassisUpdate();
+  double outputSpeed = 0.0;
+
+  double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
+  double P_dist=0.0, I_dist=0.0, D_dist=0.0, E_dist=0.0, PrevE_dist=0.0; // distance PID variables
+
+  double rawSpeed=0.0, Correction=0.0; // motor input variables
+  double dt = 20.0; // how often the PID error checks loops in ms
+
+  double DPS = (600*wheelToMotorRatio*wheelDiam*M_PI)/60; // distance per sec (inches)
+  Brain.Timer.reset(); // resets brain timer for exit
+
+  int settledTime = 200; // exit variable
+
+  // TUNEABLE EXIT VARIABLES
+  double exitError = 2.0;        // how close to target before stopping
+  double exitDerivative = 5.0;   // how still the robot must be
+  int exitTime = 50;              // ms required to be stable
+  // int timeout = 0;               // ms max runtime
+
+  double maxAccel = 4.0;
+
+  // ---------------------------------------------------------------
+  // ------------------------ main PID loop ------------------------
+  // ---------------------------------------------------------------
+  int targetLength = sizeof(target) / sizeof(target[0]);
+  
+  for (int i = 0; i < targetLength; i++) {
+    Point startpoint = CPos;
+    double startdist = pointDist(CPos, target[i]);
+    Brain.Timer.reset();
+    bool settled = false, timedOut = false, errorSmall = false;
+
+    while (!settled && !timedOut && !errorSmall) {
+      SensorVals = ChassisUpdate(); // gets drivetrain values
+
+      double dist = pointDist(CPos, target[i]); // gets current distance from target
+      double dist_moved = startdist - dist; // gets total distance theoretically travelled
+      double percent_dist = (dist_moved / startdist) * 100.0;
+
+      // distance PID calculations
+      E_dist = -(100.0 - percent_dist); // sets error as percent left to travel
+      P_dist = DistK.kp*E_dist;
+      I_dist += (DistK.ki)*E_dist*(dt/1000.0);
+      D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
+
+      // std::cout << D_dist << std::endl;
+
+      if (i == targetLength - 1) rawSpeed = P_dist + I_dist + D_dist + 10.0;
+      else rawSpeed = -100.0;
+
+      if (Speed < 0) rawSpeed = rawSpeed * -1.0;
+      if (fabs(rawSpeed) > fabs(Speed)) { // clamps outputSpeed at max speed
+        if (Speed >= 0 && rawSpeed >= 0) rawSpeed = Speed;
+        else if (Speed < 0 && rawSpeed < 0) rawSpeed = Speed;
+      }
+
+      outputSpeed = rawSpeed;
+
+
+      // heading PID adjustment calculations
+      double targetHeading = pointHeading(CPos, target[i]);
+      double relativeHeading = targetHeading - SensorVals.HDG;
+      // if (fabs(relativeHeading) > 90.0) {
+      //     targetHeading += 180;
+      //     outputSpeed *= -1;
+      // }
+
+      E_heading = SensorVals.HDG-targetHeading;
+      while (E_heading > 180) E_heading -= 360;
+      while (E_heading < -180) E_heading += 360;
+      P_heading = HeadK.kp*E_heading;
+      I_heading += HeadK.ki*E_heading*(dt/1000.0);
+      D_heading = (HeadK.kd*(E_heading-PrevE_heading)) / (dt/1000.0);
+
+      Correction = P_heading + I_heading + D_heading; // correction
+      Correction *= curveFactor; // adjusts correction power for curve aggressiveness tuning
+
+      // tells the bot how much to run each side
+      Move(outputSpeed+Correction,outputSpeed-Correction);
+      
+      PrevE_heading = E_heading; // updates previous headings
+      PrevE_dist = E_dist;
+
+      // distance exit conditions calculations
+      errorSmall = fabs(pointDist(CPos,target[i])) <= exitError;
+      bool derivativeSmall = fabs(D_dist) <= exitDerivative;
+
+      if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
+      else settledTime = 0; // if we start adjusting again, stop counting
+
+
+      // exit condition checks
+      settled = settledTime >= exitTime; 
+      timedOut = Brain.Timer.value() >= timeout;
+
+      std::cout << "Timer: " << Brain.Timer.value() << std::endl;
+      std::cout << "target dist: " << dist << std::endl;
+      std::cout << "target heading: " << targetHeading << std::endl;
+      std::cout << "current heading: " << SensorVals.HDG << std::endl;
+      std::cout << "CPos: " << CPos.x << "," << CPos.y <<std::endl;
+      std::cout << " " << std::endl;
+
+      if (settled || timedOut) break; // if either exit condition is met, exit
+
+      wait(20,msec); // wait to stop constant looping
+    }
+    wait(20,msec);
+  }
+  std::cout << "exit" << std::endl;
+  std::cout << CPos.x << std::endl;
+  std::cout << CPos.y << std::endl;
+  std::cout << pointDist(CPos,target[targetLength-1]) << std::endl;
+  if(brake){BStop(); // braking logic
+  wait(100,msec);}
+  else CStop();
+}
+
+
+
+void MoveToPoint3(int targetLength, PIDDataSet HeadK, Point target[], double Speed, double timeout, double curveFactor, bool brake)
+{
+  ChassisDataSet SensorVals;
+  SensorVals=ChassisUpdate();
+  double outputSpeed = 0.0;
+
+  double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
+
+  double rawSpeed=0.0, Correction=0.0; // motor input variables
+  double dt = 20.0; // how often the PID error checks loops in ms
+
+  int settledTime = 200; // exit variable
+
+  // TUNEABLE EXIT VARIABLES
+  double exitError = 1.5;    // how close to target before stopping
+  int exitTime = 50;
+
+
+  // ---------------------------------------------------------------
+  // ------------------------ main PID loop ------------------------
+  // ---------------------------------------------------------------
+  
+  for (int i = 0; i < targetLength; i++) {
+    Point startpoint = CPos;
+    double startdist = pointDist(CPos, target[i]);
+    Brain.Timer.reset();
+    bool settled = false, timedOut = false, errorSmall = false;
+    double startHeading = SensorVals.HDG;
+
+    while (!settled && !timedOut && !errorSmall) {
+      SensorVals = ChassisUpdate(); // gets drivetrain values
+
+      double dist = pointDist(CPos, target[i]); // gets current distance from target
+      rawSpeed = -Speed;
+
+      if (Speed < 0) rawSpeed = rawSpeed * -1.0;
+      if (fabs(rawSpeed) > fabs(Speed)) { // clamps outputSpeed at max speed
+        if (Speed >= 0 && rawSpeed >= 0) rawSpeed = Speed;
+        else if (Speed < 0 && rawSpeed < 0) rawSpeed = Speed;
+      }
+
+      outputSpeed = rawSpeed;
+
+
+      // heading PID adjustment calculations
+      double targetHeading = pointHeading(CPos, target[i]);
+      double relativeHeading = targetHeading - SensorVals.HDG;
+      // if (fabs(relativeHeading) > 90.0) {
+      //     targetHeading += 180;
+      //     outputSpeed *= -1;
+      // }
+
+      E_heading = SensorVals.HDG-targetHeading;
+      while (E_heading > 180) E_heading -= 360;
+      while (E_heading < -180) E_heading += 360;
+      P_heading = HeadK.kp*E_heading;
+      I_heading += HeadK.ki*E_heading*(dt/1000.0);
+      D_heading = (HeadK.kd*(E_heading-PrevE_heading)) / (dt/1000.0);
+
+      Correction = P_heading + I_heading + D_heading; // correction
+      Correction *= curveFactor; // adjusts correction power for curve aggressiveness tuning
+
+      // tells the bot how much to run each side
+      Move(outputSpeed+Correction,outputSpeed-Correction);
+      
+      PrevE_heading = E_heading; // updates previous headings
+
+      // distance exit conditions calculations
+      errorSmall = fabs(pointDist(CPos,target[i])) <= exitError;
+
+      if (errorSmall) settledTime += dt; // if we are close to the target, start counting
+      else settledTime = 0; // if we start adjusting again, stop counting
+
+      // exit condition checks
+      settled = settledTime >= exitTime; 
+      timedOut = Brain.Timer.value() >= timeout;
+
+      // std::cout << "Timer: " << Brain.Timer.value() << std::endl;
+      std::cout << "target dist: " << dist << std::endl;
+      std::cout << "target heading: " << targetHeading << std::endl;
+      std::cout << "current heading: " << SensorVals.HDG << std::endl;
+      std::cout << "CPos: " << CPos.x << "," << CPos.y <<std::endl;
+      std::cout << " " << std::endl;
+
+      if (settled || timedOut) break; // if either exit condition is met, exit
+
+      wait(20,msec); // wait to stop constant looping
+    }
+    std::cout << i << " complete " << std::endl;
+  }
+  std::cout << "exit" << std::endl;
+  std::cout << CPos.x << std::endl;
+  std::cout << CPos.y << std::endl;
+  std::cout << pointDist(CPos,target[targetLength-1]) << std::endl;
+  if(brake){BStop(); // braking logic
+  wait(100,msec);}
+  else CStop();
+}
+
+
+
+/** function makes the bot travel the specified distance
+*   (negative values for speed to make the bot go backwards) 
+* @param target point to curve to
+* @param speed max speed
+* @param curveP curve proportional
+* @param brake braking
+*/ 
+void curveToPoint(Point target, double speed, double curveP, bool brake) {
+  ChassisDataSet SensorVals;
+  double dist = pointDist(CPos,target);
+  while (dist <= 1.5) {
+    ChassisDataSet SensorVals = ChassisUpdate();
+    double targetHeading = pointHeading(CPos,target);
+
+    if (speed < 0) targetHeading += 180.0;
+    // if (targetHeading > 180) targetHeading - 360.0;
+
+    double E_heading = SensorVals.HDG - targetHeading;
+    while (E_heading > 180) E_heading -= 360.0;
+    while (E_heading < -180) E_heading += 360.0;
+
+    double curvature = curveP * degToRad(E_heading); // curving math
+    // std::clamp(curvature,-1,1);
+
+    double left = -speed * (1.0-curvature); // calculates powers for left and right sides
+    double right = -speed * (1.0+curvature);
+    std::clamp(left,-100,100); // clamps left and right speeds
+    std::clamp(right,-100,100);
+    Move(left,right); // move
+
+    dist = pointDist(CPos,target); // exit condition check
+    wait(20,msec); // prevents crashing
+  }
+  if(brake){
+    BStop(); // braking logic
+    wait(100,msec);}
+  else CStop();
+}
+
+
+
+

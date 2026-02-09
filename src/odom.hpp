@@ -12,11 +12,20 @@ struct Point {
 
 
 extern double globalHeading;
-extern Point Cpos;
+extern Point CPos;
 
 extern bool inRangeOf(double range, double target, double check);
 
+extern bool odomTracking;
 extern void OdomUpdate();
 
 extern void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake);
+
+extern void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed, double timeout, double curveFactor, bool brake);
+
+extern void startTracking(Point start);
+
+
+void MoveToPoint2(PIDDataSet DistK, PIDDataSet HeadK, Point target[], double Speed, double timeout, double curveFactor, bool brake);
+void MoveToPoint3(int targetLength, PIDDataSet HeadK, Point target[], double Speed, double timeout, double curveFactor, bool brake);
 #endif

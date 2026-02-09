@@ -73,7 +73,7 @@ Zeroing(true,true);
 
 wait(100,msec); // just a small delay
 
-thread Odom = thread(OdomUpdate); // runs the odom stuff
+// thread Odom = thread(OdomUpdate); // runs the odom stuff
 
 
 Brain.Screen.clearScreen();
@@ -107,7 +107,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 3; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 6; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -202,6 +202,7 @@ int DriveTask(void){
   while(true)
   {
     EXIT=true;
+    odomTracking = false;
     RV=-Controller1.Axis3.position(percent)+(Controller1.Axis1.position(percent)*turnConst);
     LV=-Controller1.Axis3.position(percent)-(Controller1.Axis1.position(percent)*turnConst);
     Move(LV,RV);
