@@ -32,8 +32,8 @@ digital_out LiftDown = digital_out(Brain.ThreeWirePort.E);
 
 inertial Gyro = inertial(PORT11);
 distance backSensor = distance(PORT18);
-distance leftSensor = distance(PORT15);
-distance rightSensor = distance(PORT14);
+distance leftSensor = distance(PORT17);
+distance rightSensor = distance(PORT1);
 
 // Important variables
 const double wheelDiam = 3.25;

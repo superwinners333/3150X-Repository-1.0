@@ -26,6 +26,9 @@ extern void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double
 extern void startTracking(Point start);
 
 
-void MoveToPoint2(PIDDataSet DistK, PIDDataSet HeadK, Point target[], double Speed, double timeout, double curveFactor, bool brake);
-void MoveToPoint3(int targetLength, PIDDataSet HeadK, Point target[], double Speed, double timeout, double curveFactor, bool brake);
+extern void MoveToPoint2(PIDDataSet DistK, PIDDataSet HeadK, Point target[], double Speed, double timeout, double curveFactor, bool brake);
+extern void MoveToPoint3(int targetLength, PIDDataSet HeadK, Point target[], double Speed, double timeout, double curveFactor, bool brake);
+
+extern void curveToPoint(Point target, double speed, double curveP, bool brake);
+extern void straightToPoint(PIDDataSet turnK, PIDDataSet HeadK, PIDDataSet DistK, Point target, double speed, double timeout, bool brake);
 #endif
