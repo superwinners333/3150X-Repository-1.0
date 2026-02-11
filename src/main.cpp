@@ -98,6 +98,8 @@ while(!confirmed2 && !EXIT) // waits for auto selection
 
 // determines which auto to run and creates confirm menu
 AutonLogic(); 
+wait(5,sec);
+drawLogo();
 
 
   // All activities that occur before the competition starts
@@ -125,69 +127,42 @@ void autonomous(void) {
   PIDDataSet TestPara={4,0.1,0.2};
   Zeroing(true,true);
 
-  if(AutoSelectorVal==1)// left 1
-  {
-    high_basic();
-  }
+  switch (AutoSelectorVal) {
+    // high side autos
+    case 1: high_basic(); break;
+    case 2: high_long(); break;
+    case 3: high_rush(); break;
+    case 4: high_middle_wing(); break;
+    case 5: high_four(); break;
+    case 6: break;
+    case 7: break;
+    case 8: break;
+    case 9: break;
+    case 10: break;
+    case 11: break;
+    case 12: break;
+    // low side autos
+    case 13: low_basic(); break;
+    case 14: low_long(); break;
+    case 15: solo_awp(); break;
+    case 16: low_rush(); break;
+    case 17: low_middle_wing(); break;
+    case 18: low_four(); break;
+    case 19: break;
+    case 20: break;
+    case 21: break;
+    case 22: break;
+    case 23: break;
+    case 24: break;
 
-  if(AutoSelectorVal==2)// left 2
-  {
-    high_long();
-  }
-
-  if(AutoSelectorVal==3)// left 3
-  {
-    high_rush();
-  } 
-
-  if(AutoSelectorVal==4)// left 4
-  {
-    high_middle_wing();
-  }
-
-  if(AutoSelectorVal==5)// left 5
-  {
-    high_four();
-  }
-
-  if(AutoSelectorVal==6)// left 6
-  {
-    mangoskills();
-  }
-
-  if(AutoSelectorVal==7)// right 1
-  {
-    low_basic();
-  }
-
-  if(AutoSelectorVal==8) // right 2
-  {
-    low_long();
-  }
-
-  if(AutoSelectorVal==9) // right 3
-  { 
-    solo_awp();
-  }
-
-  if(AutoSelectorVal==10) // right 4
-  { 
-    low_rush();
-  }
-
-  if(AutoSelectorVal==11)// left 5
-  {
-    low_middle_wing();
-  }
-
-  if(AutoSelectorVal==12)// left 6
-  {
-    low_four();
-  }
-
-  if(AutoSelectorVal==13) // PROGRAMMING SKILLS GO HERE
-  { 
-    skills();
+    // skills autos
+    case 25: skills(); break;
+    case 26: break;
+    case 27: break;
+    case 28: break;
+    case 29: break;
+    case 30: mangoskills(); break;
+    default: break;
   }
 
   CStop(); 
@@ -226,7 +201,7 @@ int ATask(void)
     }
     else if (Controller1.ButtonL2.pressing()==1)
     {
-      RunIndex(-80);
+      RunIndex(-60);
       NeutralScore();
     }
     else if (Controller1.ButtonR1.pressing()==1)

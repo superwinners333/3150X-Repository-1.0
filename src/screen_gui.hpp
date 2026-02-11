@@ -17,4 +17,6 @@ extern void confirmCorner();
 extern void AutoSelection();
 extern void AutonLogic();
 extern void greyScreen();
+
+extern void drawLogo();
 #endif

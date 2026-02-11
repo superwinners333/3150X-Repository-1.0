@@ -37,8 +37,10 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
 
     // curveToPoint(target, 90.0, 2.0, true);
 
-    straightToPoint(TestPara, CorrectionPara, MovePara, target, 100.0, 5.0, true);
+    // straightToPoint(TestPara, CorrectionPara, MovePara, target, 100.0, 5.0, true);
     // straightToPoint(TestPara, BPara, MovePara, target2, -100.0, 5.0, true);
+
+    boohoo(BPara, MovePara, target, 100.0,60.0,5.0,true);
     
     wait(50,msec);
 

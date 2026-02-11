@@ -255,32 +255,6 @@ Point StartingPosition(void) {
   return SP;
 }
 
-/** function returns distance to specified wall
-* @param TH is the trueHeading value of the bot
-* @param side is the wall that you want the distance to
-* @param EP is the estimated position that the bot is at
-*/
-double getWallDist(double TH, double side, Point EP) { 
-  ChassisDataSet SenVals = ChassisUpdate();
-  // side values are:
-  // 1 = left
-  // 2 = right
-  // 3 = near
-  // 4= far
-  
-  double wallDist = 0.0; // distance from specified wall
-  
-  if (side == 1) {
-    if (inRangeOf(1.5,0.0,TH)) {
-      wallDist = SenVals.leftD + LDC;
-    }
-    else if (inRangeOf(1.5,90.0,TH)) {
-      wallDist = 0;
-    }
-  }
-
-  return wallDist;
-}
 
 
 // returns a new position of the bot
@@ -290,25 +264,25 @@ Point longGoalReset(Point EP) { // resets base on long goal position
   Point LG; // long goal point
   ChassisDataSet SenVals = ChassisUpdate();
   double trueHeading = globalHeading + SenVals.HDG;
-  if (trueHeading > 180.0) trueHeading -= 360.0;
-  else if (trueHeading < -180.0) trueHeading += 360.0;
+  while (trueHeading > 180.0) trueHeading -= 360.0;
+  while (trueHeading < -180.0) trueHeading += 360.0;
 
   LG = EP; // creates values to output in case the bot thinks our position is too innacurate
   
   // resets x vals
   if (SenVals.leftD <= SenVals.rightD) {
-    if (inRangeOf(1.5,180.0,trueHeading)) LG.x = 144.0 - (SenVals.leftD + LDC); // close right
+    if (inRangeOf(1.5,180.0,trueHeading) || inRangeOf(1.5,-180.0,trueHeading)) LG.x = 144.0 - (SenVals.leftD + LDC); // close right
     else if (inRangeOf(1.5,0.0,trueHeading)) LG.x = SenVals.leftD + LDC;
   }
   else if (SenVals.rightD < SenVals.leftD) {
-    if (inRangeOf(1.5,180.0,trueHeading)) LG.x = SenVals.rightD + RDC;
+    if (inRangeOf(1.5,180.0,trueHeading) || inRangeOf(1.5,-180.0,trueHeading)) LG.x = SenVals.rightD + RDC;
     else if (inRangeOf(1.5,0.0,trueHeading)) LG.x = 144.0 - (SenVals.rightD + RDC);
   }
 
   // resets y vals with constants 
   // the value of the constant should be the distance from the wall to the center of the bot when the bot is scoring on the long goal
   double LGConst = 42.362205;
-  if (inRangeOf(1.0,180.0,trueHeading)) LG.y = LGConst; 
+  if (inRangeOf(1.0,180.0,trueHeading) || inRangeOf(1.5,-180.0,trueHeading)) LG.y = LGConst; 
   else if (inRangeOf(1.0,0.0,trueHeading)) LG.y = 144.0 - LGConst;
 
   return LG;
@@ -322,8 +296,8 @@ Point wallReset(Point EP, bool botBack) { // if back == true, then the back of o
   ChassisDataSet SenVals = ChassisUpdate();
 
   double trueHeading = globalHeading + SenVals.HDG; // gets true heading relative to the field
-  if (trueHeading > 180.0) trueHeading -= 360.0;
-  else if (trueHeading < -180.0) trueHeading += 360.0;
+  while (trueHeading > 180.0) trueHeading -= 360.0;
+  while (trueHeading < -180.0) trueHeading += 360.0;
 
   NP = EP;
 
@@ -349,10 +323,47 @@ Point wallReset(Point EP, bool botBack) { // if back == true, then the back of o
 }
 
 Point resetBack(Point EP) {
-  
+  ChassisDataSet SenVals = ChassisUpdate();
+  double trueHeading = globalHeading + SenVals.HDG;
+  while (trueHeading > 180.0) trueHeading -= 360.0;
+  while (trueHeading < -180.0) trueHeading += 360.0;
+
+  Point NP = EP;
+  if (inRangeOf(2.0, 0.0, trueHeading)) NP.y = SenVals.backD + BDC;
+  else if (inRangeOf(2.0, 90.0, trueHeading)) NP.x = SenVals.backD + BDC;
+  else if (inRangeOf(2.0, 180.0, trueHeading) || inRangeOf(1.5, -180.0,trueHeading)) NP.y = 144.0 - (SenVals.backD + BDC);
+  else if (inRangeOf(2.0, -90.0, trueHeading)) NP.x = 144.0 - (SenVals.backD + BDC);
+
+  return NP;
 }
-Point resetLeft(Point EP);
-Point resetRight(Point EP);
+Point resetLeft(Point EP) {
+  ChassisDataSet SenVals = ChassisUpdate();
+  double trueHeading = globalHeading + SenVals.HDG;
+  while (trueHeading > 180.0) trueHeading -= 360.0;
+  while (trueHeading < -180.0) trueHeading += 360.0;
+  Point NP = EP; // gets current position in case our heading is too off to return anything
+
+  if (inRangeOf(2.0, 0.0, trueHeading)) NP.x = SenVals.leftD + LDC;
+  else if (inRangeOf(2.0, 90.0, trueHeading)) NP.y = 144.0 - (SenVals.leftD + LDC);
+  else if (inRangeOf(2.0, 180.0, trueHeading) || inRangeOf(1.5, -180.0,trueHeading)) NP.x = 144.0 - (SenVals.leftD + LDC);
+  else if (inRangeOf(2.0, -90.0, trueHeading)) NP.y = SenVals.leftD + LDC;
+
+  return NP;
+}
+Point resetRight(Point EP) {
+  ChassisDataSet SenVals = ChassisUpdate();
+  double trueHeading = globalHeading + SenVals.HDG;
+  while (trueHeading > 180.0) trueHeading -= 360.0;
+  while (trueHeading < -180.0) trueHeading += 360.0;
+  Point NP = EP;
+
+  if (inRangeOf(2.0, 0.0, trueHeading)) NP.x = 144.0 - (SenVals.rightD + RDC);
+  else if (inRangeOf(2.0, 90.0, trueHeading)) NP.y = SenVals.rightD + RDC;
+  else if (inRangeOf(2.0, 180.0, trueHeading) || inRangeOf(1.5, -180.0,trueHeading)) NP.x = SenVals.rightD + RDC;
+  else if (inRangeOf(2.0, -90.0, trueHeading)) NP.y = 144.0 - (SenVals.rightD + RDC);
+
+  return NP;
+}
 
 // use negative distance values for moving backwards?
 
@@ -732,7 +743,7 @@ void boohoo(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, double
 
   double startdist = dist;
 
-  while (!settled & Brain.Timer.value() < 5.0) {
+  while (!settled & Brain.Timer.value() < 5.0) { // maybe try to just stop when dist < x if settled does not work
     SensorVals = ChassisUpdate();
 
     dist = pointDist(CPos, target);
@@ -772,7 +783,7 @@ void boohoo(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, double
     D_head = (HeadK.kd*(E_head-PrevE_head)) / (dt/1000.0);
 
     correction = P_head + I_head + D_head; // correction
-    correction *= ((E_dist/100.0)*(E_dist/100.0));
+    // correction *= ((E_dist/100.0)*(E_dist/100.0));
 
     if (fabs(E_head) > 90) outputSpeed *= -1.0;
 
