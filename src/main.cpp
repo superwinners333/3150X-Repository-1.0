@@ -98,8 +98,6 @@ while(!confirmed2 && !EXIT) // waits for auto selection
 
 // determines which auto to run and creates confirm menu
 AutonLogic(); 
-wait(5,sec);
-drawLogo();
 
 
   // All activities that occur before the competition starts
@@ -109,7 +107,7 @@ drawLogo();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 6; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 25; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
