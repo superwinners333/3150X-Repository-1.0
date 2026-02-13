@@ -347,16 +347,9 @@ void curvePID(PIDDataSet KVals, int Speed, double radius, double dist, double Ac
   double PVal=0, IVal=0, DVal=0, LGV=0, Correction=0;//define local gyro variable.
   PrevE=0;
 
-  double startL = SensorVals.Left;
-  double startR = SensorVals.Right;
-  double movedL = SensorVals.Left - startL;
-  double movedR = SensorVals.Right - startR;
-  double movedAvg = (movedL + movedR) / 2.0;
+
   while(fabs(SensorVals.Avg) <= fabs(dist))
   {
-    movedL = SensorVals.Left - startL;
-    movedR = SensorVals.Right - startR;
-    movedAvg = (movedL + movedR) / 2.0;
     if(fabs(CSpeed)<fabs((double)Speed))
     {
       CSpeed+=Speed/AccT*0.02; // acceleration logic

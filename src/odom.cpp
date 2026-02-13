@@ -76,7 +76,7 @@ double pointHeading(Point current, Point target) {
 */
 void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
 {
-  // Zeroing(true,false);
+  Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double outputSpeed = 0.0;
@@ -115,7 +115,8 @@ void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAcce
     double left_moved = SensorVals.Left - startL; // gets distance that left side moved
     double right_moved = SensorVals.Right - startR; // gets distance that right side moved
 
-    double dist_moved = (left_moved + right_moved) / 2.0; // averages left moved and right moved
+    // double dist_moved = (left_moved + right_moved) / 2.0; // averages left moved and right moved
+    double dist_moved = SensorVals.Avg;
     double percent_dist = (dist_moved / dist) * 100.0;
 
     // distance PID calculations
@@ -440,6 +441,7 @@ void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed,
 {
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
+  Zeroing(true,false);
   double outputSpeed = 0.0;
 
   double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
@@ -477,7 +479,7 @@ void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed,
     SensorVals = ChassisUpdate(); // gets drivetrain values
 
     double dist = pointDist(CPos, target); // gets current distance from target
-    double dist_moved = startdist - dist; // gets total distance theoretically travelled
+    double dist_moved = SensorVals.Avg; // (startdist - dist)gets total distance theoretically travelled
     double percent_dist = (dist_moved / startdist) * 100.0;
 
     // distance PID calculations

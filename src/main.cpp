@@ -98,6 +98,8 @@ while(!confirmed2 && !EXIT) // waits for auto selection
 
 // determines which auto to run and creates confirm menu
 AutonLogic(); 
+wait(5,sec);
+drawLogo();
 
 
   // All activities that occur before the competition starts
@@ -107,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 25; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 26; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -155,7 +157,7 @@ void autonomous(void) {
 
     // skills autos
     case 25: skills(); break;
-    case 26: break;
+    case 26: yahuskills(); break;
     case 27: break;
     case 28: break;
     case 29: break;
