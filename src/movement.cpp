@@ -338,6 +338,63 @@ void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHD
   else CStop();
 }
 
+/** Moves the robot forward or backward. Negative speed moves
+ * the robot forward. Positive value moves it backward. 
+ * @param KVals the PID constants
+ * @param Speed the speed, from -100 to 100
+ * @param dist distance travelled, in inches
+ * @param AccT time to max speed (s)
+ * @param ABSHDG absolute heading of the robot
+ * @param brake Brake at end, or coast
+ */
+void CurveEncoderPID(PIDDataSet KVals, int SpeedL, int SpeedR, double dist,double AccT, double ABSHDG,bool brake) {
+  double CSpeedL=0, CSpeedR=0;
+  Zeroing(true,false);
+  ChassisDataSet SensorVals;
+  SensorVals = ChassisUpdate();
+  double PVal=0, IVal=0, DVal=0, LGV=0;//define local gyro variable.
+  PrevE=0;
+  double Correction=0;
+  bool notatpos = true;
+
+  while(notatpos)
+  {
+    if(fabs(CSpeedL)<fabs((double)SpeedL)) {
+      CSpeedL+=SpeedL/AccT*0.02; // acceleration logic
+    }
+    if(fabs(CSpeedR)<fabs((double)SpeedR)) {
+      CSpeedR+=SpeedR/AccT*0.02;  
+    }
+
+    SensorVals=ChassisUpdate(); 
+
+    // LGV=SensorVals.HDG-ABSHDG; // gyro error
+    // if(LGV>180) LGV=LGV-360; 
+    // PVal=KVals.kp*LGV;
+    // IVal=IVal+KVals.ki*LGV*0.02;
+    // DVal=KVals.kd*(LGV-PrevE);
+
+    Correction=PVal+IVal+DVal/0.02; 
+
+    Move(CSpeedL+Correction,CSpeedR-Correction); 
+    PrevE=LGV;
+
+    wait(20, msec);
+    SensorVals = ChassisUpdate();
+    if (fabs(SpeedL) < fabs(SpeedR)) notatpos = fabs(SensorVals.Right) <= fabs(dist);
+    else if (fabs(SpeedL) > fabs(SpeedR)) notatpos = fabs(SensorVals.Left) <= fabs(dist);
+    else notatpos = fabs(SensorVals.Avg) <= fabs(dist);
+  }
+  if(brake){
+    BStop();
+    wait(120,msec);
+  }
+  else CStop();
+}
+
+
+
+
 double trackwidth = 10.728346;
 void curvePID(PIDDataSet KVals, int Speed, double radius, double dist, double AccT, double ABSHDG, bool brake) {
   double CSpeed=0;

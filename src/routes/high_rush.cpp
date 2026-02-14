@@ -39,7 +39,9 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     Wings.set(false); // lowers wings
     wait(100,msec);
     NeutralScore(); // stops rolling block violations
-    MoveEncoderPID(TestPara, 100, 8.65, 0.4, -159, false); // goes to the side of long goal a bit
+
+    // ****change this to -160 if its missing the block still****
+    MoveEncoderPID(TestPara, 100, 8.65, 0.4, -159.5, false); // goes to the side of long goal a bit
 
     MoveEncoderPID(TestPara, 100, 14.8, 0.6, 179, false); // backs up to wing
     wait(200,msec);

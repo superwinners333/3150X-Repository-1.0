@@ -13,45 +13,52 @@
 void low_rush() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     PIDDataSet TurnPara={1.5,0.1,0.12};
-    PIDDataSet DrivePara={1.5,0.1,0.12};
+    PIDDataSet TestPara={1.5,0.1,0.15};
     PIDDataSet PurePara={1.5,0.1,0.12};
 
+    timer stopwatch;
+
     RunIndex(100);
-    MoveEncoderPID(TurnPara, -100, 10, 0.2, 10, false); // goes forward
-    TurnMaxTimePID(TurnPara, 80, 0.33, false); // turn to 3 blocks
-    MoveEncoderPID(TurnPara, -100, 10.6, 0.2, 85, false); // goes into the 3 blocks
+    MoveEncoderPID(TurnPara, -100, 10.5, 0.2, 30, false); // goes forward
     Scrapper.set(true);
-    TurnMaxTimePID(TurnPara, 130, 0.2, false); // turns to between long goal and matchload tube
+    CurveEncoderPID(TurnPara, -100, 10, 10, 0.2, 0, false);
+    // TurnMaxTimePID(TurnPara, 125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 16.3, 0.4, 130, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 29, 0.2, 122, true); // goes between there
 
-    TurnMaxTimePID(TurnPara, 170, 0.35, false); // turns to matchload
-    MoveTimePID(TurnPara, 100, 0.5, 0.5, 178, false); // goes into matchload
-    MoveTimePID(TurnPara, 40, 0.75, 0.2, 180, false); // slows down
-    
-    // MoveEncoderPID(TurnPara, 50, 1, 0.1, 180, false); // moves backwards very little so we have room to adjust
+    TurnMaxTimePID(TurnPara, 175, 0.4, false); // turns to matchload
+    MoveTimePID(TurnPara, 100, 0.25, 0.2, 178, false); // goes into matchload
+    MoveTimePID(TurnPara, 50, 0.93, 0.2, 178, false); // slows down
 
-    MoveTimePID(TurnPara, -80, 0.9, 1, 180, false); // goes backwards into long goal
+    MoveTimePID(TurnPara, -80, 0.7, 0.2, 178, false); // goes backwards into long goal
     HighScore(); // activates long goal scoring
-    wait(100,msec);
-    MoveTimePID(TurnPara, -50, 1.7, 0.2, 180, false); // pushes into long goal
+    wait(50,msec);
+    MoveTimePID(TurnPara, -50, 1.5, 0.2, 178, false); // pushes into long goal
 
-    MoveEncoderPID(TurnPara, -100, 9.5, 0.4, 165, false); // goes away from long goal
+    // wing code
+    MoveEncoderPID(TestPara, -90, 10, 0.4, 178, false); // goes away from long goal
     Wings.set(false); // lowers wings
     wait(100,msec);
-    MoveEncoderPID(TurnPara, 100, 7.85, 0.4, -164.5, false); // goes to the side of long goal a bit
+    NeutralScore(); // stops rolling block violations
 
-    MoveEncoderPID(TurnPara, 100, 9.4, 0.4, 179, false); // backs up to wing
-    MoveTimePID(TurnPara, -40, 0.6, 0.2, 177, false); // slows down
+
+    MoveEncoderPID(TestPara, 100, 8.7, 0.4, -160.5, false); // goes to the side of long goal a bit
+
+    MoveEncoderPID(TestPara, 100, 14.8, 0.6, 179, false); // backs up to wing
     wait(200,msec);
-    MoveTimePID(TurnPara, -60, 1, 0.2, 170, true); // turns a bit while backing up
+    Move(-30,0);
     wait(100,msec);
-    Move(-30,0); // turns to lock
+    std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
     wait(2000,msec);
-    Move(0,0);
-    BStop();
-    // TurnMaxTimePID(TurnPara, -150, 0.35, true); // turns to lock
-    //TurnMaxTimePID(TurnPara, -150, 0.35, true);
+
+    int screenheading = Gyro.heading(degrees);
+    Brain.Screen.clearScreen();
+    Brain.Screen.setFont(monoL);
+    Brain.Screen.setPenColor("#808080");
+    Brain.Screen.setCursor(3,10);
+    Brain.Screen.print("HEADING:");
+    Brain.Screen.setCursor(4,10);
+    Brain.Screen.print(screenheading);
 
 
 
@@ -95,15 +102,5 @@ void low_rush() { // NEGATIVE TURNS TO THE LEFT
     // };
 
     // PurePursuitDrive(backCurve, PurePara, 10, 80, true, false);
-
-
-    int screenheading = Gyro.heading(degrees);
-    Brain.Screen.clearScreen();
-    Brain.Screen.setFont(monoL);
-    Brain.Screen.setPenColor("#808080");
-    Brain.Screen.setCursor(3,10);
-    Brain.Screen.print("HEADING:");
-    Brain.Screen.setCursor(4,10);
-    Brain.Screen.print(screenheading);
     
 }

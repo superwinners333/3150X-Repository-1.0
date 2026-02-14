@@ -392,6 +392,12 @@ void OdomUpdate(){
     double d_left_in = left_in - prev_left_in; // change in left and right distances
     double d_right_in = right_in - prev_right_in;
 
+    if (dist_reset) {
+      d_left_in = 0.0;
+      d_right_in = 0.0;
+      dist_reset = false;
+    }
+
     // checks if there is change in heading
     if (fabs(d_heading_rad) < 1e-6) {
       // if no change, assume we moved in a straight line

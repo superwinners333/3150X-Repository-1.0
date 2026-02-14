@@ -89,10 +89,10 @@ void skills() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, 20, 1.1, 0.2, 0,false); // mactchload 
     MoveEncoderPID(TestPara, 80, 8, 0.4, 0,true); // move back
     TurnMaxTimePID(TestPara, -45, 0.2, true); // turns to aglin with goal
-    MoveEncoderPID(TestPara, 80, 10.5, 0.4, -45,true); // moves to beside goal
+    MoveEncoderPID(TestPara, 80, 21.8, 0.4, -24,true); // moves to beside goal
     Scrapper.set(false);
     RunIndex(41);
-    TurnMaxTimePID(TestPara, 0, 0.3, true); // turns to face other side of the field
+    
     MoveEncoderPID(TestPara, 75, 43, 0.4, 0, false); // goes to other side of the field 
     MoveEncoderPID(TestPara, 50, 9, 0.2, 0, true); // slows down
     wait(100,msec);
