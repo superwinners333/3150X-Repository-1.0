@@ -98,8 +98,8 @@ while(!confirmed2 && !EXIT) // waits for auto selection
 
 // determines which auto to run and creates confirm menu
 AutonLogic(); 
-wait(5,sec);
-drawLogo();
+// wait(5,sec);
+// drawLogo();
 
 
   // All activities that occur before the competition starts
@@ -195,6 +195,7 @@ int ATask(void)
   {
     if (Controller1.ButtonR2.pressing()==1)
     {
+      // MIDDLE GOAL SCORING
       if (DownTaskActiv == 1) RunIndex(40);
       else RunIndex(100); // 40
       MiddleScore();
