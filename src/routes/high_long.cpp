@@ -7,9 +7,16 @@
 // MoveTimePID(TestPara, motor speed, time traveled (sec), time to full speed, heading, false);
 
 void high_long() { // NEGATIVE TURNS TO THE LEFT
+    
     // declare initial conditions
     //PIDDataSet TestPara={4,0.1,0.2};
     PIDDataSet TestPara={1.5,0.1,0.15};
+    MoveEncoderPID(TestPara, -90, 7, 0.1, 0, false); // curve towards park
+    MoveEncoderPID(TestPara, -90, 10, 0.1, 40, false); // curve towards park
+    MoveEncoderPID(TestPara, -90, 23, 0.1, 60, true); // curve towards park
+    RunIndex(100);
+    MoveEncoderPID(TestPara, -80, 35, 0.1, 90, true); // park
+    /*
     TurnMaxTimePID(TestPara, -20, 0.1, true); // turns to 3 balls
     RunIndex(100); // activates intake
     MoveEncoderPID(TestPara, -70, 8 , 0.3,-20,true); // drives and turns towards the 3 blocks near center
@@ -44,6 +51,7 @@ void high_long() { // NEGATIVE TURNS TO THE LEFT
     // wait(50,msec);
     // MoveTimePID(TestPara, -100, 1, 0.3, 180,false); // ram
     wait(15000,msec);
+    */
 }
 /*TurnMaxTimePID(TestPara, -18, 0.5, true); // turns to 3 balls
     RunRoller(100); // activates intake

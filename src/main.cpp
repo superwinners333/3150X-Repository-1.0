@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 26; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 3; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -215,6 +215,14 @@ int ATask(void)
       RunIndex(100);
       NeutralScore();
     }
+    /*
+    else if(Controller1.ButtonDown.pressing())
+    {
+      if (DownTaskActiv == 1) RunIndex(60);
+      else RunIndex(60); // 40
+      MiddleScore();
+    }
+    */
     else
     {
       RunIndex(0);
@@ -338,7 +346,7 @@ int PTask(void)
     //   ButtonPressingDown=1;
     //   DownTaskActiv=0;
     // }
-
+    
     if(Controller1.ButtonDown.pressing())
     {
       Wings.set(false);
@@ -347,7 +355,7 @@ int PTask(void)
     {
       Wings.set(true);
     }
-
+    
   // if(UpTaskActiv==0&&Controller1.ButtonUp.pressing()&&ButtonPressingUp==0)
   //   {
   //     ButtonPressingUp=1;

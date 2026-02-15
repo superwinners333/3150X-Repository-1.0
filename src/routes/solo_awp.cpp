@@ -17,7 +17,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     Scrapper.set(true);
     RunIndex(100);
     TurnMaxTimePID(TurnPara, 90, 0.3, true); // turns to matchloader
-    MoveTimePID(TurnPara, 50, 0.92 , 0.3, 90,false); // move into matchloader
+    MoveTimePID(TurnPara, 40, 1.1 , 0.3, 90,false); // move into matchloader
     MoveTimePID(TurnPara, -75, 0.9, 0.3, 90,false); // move backwards to long goal
     HighScore();
     MoveTimePID(TurnPara, -10, 1.0, 0.3, 90,false); // move into long goal
@@ -38,7 +38,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     MiddleScore();
     wait(790,msec);
     NeutralScore();
-    MoveEncoderPID(TurnPara, -80, 41, 0.3, 135, true); // moves to between matchload tube and long goal
+    MoveEncoderPID(TurnPara, -80, 40.5, 0.3, 135, true); // moves to between matchload tube and long goal
     TurnMaxTimePID(TurnPara, 90, 0.2, true); // turn so scraper faces matchload tube
     NeutralScore();
     MoveTimePID(TurnPara, 50, 1.2 , 0.4, 90,false); // move into matchloader
