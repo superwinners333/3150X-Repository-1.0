@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 3; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 26; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -193,10 +193,10 @@ int ATask(void)
 {
     while(true)
   {
-    if (Controller1.ButtonR2.pressing()==1)
+    if (Controller1.ButtonDown.pressing()==1)
     {
       // MIDDLE GOAL SCORING
-      if (DownTaskActiv == 1) RunIndex(40);
+      if (DownTaskActiv == 1) RunIndex(60);
       else RunIndex(100); // 40
       MiddleScore();
     }
@@ -266,20 +266,6 @@ int PTask(void)
     
 
 
-    /*
-    if(Controller1.ButtonX.pressing()&&middleActiv==false)
-    {
-      // TopIntake = true;
-      Lift.set(true);
-      middleActiv = true;
-    }
-
-    else if(!Controller1.ButtonX.pressing()) 
-    {
-      middleActiv = false;
-      Lift.set(false);
-    }
-    */
 
 
     //----------------------------------------- SCRAPPER
@@ -347,11 +333,11 @@ int PTask(void)
     //   DownTaskActiv=0;
     // }
     
-    if(Controller1.ButtonDown.pressing())
+    if(Controller1.ButtonR2.pressing())
     {
       Wings.set(false);
     }
-    else if(!Controller1.ButtonDown.pressing()) 
+    else if(!Controller1.ButtonR2.pressing()) 
     {
       Wings.set(true);
     }
