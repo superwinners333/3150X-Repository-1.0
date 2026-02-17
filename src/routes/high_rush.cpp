@@ -21,29 +21,29 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     RunIndex(100);
     MoveEncoderPID(TurnPara, -100, 10.5, 0.2, -30, false); // goes forward
     Scrapper.set(true);
-    TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
+    CurveEncoderPID(TurnPara, 10, -100, 10, 0.2, 0, false);
+    // TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 27.45, 0.2, -125, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 31.5, 0.2, -125, true); // goes between there
 
     TurnMaxTimePID(TurnPara, -175, 0.4, false); // turns to matchload
-    MoveTimePID(TurnPara, 100, 0.25, 0.2, -178, false); // goes into matchload
-    MoveTimePID(TurnPara, 50, 0.87, 0.2, -178, false); // slows down
+    MoveTimePID(TurnPara, 100, 0.36, 0.2, -178, false); // goes into matchload
+    MoveTimePID(TurnPara, 50, 0.7, 0.2, -178, false); // slows down
 
     MoveTimePID(TurnPara, -80, 0.7, 0.2, -178, false); // goes backwards into long goal
     HighScore(); // activates long goal scoring
-    wait(50,msec);
-    MoveTimePID(TurnPara, -50, 1.7, 0.2, -178, false); // pushes into long goal
+    MoveTimePID(TurnPara, -40, 1.55, 0.2, -178, false); // pushes into long goal
 
     // wing code
-    MoveEncoderPID(TestPara, -90, 10, 0.4, 178, false); // goes away from long goal
+    MoveEncoderPID(TestPara, -90, 9.2, 0.4, 178, false); // goes away from long goal
     Wings.set(false); // lowers wings
     wait(100,msec);
     NeutralScore(); // stops rolling block violations
 
     // ****change this to -160 if its missing the block still****
-    MoveEncoderPID(TestPara, 100, 8.65, 0.4, -159.5, false); // goes to the side of long goal a bit
+    MoveEncoderPID(TestPara, 100, 8.7, 0.4, -157, false); // goes to the side of long goal a bit
 
-    MoveEncoderPID(TestPara, 100, 14.8, 0.6, 179, false); // backs up to wing
+    MoveEncoderPID(TestPara, 100, 15.2, 0.6, 179, false); // backs up to wing
     wait(200,msec);
     Move(-30,0);
     wait(100,msec);

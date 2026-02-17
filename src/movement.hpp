@@ -10,8 +10,8 @@ extern int PX;
 extern int JX;
 
 struct ChassisDataSet{
-  double Left;
-  double Right;
+  double Left; // left side distance travelled
+  double Right; // right side distance travelled
   double Avg;   // Average between left and right of the drive train
   int Diff;     // Left - Right
   double HDG;   // Robot heading
