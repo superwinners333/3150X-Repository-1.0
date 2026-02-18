@@ -20,5 +20,6 @@ extern void low_four();
 extern void high_four();
 
 extern void yahuskills();
+extern void small_yahuskills();
 
 #endif

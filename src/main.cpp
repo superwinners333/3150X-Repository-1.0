@@ -157,8 +157,8 @@ void autonomous(void) {
 
     // skills autos
     case 25: skills(); break;
-    case 26: yahuskills(); break;
-    case 27: break;
+    case 26: small_yahuskills(); break;
+    case 27: yahuskills(); break;
     case 28: break;
     case 29: break;
     case 30: mangoskills(); break;
