@@ -18,11 +18,11 @@ void fillTiltedRectangle(int centerX, int centerY, double width, double height);
 
 // NAMES OF AUTONS GO INSIDE OF HERE
 
-const char* leftAutos[] = {"3+6","9 Block","7 Wing","3+4","4 rush"," "," "," "," "," "," "," "}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
+const char* leftAutos[] = {"3+6","9 Block","7 Wing","3+4","4 rush","anti 7","hard 7","all middle"," "," "," "," "}; // MAKE SURE THERE ARE FOUR ITEMS IN THE LIST
 // autoselector values 1,2,3,4,5,6,7,8,9,10,11,12
 // high side
 
-const char* rightAutos[] = {"3+6","9 Block","Solo-AWP"," 7 Wing","3+4","test"," "," "," "," "," "," "}; // SAME FOR THIS ONE
+const char* rightAutos[] = {"3+6","9 Block","Solo-AWP"," 7 Wing","3+4","4 rush","push awp"," "," "," "," "," "}; // SAME FOR THIS ONE
 
 // autoselector values 13,14,15,16,17,18,19,20,21,22,23,24
 // low side

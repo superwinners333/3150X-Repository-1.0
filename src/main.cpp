@@ -38,7 +38,7 @@ void pre_auton(void) {
    EXIT=false;
   NeutralScore();
   Scrapper.set(false);
-  DoubleP.set(false);
+  Funnel.set(false);
   Wings.set(false);
   confirmed = false;
   confirmed2 = false;
@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 2; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 3; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -134,9 +134,9 @@ void autonomous(void) {
     case 3: high_rush(); break;
     case 4: high_middle_wing(); break;
     case 5: high_four(); break;
-    case 6: break;
-    case 7: break;
-    case 8: break;
+    case 6: high_counter_rush(); break;
+    case 7: high_wingbreak(); break;
+    case 8: high_all(); break;
     case 9: break;
     case 10: break;
     case 11: break;
@@ -148,7 +148,7 @@ void autonomous(void) {
     case 16: low_rush(); break;
     case 17: low_middle_wing(); break;
     case 18: low_four(); break;
-    case 19: break;
+    case 19: push_awp(); break;
     case 20: break;
     case 21: break;
     case 22: break;
@@ -204,6 +204,7 @@ int ATask(void)
     {
       RunIndex(-60);
       NeutralScore();
+      Funnel.set(true);
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
@@ -340,6 +341,15 @@ int PTask(void)
     else if(!Controller1.ButtonR2.pressing()) 
     {
       Wings.set(true);
+    }
+
+    if(Controller1.ButtonUp.pressing()) 
+    {
+      Funnel.set(true);
+    }
+    else if (!Controller1.ButtonUp.pressing() && !Controller1.ButtonL2.pressing()) 
+    {
+      Funnel.set(false);
     }
     
   // if(UpTaskActiv==0&&Controller1.ButtonUp.pressing()&&ButtonPressingUp==0)

@@ -19,6 +19,11 @@ extern void low_middle_wing();
 extern void low_four();
 extern void high_four();
 
+extern void push_awp();
+extern void high_counter_rush();
+extern void high_all();
+extern void high_wingbreak();
+
 extern void yahuskills();
 extern void small_yahuskills();
 

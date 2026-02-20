@@ -20,6 +20,7 @@ extern digital_out DoubleP;
 extern digital_out Wings;
 extern inertial Gyro;
 extern digital_out Lift;
+extern digital_out Funnel;
 
 extern distance backSensor;
 extern distance leftSensor;

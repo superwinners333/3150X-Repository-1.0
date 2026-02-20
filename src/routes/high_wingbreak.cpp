@@ -10,17 +10,18 @@
 // MoveDistancePID(PIDDataSet KDist, PIDDataSet KTurn, double dist, double ABSHDG, bool brake)
 // PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake)
 
-void high_rush() { // NEGATIVE TURNS TO THE LEFT
+void high_wingbreak() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
     PIDDataSet TurnPara={1.5,0.1,0.12};
     PIDDataSet TestPara={1.5,0.1,0.15};
+    PIDDataSet PurePara={1.5,0.1,0.12};
 
     timer stopwatch;
 
     RunIndex(100);
     MoveEncoderPID(TurnPara, -100, 10.5, 0.2, -30, false); // goes forward
     Scrapper.set(true);
-    CurveEncoderPID(TurnPara, 10, -110, 10, 0.2, 0, false);
+    CurveEncoderPID(TurnPara, 10, -100, 10, 0.2, 0, false);
     // TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
     MoveEncoderPID(TurnPara, -80, 30.5, 0.2, -125, true); // goes between there
@@ -34,20 +35,19 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TurnPara, -40, 1.55, 0.2, -178, false); // pushes into long goal
 
     // wing code
-    MoveEncoderPID(TestPara, -100, 1, 0.2, 160, false); // goes away from long goal
-    MoveEncoderPID(TestPara, -110, 5, 0.4, 130, false); 
-    MoveEncoderPID(TestPara, -110, 6, 0.2, 90, false); // aggressively curves
+    MoveEncoderPID(TestPara, -100, 2, 0.4, 170, false); // goes away from long goal
+    MoveEncoderPID(TestPara, -110, 5, 0.2, 155, false); // curves out
+    MoveEncoderPID(TestPara, -110, 6, 0.2, 140, false);
     Wings.set(false); // lowers wings
     NeutralScore(); // stops rolling block violations
 
-    MoveEncoderPID(TestPara, 110, 3, 0.4, -140, false); // straightens the bot out 
+    MoveEncoderPID(TestPara, 110, 3, 0.4, -128, false); // goes to the side of long goal a bit
 
-    MoveEncoderPID(TestPara, 80, 10, 0.2, 179, false); // backs up to wing
+    MoveEncoderPID(TestPara, 100, 15, 0.2, 179, false); // backs up to wing at FULL SPEED
     wait(150,msec);
     Move(-30,0);
     wait(100,msec);
     std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
-    wait(2000,msec);
 
     int screenheading = Gyro.heading(degrees);
     Brain.Screen.clearScreen();
