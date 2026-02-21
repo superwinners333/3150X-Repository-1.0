@@ -14,13 +14,14 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet PurePara={1.5,0.1,0.12};
 
     timer stopwatch;
-
+    // 4+3
     RunIndex(100);
     MoveEncoderPID(TurnPara, -100, 10.5, 0.2, -30, false); // goes forward
     Scrapper.set(true);
-    TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
+    CurveEncoderPID(TurnPara, 10, -100, 10, 0.2, 0, false);
+    // TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 27.8, 0.2, -125, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 31.5, 0.2, -125, true); // goes between there
 
     TurnMaxTimePID(TurnPara, -175, 0.4, false); // turns to matchload
     MoveTimePID(TurnPara, 100, 0.25, 0.2, -178, false); // goes into matchload
@@ -32,7 +33,7 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TurnPara, -50, 0.55, 0.2, -178, false); // pushes into long goal
     NeutralScore();
     wait(50,msec);
-    MoveEncoderPID(TestPara, -60, 13.4, 0.1, -178, false); // moves forward
+    MoveEncoderPID(TestPara, -90, 8.7, 0.2, -178, false); // moves forward
     TurnMaxTimePID(TurnPara, -135, 0.4, false); // turns to face middle
     MoveEncoderPID(TestPara, 100, 32, 0.3, -135, false); // moves back into middle goal
     MoveTimePID(TestPara, -40, 0.5, 0.1, -135, false); // slows down

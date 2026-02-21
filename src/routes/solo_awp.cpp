@@ -36,23 +36,23 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     NeutralScore();
     MoveEncoderPID(TurnPara, -40, 26, 0.3, -155,true); // gets 3 blocks
     TurnMaxTimePID(TurnPara, 178, 0.3, false); // turns to other 3 blocks
-    MoveEncoderPID(TestPara, -100, 31.7, 0.3, 178,false); // move to other side
+    MoveEncoderPID(TestPara, -100, 31.6, 0.3, 178,false); // move to other side
     Scrapper.set(true); // activates scraper
     wait(50,msec); // lets us coast a bit
     TurnMaxTimePID(TurnPara, 135, 0.2, true); // turns to long goal
-    MoveEncoderPID(TestPara, -90, 21.0, 0.3, 135,true); // goes to between long goal and matchload
+    MoveEncoderPID(TestPara, -90, 20.5, 0.3, 135,true); // goes to between long goal and matchload
     TurnMaxTimePID(TurnPara, 90, 0.2, false); // turns to score on long goal
 
     MoveTimePID(TestPara, -60, 0.3, 0.1, 90,false); // move to long goal
     HighScore();
     wait(50,msec);
     RunIndex(90);
-    MoveTimePID(TestPara, -25, 1.5, 0.4, 90,true); // score
+    MoveTimePID(TestPara, -40, 1.5, 0.4, 90,true); // score
     NeutralScore();
     MoveTimePID(TurnPara, 100, 0.50, 0.2, 90, false); // goes into matchload
     MoveTimePID(TurnPara, 40, 0.80, 0.2, 90, false); // slows down
 
-    MoveEncoderPID(TestPara, 70, 7.0, 0.1, 90, false); // moves backwards
+    MoveEncoderPID(TestPara, 70, 3.8, 0.1, 90, false); // moves backwards
     TurnMaxTimePID(TurnPara, 135, 0.4, false); // turns to face middle
     MoveEncoderPID(TestPara, 100, 34, 0.3, 135, false); // moves back into middle goal
     MoveTimePID(TestPara, -40, 0.4, 0.1, 135, false); // slows down

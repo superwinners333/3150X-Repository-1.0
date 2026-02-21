@@ -24,7 +24,7 @@ void low_rush() { // NEGATIVE TURNS TO THE LEFT
     CurveEncoderPID(TurnPara, -100, 10, 10, 0.2, 0, false);
     // TurnMaxTimePID(TurnPara, 125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 29.6, 0.2, 122, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 31.2, 0.2, 122, true); // goes between there
 
     TurnMaxTimePID(TurnPara, 175, 0.4, false); // turns to matchload
     MoveTimePID(TurnPara, 100, 0.33, 0.2, 178, false); // goes into matchload

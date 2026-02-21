@@ -172,7 +172,7 @@ int RV;
 int LV;
 
 bool middleActiv = false;
-double turnConst = 2.75/3.75;
+double turnConst = 2.75/3.25;
 int DriveTask(void){
   while(true)
   {
@@ -248,6 +248,7 @@ int PTask(void)
     {
       //Toggles Lift
     
+    /*
     // if(XTaskActiv == 0) Lift.set(false); 
     if(XTaskActiv==0&&Controller1.ButtonX.pressing()&&ButtonPressingX==0)
     {
@@ -264,7 +265,7 @@ int PTask(void)
       XTaskActiv=0;
       DoubleP.set(false);
     }
-    
+    */
 
 
 
@@ -343,11 +344,11 @@ int PTask(void)
       Wings.set(true);
     }
 
-    if(Controller1.ButtonUp.pressing()) 
+    if(Controller1.ButtonX.pressing()) 
     {
       Funnel.set(true);
     }
-    else if (!Controller1.ButtonUp.pressing() && !Controller1.ButtonL2.pressing()) 
+    else if (!Controller1.ButtonX.pressing() && !Controller1.ButtonL2.pressing()) 
     {
       Funnel.set(false);
     }
