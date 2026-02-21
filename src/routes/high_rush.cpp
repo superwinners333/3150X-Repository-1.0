@@ -23,26 +23,26 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     CurveEncoderPID(TurnPara, 10, -110, 10, 0.2, 0, false);
     // TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 30.5, 0.2, -125, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 32, 0.2, -125, true); // goes between there
 
-    // TurnMaxTimePID(TurnPara, -178, 0.2, false); // turns to matchload
+    TurnMaxTimePID(TurnPara, -178, 0.2, false); // turns to matchload
     MoveTimePID(TurnPara, 100, 0.38, 0.2, -178, false); // goes into matchload
-    MoveTimePID(TurnPara, 50, 0.8, 0.1, -178, false); // slows down
+    MoveTimePID(TurnPara, 50, 0.67, 0.1, -178, false); // slows down
 
     MoveTimePID(TurnPara, -80, 0.7, 0.2, -178, false); // goes backwards into long goal
     HighScore(); // activates long goal scoring
     MoveTimePID(TurnPara, -40, 1.55, 0.2, -178, false); // pushes into long goal
 
     // wing code
-    MoveEncoderPID(TestPara, -100, 1, 0.2, 160, false); // goes away from long goal
-    MoveEncoderPID(TestPara, -110, 5, 0.4, 130, false); 
-    MoveEncoderPID(TestPara, -110, 6, 0.2, 90, false); // aggressively curves
+    MoveEncoderPID(TestPara, -100, 2, 0.2, 175, false);
+    MoveEncoderPID(TestPara, -110, 3, 0.3, 130, false); 
+    MoveEncoderPID(TestPara, -110, 4, 0.1, 90, false); // aggressively curves
     Wings.set(false); // lowers wings
     NeutralScore(); // stops rolling block violations
 
-    MoveEncoderPID(TestPara, 110, 3, 0.4, -140, false); // straightens the bot out 
+    MoveEncoderPID(TestPara, 110, 3.7, 0.4, -100, false); // straightens the bot out 
 
-    MoveEncoderPID(TestPara, 80, 10, 0.2, 179, false); // backs up to wing
+    MoveEncoderPID(TestPara, 80, 18.2, 0.2, 179, false); // backs up to wing
     wait(150,msec);
     Move(-30,0);
     wait(100,msec);
