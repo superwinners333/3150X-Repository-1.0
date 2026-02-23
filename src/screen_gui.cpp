@@ -2,6 +2,7 @@
 #include "vex.h"
 #include "cstring"
 #include <iostream>
+#include <string>
 
 void drawCurvedRectangle(int xPos, int yPos, int length, int height, int radius);
 void drawField(void);

@@ -24,7 +24,7 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
     CurveEncoderPID(TurnPara, 10, -100, 10, 0.2, 0, false);
     // TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
-    MoveEncoderPID(TurnPara, -80, 31.5, 0.2, -125, true); // goes between there
+    MoveEncoderPID(TurnPara, -80, 31.3, 0.2, -125, true); // goes between there
 
     TurnMaxTimePID(TurnPara, -175, 0.4, false); // turns to matchload
     MoveTimePID(TurnPara, 100, 0.4, 0.2, -178, false); // goes into matchload
@@ -34,18 +34,18 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, 70, 3.2, 0.1, -178, false); // moves backwards
     TurnMaxTimePID(TurnPara, -135, 0.2, false); // turns to face middle
     MoveEncoderPID(TestPara, 110, 30, 0.3, -135, false); // moves back into middle goal
-    RunIndex(80);
+    RunIndex(100);
     MoveTimePID(TestPara, -40, 0.4, 0.1, -135, false); // slows down
     MiddleScore();
-    MoveTimePID(TestPara, -20, 0.48, 0.1, -135, false); // pushes into middle goal
+    MoveTimePID(TestPara, -40, 0.52, 0.1, -135, false); // pushes into middle goal
     NeutralScore();
     Scrapper.set(false);
-    TurnMaxTimePID(TurnPara, -77, 0.35, false); // turns to blocks under long goal
-    MoveEncoderPID(TestPara, -100, 15, 0.3, -77, false); // goes to blocks under long goal
+    TurnMaxTimePID(TurnPara, -81, 0.35, false); // turns to blocks under long goal
+    MoveEncoderPID(TestPara, -100, 14.5, 0.3, -81, false); // goes to blocks under long goal
     MoveTimePID(TestPara, 25, 0.50, 0.1, -87, false); // slows down a bit
     // Scrapper.set(true); // drops scraper onto blocks
     wait(300,msec);
-    MoveEncoderPID(TestPara, 80, 1.1, 0.3, -75, false); // backs up a bit
+    MoveEncoderPID(TestPara, 80, 0.98, 0.3, -74, false); // backs up a bit
     // wait(150,msec);
     // Scrapper.set(false); // lifts scraper up to not get stuck
     // wait(200,msec); // lets blocks enter intake and to stop scraper from being stuck
@@ -62,18 +62,18 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
     Wings.set(true);  // raises wing so we're less likely to get stuck later
     MoveEncoderPID(TestPara, -100, 5, 0.2, -140, false); // goes to between long goal and matchload
     MoveEncoderPID(TestPara, -100, 9, 0.2, -100, false);
-    MoveEncoderPID(TestPara, -100, 4.2, 0.2, -90, false);
-    MoveTimePID(TestPara, -80, 0.53, 0.2, -180, false); // backs up into long goal
+    MoveEncoderPID(TestPara, -100, 4.52, 0.2, -90, false);
+    MoveTimePID(TestPara, -85, 0.53, 0.2, -180, false); // backs up into long goal
     HighScore();
-    MoveTimePID(TestPara, -30, 1.5, 0.2, -180, false); // scores
+    MoveTimePID(TestPara, -45, 1.5, 0.2, -180, false); // scores
 
     // descoring everything section
-    MoveEncoderPID(TestPara, -90, 7.2, 0.2, -178, false); // moves forward
+    MoveEncoderPID(TestPara, -90, 6, 0.2, -178, false); // moves forward
     TurnMaxTimePID(TurnPara, -135, 0.2, false); // turns to face middle
     Funnel.set(true);
-    MoveEncoderPID(TestPara, 110, 29, 0.2, -135, false); // moves back to descore middle
+    MoveEncoderPID(TestPara, 110, 24, 0.2, -135, false); // moves back to descore middle
     MoveTimePID(TestPara, -80, 0.3, 0.2, -135, false); // moves back to descore middle
-    MoveEncoderPID(TestPara, -110, 20.3, 0.4, -135, false); // moves forward into wing position
+    MoveEncoderPID(TestPara, -110, 21, 0.4, -135, false); // moves forward into wing position
     Funnel.set(false);
     TurnMaxTimePID(TurnPara, 179, 0.4, false); // turns to wing
     Wings.set(false);

@@ -27,23 +27,24 @@ void low_rush() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TurnPara, -80, 31.2, 0.2, 122, true); // goes between there
 
     TurnMaxTimePID(TurnPara, 175, 0.4, false); // turns to matchload
-    MoveTimePID(TurnPara, 100, 0.33, 0.2, 178, false); // goes into matchload
-    MoveTimePID(TurnPara, 50, 0.70, 0.2, 178, false); // slows down
+    MoveTimePID(TurnPara, 100, 0.35, 0.2, 178, false); // goes into matchload
+    MoveTimePID(TurnPara, 50, 0.67, 0.2, 178, false); // slows down
 
     MoveTimePID(TurnPara, -80, 0.68, 0.2, 178, false); // goes backwards into long goal
     HighScore(); // activates long goal scoring
     MoveTimePID(TurnPara, -50, 1.5, 0.2, 178, false); // pushes into long goal
 
     // wing code
-    MoveEncoderPID(TestPara, -90, 9.2, 0.4, 178, false); // goes away from long goal
+    MoveEncoderPID(TestPara, -100, 2, 0.2, 175, false);
+    MoveEncoderPID(TestPara, -110, 3, 0.3, 130, false); 
+    MoveEncoderPID(TestPara, -110, 3.7, 0.1, 90, false); // aggressively curves
     Wings.set(false); // lowers wings
-    wait(100,msec);
     NeutralScore(); // stops rolling block violations
 
-    MoveEncoderPID(TestPara, 100, 8.7, 0.4, -163, false); // goes to the side of long goal a bit
+    MoveEncoderPID(TestPara, 110, 3.4, 0.4, -100, false); // straightens the bot out 
 
-    MoveEncoderPID(TestPara, 100, 15, 0.6, 179, false); // backs up to wing
-    wait(100,msec);
+    MoveEncoderPID(TestPara, 70, 18, 0.2, 179, false); // backs up to wing
+    wait(200,msec);
     Move(-30,0);
     wait(100,msec);
     std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
