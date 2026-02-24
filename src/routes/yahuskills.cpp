@@ -36,6 +36,8 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
 
     // straightToPoint(UhhhPara, CorrectionPara, MovePara, target, 100.0, 5.0, true);
     
+    timer stopwatch;
+
     RunIndex(80);
     MoveTimePID(TestPara, 60, 0.5, 0.2, 0, false); // grab blocks in park
     MoveTimePID(TestPara, -20, 0.3, 0.02, 0, false); // grab blocks in park
@@ -120,9 +122,10 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     HighScore();
     wait(100,msec);
     RunIndex(90);
+    Scrapper.set(true);
     MoveTimePID(TestPara, -25, 2, 0.4, 180,true); // score
     NeutralScore();
-    Scrapper.set(true);
+    // Scrapper.set(true);
     MoveTimePID(TurnPara, 100, 0.50, 0.2, 180, false); // goes into matchload
     MoveTimePID(TurnPara, 40, 0.80, 0.2, 180, false); // slows down
     MoveTimePID(TestPara, 20, 1.3, 0.2, 180,false); // mactchload
@@ -158,8 +161,9 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     TurnMaxTimePID(TestPara, -180, 0.4, true); // turns to goal
     MoveTimePID(TestPara, -80, 0.6, 0.1, -180,false); // line up with goal
     HighScore();
-    MoveTimePID(TestPara, -40, 0.8, 0.1, -180,false); // score
     Scrapper.set(true);
+    MoveTimePID(TestPara, -40, 0.8, 0.1, -180,false); // score
+    // Scrapper.set(true);
     NeutralScore();
     RunIndex(100);
     MoveTimePID(TurnPara, 100, 0.50, 0.2, 180, false); // goes into matchload
@@ -180,9 +184,10 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -80, 0.4, 0.1, 0,true); // move to long goal
     HighScore();
     RunIndex(90);
+    Scrapper.set(true);
     MoveTimePID(TestPara, -25, 2, 0.4, 0,true); // score
     NeutralScore();
-    Scrapper.set(true);
+    // Scrapper.set(true);
     MoveTimePID(TurnPara, 100, 0.50, 0.2, 0, false); // goes into matchload
     MoveTimePID(TurnPara, 40, 0.80, 0.2, 0, false); // slows down
     MoveTimePID(TestPara, 20, 1.3, 0.4, 0,false); // mactchload
@@ -194,8 +199,8 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, -90, 7, 0.1, 0, false); // curve towards park
     MoveEncoderPID(TestPara, -90, 10, 0.1, 40, false); // curve towards park
     MoveEncoderPID(TestPara, -90, 23, 0.1, 60, true); // curve towards park
-    MoveEncoderPID(TestPara, -80, 35, 0.1, 90, true); // park
-
+    MoveEncoderPID(TestPara, -80, 34, 0.1, 90, true); // park
+    std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
 
     /*
     MoveEncoderPID(TestPara, -90, 7, 0.1, -180, false); // curve towards park

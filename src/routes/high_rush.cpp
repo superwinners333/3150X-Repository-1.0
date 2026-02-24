@@ -20,14 +20,14 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     RunIndex(100);
     MoveEncoderPID(TurnPara, -100, 10.5, 0.2, -30, false); // goes forward
     Scrapper.set(true);
-    CurveEncoderPID(TurnPara, 10, -110, 10, 0.2, 0, false);
+    CurveEncoderPID(TurnPara, 10, -100, 10, 0.2, 0, false);
     // TurnMaxTimePID(TurnPara, -125, 0.35, false); // turns to between long goal and matchload tube
 
     MoveEncoderPID(TurnPara, -80, 32, 0.2, -125, true); // goes between there
 
     TurnMaxTimePID(TurnPara, -178, 0.2, false); // turns to matchload
-    MoveTimePID(TurnPara, 100, 0.38, 0.2, -178, false); // goes into matchload
-    MoveTimePID(TurnPara, 50, 0.67, 0.1, -178, false); // slows down
+    MoveTimePID(TurnPara, 100, 0.36, 0.2, -178, false); // goes into matchload
+    MoveTimePID(TurnPara, 40, 0.67, 0.1, -178, false); // slows down
 
     MoveTimePID(TurnPara, -80, 0.7, 0.2, -178, false); // goes backwards into long goal
     HighScore(); // activates long goal scoring

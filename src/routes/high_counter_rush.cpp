@@ -27,11 +27,11 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TurnPara, -80, 31.3, 0.2, -125, true); // goes between there
 
     TurnMaxTimePID(TurnPara, -175, 0.4, false); // turns to matchload
-    MoveTimePID(TurnPara, 100, 0.4, 0.2, -178, false); // goes into matchload
+    MoveTimePID(TurnPara, 100, 0.38, 0.2, -178, false); // goes into matchload
     MoveTimePID(TurnPara, 50, 0.6, 0.2, -178, false); // slows down
 
     // middle goal scoring section
-    MoveEncoderPID(TestPara, 70, 3.2, 0.1, -178, false); // moves backwards
+    MoveEncoderPID(TestPara, 70, 4, 0.1, -178, false); // moves backwards
     TurnMaxTimePID(TurnPara, -135, 0.2, false); // turns to face middle
     MoveEncoderPID(TestPara, 110, 30, 0.3, -135, false); // moves back into middle goal
     RunIndex(100);
@@ -61,19 +61,19 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, -100, 2, 0.2, 170, false); // descore
     Wings.set(true);  // raises wing so we're less likely to get stuck later
     MoveEncoderPID(TestPara, -100, 5, 0.2, -140, false); // goes to between long goal and matchload
-    MoveEncoderPID(TestPara, -100, 9, 0.2, -100, false);
-    MoveEncoderPID(TestPara, -100, 4.52, 0.2, -90, false);
+    MoveEncoderPID(TestPara, -100, 10, 0.2, -100, false);
+    MoveEncoderPID(TestPara, -100, 4.6, 0.2, -90, false);
     MoveTimePID(TestPara, -85, 0.53, 0.2, -180, false); // backs up into long goal
     HighScore();
     MoveTimePID(TestPara, -45, 1.5, 0.2, -180, false); // scores
 
     // descoring everything section
-    MoveEncoderPID(TestPara, -90, 6, 0.2, -178, false); // moves forward
+    MoveEncoderPID(TestPara, -90, 5.7, 0.2, -178, false); // moves forward
     TurnMaxTimePID(TurnPara, -135, 0.2, false); // turns to face middle
     Funnel.set(true);
-    MoveEncoderPID(TestPara, 110, 24, 0.2, -135, false); // moves back to descore middle
+    MoveEncoderPID(TestPara, 110, 25, 0.2, -135, false); // moves back to descore middle
     MoveTimePID(TestPara, -80, 0.3, 0.2, -135, false); // moves back to descore middle
-    MoveEncoderPID(TestPara, -110, 21, 0.4, -135, false); // moves forward into wing position
+    MoveEncoderPID(TestPara, -110, 20.5, 0.4, -135, false); // moves forward into wing position
     Funnel.set(false);
     TurnMaxTimePID(TurnPara, 179, 0.4, false); // turns to wing
     Wings.set(false);
