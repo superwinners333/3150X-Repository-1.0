@@ -65,10 +65,10 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     TurnMaxTimePID(TestPara, -45, 0.4, true); // turns to middle goal
     RunIndex(100);
     MoveEncoderPID(TestPara, 80, 5.4 , 0.3, -45, false); // move to inbetween middle goal and 4 blocks
-    MoveEncoderPID(TestPara, 80, 13 , 0.3, 45, true); //turn into middle goal
-    MoveTimePID(TestPara, -50, 0.3, 0.2, 45, false); // aglin
-    MoveTimePID(TestPara, -30, 0.1, 0.1, 20, false); // aglin
-    MoveTimePID(TestPara, -30, 0.1, 0.1, 70, false); // aglin
+    MoveEncoderPID(TestPara, 80, 13 , 0.3, 45, true); // turn into middle goal
+    MoveTimePID(TestPara, -50, 0.25, 0.2, 45, false); // aglin
+    MoveTimePID(TestPara, -30, 0.1, 0.1, 20, false); // wiggles
+    MoveTimePID(TestPara, -30, 0.1, 0.1, 70, false); // wiggles
     MoveTimePID(TestPara, -30, 0.1, 0.1, 45, false); // aglin
     //TurnMaxTimePID(TestPara, 45, 0.3, true); // turns to face middle goal
     //MoveTimePID(TestPara, -40, 0.5, 0.2, 45, false); // backs up into middle goal
