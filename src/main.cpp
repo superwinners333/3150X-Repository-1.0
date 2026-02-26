@@ -196,8 +196,11 @@ int ATask(void)
     if (Controller1.ButtonDown.pressing()==1)
     {
       // MIDDLE GOAL SCORING
-      if (DownTaskActiv == 1) RunIndex(60);
-      else RunIndex(100); // 40
+      RunIndex(100); // 60
+      MiddleScore();
+    }
+    else if (DownTaskActiv == 1) {
+      RunIndex(35);
       MiddleScore();
     }
     else if (Controller1.ButtonL2.pressing()==1)
@@ -338,10 +341,12 @@ int PTask(void)
     if(Controller1.ButtonR2.pressing())
     {
       Wings.set(false);
+      // DownTaskActiv = 1;
     }
     else if(!Controller1.ButtonR2.pressing()) 
     {
       Wings.set(true);
+      DownTaskActiv = 0;
     }
 
     if(Controller1.ButtonX.pressing()) 
