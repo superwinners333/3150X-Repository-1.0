@@ -1,6 +1,7 @@
 #include "../movement.hpp"
 #include "../helper_functions.hpp"
 #include "vex.h"
+#include <iostream>
 //PID Straight and turn arguments:
 // MoveEncoderPID(TurnPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
 // TurnMaxTimePID(TurnPara, Desired Heading -180 to 180, time out to calculate turn, Braking?)
@@ -12,30 +13,40 @@ void high_four() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet TestPara={1.5,0.1,0.15};
     PIDDataSet TurnPara={1.5,0.1,0.12};
     // SIXSEVEEN 77777777777777777777
+    timer stopwatch;
+
     NeutralScore();
-    MoveEncoderPID(TurnPara, -70, 19.3 , 0.3, 0,true); // drives to mathcloader
+    MoveEncoderPID(TurnPara, -70, 19.3 , 0.3, -90,true); // drives to mathcloader
     Scrapper.set(true);
     RunIndex(100);
-    TurnMaxTimePID(TurnPara, -90, 0.3, true); // turns to matchloader
-    MoveTimePID(TurnPara, 50, 1 , 0.3, -90,false); // move into matchloader
-    MoveTimePID(TurnPara, -70, 0.9, 0.3, -90,false); // move backwards to long goal
+    TurnMaxTimePID(TurnPara, -180, 0.3, true); // turns to matchloader
+    MoveTimePID(TurnPara, 50, 1 , 0.3, -180,false); // move into matchloader
+    MoveTimePID(TurnPara, -70, 0.9, 0.3, -180,false); // move backwards to long goal
     HighScore();
-    MoveTimePID(TurnPara, -10, 0.9, 0.3, -90,false); // move to long goal
-    Scrapper.set(false);
+    MoveTimePID(TurnPara, -40, 0.9, 0.3, -180,false); // pushes into long goal
 
-
-    MoveEncoderPID(TestPara, -90, 9.5, 0.4, -112, false); // goes away from long goal
+    // wing code
+    MoveEncoderPID(TestPara, -100, 2, 0.2, 175, false);
+    MoveEncoderPID(TestPara, -110, 3, 0.3, 130, false); 
+    MoveEncoderPID(TestPara, -110, 4, 0.1, 90, false); // aggressively curves
     Wings.set(false); // lowers wings
-    wait(100,msec);
-    MoveEncoderPID(TestPara, 100, 7.85, 0.4, -80, false); // goes to the side of long goal a bit
+    NeutralScore(); // stops rolling block violations
 
-    MoveEncoderPID(TestPara, 100, 12.3, 0.6, -91, false); // backs up to wing
-    //MoveTimePID(TestPara, -40, 0.6, 0.2, -175, false); // slows down
-    wait(200,msec);
-    Move(-30,0);
+    MoveEncoderPID(TestPara, 110, 3.7, 0.4, -100, false); // straightens the bot out 
+
+    MoveEncoderPID(TestPara, 80, 18.2, 0.2, 179, false); // backs up to wing
+    wait(150,msec);
+    Move(-40,0);
     wait(100,msec);
-    //Move(-30,0); // turns to lock
+    std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
     wait(2000,msec);
-    //Move(0,0);
-    //BStop();
+
+    int screenheading = Gyro.heading(degrees);
+    Brain.Screen.clearScreen();
+    Brain.Screen.setFont(monoL);
+    Brain.Screen.setPenColor("#808080");
+    Brain.Screen.setCursor(3,10);
+    Brain.Screen.print("HEADING:");
+    Brain.Screen.setCursor(4,10);
+    Brain.Screen.print(screenheading);
 }

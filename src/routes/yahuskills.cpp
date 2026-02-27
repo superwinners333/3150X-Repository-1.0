@@ -37,17 +37,16 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     // straightToPoint(UhhhPara, CorrectionPara, MovePara, target, 100.0, 5.0, true);
     
     timer stopwatch;
-    
-    RunIndex(80);
-    MoveTimePID(TestPara, 55, 0.5, 0.2, 0, false); // grab blocks in park
+    RunIndex(100);
+    MoveTimePID(TestPara, 55, 0.4, 0.2, 0, false); // grab blocks in park
     MoveTimePID(TestPara, -20, 0.3, 0.02, 0, false); // grab blocks in park
     TurnMaxTimePID(TestPara, 10, 0.1, true); // turn
     TurnMaxTimePID(TestPara, -10, 0.1, true); // turn
-    MoveTimePID(TestPara, 30, 0.2, 0.02, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, 40, 0.2, 0.02, 0, false); // grab blocks in park
     MoveTimePID(TestPara, -30, 0.2, 0.02, 0, false); // grab blocks in park
     wait(250,msec);
     MoveTimePID(TestPara, 30, 0.2, 0.02, 0, false); // grab blocks in park
-    MoveTimePID(TestPara, 90, 1, 0.02, 0, false); // grab blocks in park
+    MoveTimePID(TestPara, 90, 0.9, 0.02, 0, false); // grab blocks in park
     RunIndex(100);
     MoveTimePID(TestPara, -30, 0.1, 0.02, 0, false); // grab blocks in park
     TurnMaxTimePID(TestPara, 10, 0.1, true); // turn
@@ -64,7 +63,7 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, 80, 12 , 0.3, 0, true); // back up 
     TurnMaxTimePID(TestPara, -45, 0.4, true); // turns to middle goal
     RunIndex(100);
-    MoveEncoderPID(TestPara, 80, 5.4 , 0.3, -45, false); // move to inbetween middle goal and 4 blocks
+    MoveEncoderPID(TestPara, 80, 5.3 , 0.3, -45, false); // move to inbetween middle goal and 4 blocks
     MoveEncoderPID(TestPara, 80, 13 , 0.3, 45, true); // turn into middle goal
     MoveTimePID(TestPara, -50, 0.15, 0.2, 45, false); // aglin
     MoveTimePID(TestPara, -30, 0.1, 0.1, 20, false); // wiggles
@@ -75,19 +74,22 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     RunIndex(0);
     MiddleScore();
     wait(100,msec);
-    RunIndex(75);
-    MoveTimePID(TestPara, -10, 0.3, 0.2, 45, false); // score
-    RunIndex(60);
-    MoveTimePID(TestPara, -10, 0.7, 0.2, 45, false); // score
-    RunIndex(40);
+    //RunIndex(65);
+    //MoveTimePID(TestPara, -10, 0.2, 0.2, 45, false); // score
+    RunIndex(55);
+    MoveTimePID(TestPara, -10, 0.9, 0.2, 45, false); // score
+    RunIndex(39);
     MoveTimePID(TestPara, -10, 1.4, 0.2, 45, false); // score
-    RunIndex(60);
+    RunIndex(39);
     MoveEncoderPID(TestPara, -80, 5.8 , 0.3, 45, true); // grab block blue
     wait(100,msec);
-    MoveEncoderPID(TestPara, 40, 5.5 , 0.3, 45, true); // move in to goal
+    MoveEncoderPID(TestPara, 40, 5.4 , 0.3, 45, false); // move in to goal
+
     RunIndex(30);
-    MoveTimePID(TestPara, -10, 0.8, 0.2, 45, false); // score
+    MoveTimePID(TestPara, -10, 1.4, 0.2, 45, false); // score
+    HighScore();
     NeutralScore();
+    wait(100,msec);
   
 
 
@@ -97,26 +99,26 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     MoveEncoderPID(TestPara, -80, 5, 0.3, 45,false); // drives to long goal
     Scrapper.set(true);
     RunIndex(100);
-    MoveEncoderPID(TestPara, -80, 36.5, 0.3, 45,true); // drives to long goal
+    MoveEncoderPID(TestPara, -80, 36.6, 0.3, 45,true); // drives to long goal
     TurnMaxTimePID(TestPara, 0, 0.2, true); // turns to matchloader
     MoveTimePID(TestPara, -80, 0.6 , 0.3, 0,false); // move into long goal
     HighScore();
     MoveTimePID(TestPara, -40, 0.9 , 0.3, 0,false); // score
-    NeutralScore();
     MoveTimePID(TurnPara, 100, 0.40, 0.2, 0, false); // goes into matchload
     MoveTimePID(TurnPara, 40, 0.80, 0.2, 0, false); // slows down
-    MoveTimePID(TestPara, 20, 1.3, 0.2, 0,false); // mactchload 
+    NeutralScore();
+    MoveTimePID(TestPara, 20, 1.35, 0.2, 0,false); // matchload 
     
     MoveEncoderPID(TestPara, 80, 7, 0.4, 0,false); // move back
     TurnMaxTimePID(TestPara, -45, 0.2, false); // turns to aglin with goal
     MoveEncoderPID(TestPara, 80, 14.5, 0.4, -45,true); // moves to beside goal
     Scrapper.set(false);
-    RunIndex(41);
+    RunIndex(60);
     // maybe cahnge to like 0
-    TurnMaxTimePID(TestPara, -1, 0.4, true); // turns to face other side of the field
+    TurnMaxTimePID(pp, -1, 0.4, true); // turns to face other side of the field
     std::cout<< "go accross heading 1: " << Gyro.heading(degrees) <<std::endl;
-    MoveEncoderPID(TestPara, 90, 40, 0.4, 0, false); // goes to other side of the field 
-    MoveEncoderPID(TestPara, 50, 9, 0.2, 0, true); // slows down
+    MoveEncoderPID(CorrectionPara, 90, 40, 0.4, 0, false); // goes to other side of the field 
+    MoveEncoderPID(CorrectionPara, 50, 9, 0.2, 0, true); // slows down
     std::cout<< "after accross heading 1: " << Gyro.heading(degrees) <<std::endl;
     wait(100,msec);
     TurnMaxTimePID(TestPara, 45, 0.2, false); // turns to aglin with goal
@@ -130,18 +132,18 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     wait(100,msec);
     Scrapper.set(true);
     RunIndex(100);
-    MoveTimePID(TestPara, -30, 1.8, 0.4, 180,true); // score
+    MoveTimePID(TestPara, -50, 1.7, 0.4, 180,true); // score
     NeutralScore();
     // Scrapper.set(true);
     MoveTimePID(TurnPara, 100, 0.40, 0.2, 180, false); // goes into matchload
     MoveTimePID(TurnPara, 40, 0.80, 0.2, 180, false); // slows down
     MoveTimePID(TestPara, 20, 1.3, 0.2, 180,false); // mactchload
 
-    MoveTimePID(TestPara, -75, 0.6, 0.1, 180,true); // move to long goal
-    MoveTimePID(TestPara, -40, 0.1, 0.1, 180,true); // move to long goal
+    MoveTimePID(TestPara, -75, 0.6, 0.1, 180,false); // move to long goal
+    MoveTimePID(TestPara, -40, 0.1, 0.1, 180,false); // move to long goal
     HighScore();
     
-    MoveTimePID(TestPara, -60, 0.8, 0.4, 180,true); // score
+    MoveTimePID(TestPara, -60, 0.75, 0.4, 180,true); // score
     RunIndex(50);
     MoveTimePID(TestPara, -40, 1, 0.4, 180,true); // score
     Scrapper.set(false);
@@ -156,7 +158,7 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     RunIndex(100);
     MoveEncoderPID(TestPara, -100, 30, 0.1, -100, true); // curve towards park
     //wait(100,msec);
-    MoveTimePID(TestPara, 75, 1.7, 0.1, -90,false); // pickup blocks
+    MoveTimePID(TestPara, 75, 1.6, 0.1, -90,false); // pickup blocks
 
     //Scrapper.set(true)
 
@@ -176,10 +178,10 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
 
     MoveEncoderPID(TestPara, 80, 6.8, 0.1,  -90, true); // move back
     TurnMaxTimePID(TestPara, -180, 0.4, true); // turns to goal
-    MoveTimePID(TestPara, -80, 0.55, 0.1, -180,false); // line up with goal
+    MoveTimePID(TestPara, -90, 0.55, 0.1, -180,false); // line up with goal
     HighScore();
     Scrapper.set(true);
-    MoveTimePID(TestPara, -40, 0.65, 0.1, -180,false); // score
+    MoveTimePID(TestPara, -40, 0.8, 0.1, -180,false); // score
     // Scrapper.set(true);
     RunIndex(100);
     MoveTimePID(TurnPara, 100, 0.40, 0.2, 180, false); // goes into matchload
@@ -190,39 +192,40 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     TurnMaxTimePID(TestPara, 135, 0.2, false); // turns to walll
     MoveEncoderPID(TestPara, 80, 14.5, 0.4, 135 ,true); // moves to beside goal
     Scrapper.set(false);
-    RunIndex(41);
-    TurnMaxTimePID(TestPara, 178, 0.4, true); // turns to face other side of the field
+    RunIndex(60);
+    TurnMaxTimePID(pp, 180, 0.4, true); // turns to face other side of the field
     std::cout<< "go accross heading 2: " << Gyro.heading(degrees) <<std::endl;
-    MoveEncoderPID(TestPara, 90, 40, 0.4, 179, false); // goes to other side ofthe field 
-    MoveEncoderPID(TestPara, 50, 9, 0.2, 180, true); // slows down
+    MoveEncoderPID(CorrectionPara, 90, 40, 0.4, 180, false); // goes to other side ofthe field 
+    MoveEncoderPID(CorrectionPara, 50, 9, 0.2, 180, true); // slows down
     std::cout<< "after accross heading 2: " << Gyro.heading(degrees) <<std::endl;
     wait(100,msec);
     TurnMaxTimePID(TestPara, -135, 0.2, false); // turns to aglin with goal
-    MoveEncoderPID(TestPara, 80, 7.5, 0.2, -135, true); // move to goal and matcjoader
+    MoveEncoderPID(TestPara, 80, 7.1, 0.2, -135, true); // move to goal and matcjoader
     TurnMaxTimePID(TestPara, 0, 0.4, true); // turns to have back face long goal
     MoveTimePID(TestPara, -80, 0.4, 0.1, 0,true); // move to long goal
     HighScore();
     RunIndex(100);
     Scrapper.set(true);
-    MoveTimePID(TestPara, -25, 1.8, 0.2, 0,true); // score
+    MoveTimePID(TestPara, -25, 1.7, 0.2, 0,true); // score
     NeutralScore();
     // Scrapper.set(true);
     MoveTimePID(TurnPara, 100, 0.40, 0.2, 0, false); // goes into matchload
     MoveTimePID(TurnPara, 40, 0.80, 0.2, 0, false); // slows down
     MoveTimePID(TestPara, 20, 1.25, 0.4, 0,false); // mactchload
 
-    MoveTimePID(TestPara, -75, 0.6, 0.1, 0,true); // move to long goal
-    MoveTimePID(TestPara, -40, 0.1, 0.1, 0,true); // move to long goal
+    MoveTimePID(TestPara, -75, 0.6, 0.1, 0,false); // move to long goal
+    MoveTimePID(TestPara, -40, 0.1, 0.1, 0,false); // move to long goal
     HighScore();
-    MoveTimePID(TestPara, -60, 0.8, 0.4, 0,true); // score
+    MoveTimePID(TestPara, -60, 0.75, 0.4, 0,true); // score
     RunIndex(50);
     MoveTimePID(TestPara, -40, 1, 0.4, 0,true); // score
     Scrapper.set(false);
     MoveEncoderPID(TestPara, -100, 7, 0.1, 0, false); // curve towards park
     MoveEncoderPID(TestPara, -100, 10, 0.1, 40, false); // curve towards park
     MoveEncoderPID(TestPara, -110, 23, 0.1, 60, true); // curve towards park
-    MoveEncoderPID(TestPara, -110, 34, 0.1, 100, true); // park
+    MoveEncoderPID(TestPara, -70, 34.5, 0.1, 85, true); // park
     std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
+    
 
     /*
     MoveEncoderPID(TestPara, -90, 7, 0.1, -180, false); // curve towards park

@@ -44,7 +44,7 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
 
     MoveEncoderPID(TestPara, 80, 18.2, 0.2, 179, false); // backs up to wing
     wait(150,msec);
-    Move(-30,0);
+    Move(-40,0);
     wait(100,msec);
     std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
     wait(2000,msec);
