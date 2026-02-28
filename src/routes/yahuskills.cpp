@@ -76,10 +76,10 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     wait(100,msec);
     //RunIndex(65);
     //MoveTimePID(TestPara, -10, 0.2, 0.2, 45, false); // score
-    RunIndex(55);
-    MoveTimePID(TestPara, -10, 0.9, 0.2, 45, false); // score
+    RunIndex(50);
+    MoveTimePID(TestPara, -10, 1.0, 0.2, 45, false); // score
     RunIndex(39);
-    MoveTimePID(TestPara, -10, 1.4, 0.2, 45, false); // score
+    MoveTimePID(TestPara, -10, 1.5, 0.2, 45, false); // score
     RunIndex(39);
     MoveEncoderPID(TestPara, -80, 5.8 , 0.3, 45, true); // grab block blue
     wait(100,msec);
@@ -200,7 +200,7 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     std::cout<< "after accross heading 2: " << Gyro.heading(degrees) <<std::endl;
     wait(100,msec);
     TurnMaxTimePID(TestPara, -135, 0.2, false); // turns to aglin with goal
-    MoveEncoderPID(TestPara, 80, 7.1, 0.2, -135, true); // move to goal and matcjoader
+    MoveEncoderPID(TestPara, 80, 7.2, 0.2, -135, true); // move to goal and matcjoader
     TurnMaxTimePID(TestPara, 0, 0.4, true); // turns to have back face long goal
     MoveTimePID(TestPara, -80, 0.4, 0.1, 0,true); // move to long goal
     HighScore();
