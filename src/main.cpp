@@ -109,7 +109,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 18; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 4; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -205,7 +205,7 @@ int ATask(void)
     }
     else if (Controller1.ButtonL2.pressing()==1)
     {
-      RunIndex(-60);
+      RunIndex(-60); // 40
       NeutralScore();
       Funnel.set(true);
     }
@@ -349,11 +349,11 @@ int PTask(void)
       DownTaskActiv = 0;
     }
 
-    if(Controller1.ButtonX.pressing()) 
+    if(Controller1.ButtonRight.pressing()) 
     {
       Funnel.set(true);
     }
-    else if (!Controller1.ButtonX.pressing() && !Controller1.ButtonL2.pressing()) 
+    else if (!Controller1.ButtonRight.pressing() && !Controller1.ButtonL2.pressing()) 
     {
       Funnel.set(false);
     }

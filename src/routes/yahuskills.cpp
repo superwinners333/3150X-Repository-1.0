@@ -144,7 +144,7 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     HighScore();
     
     MoveTimePID(TestPara, -60, 0.75, 0.4, 180,true); // score
-    RunIndex(50);
+    RunIndex(80);
     MoveTimePID(TestPara, -40, 1, 0.4, 180,true); // score
     Scrapper.set(false);
     RunIndex(0);
@@ -217,7 +217,7 @@ void yahuskills() { // NEGATIVE TURNS TO THE LEFT
     MoveTimePID(TestPara, -40, 0.1, 0.1, 0,false); // move to long goal
     HighScore();
     MoveTimePID(TestPara, -60, 0.75, 0.4, 0,true); // score
-    RunIndex(50);
+    RunIndex(80);
     MoveTimePID(TestPara, -40, 1, 0.4, 0,true); // score
     Scrapper.set(false);
     MoveEncoderPID(TestPara, -100, 7, 0.1, 0, false); // curve towards park

@@ -16,7 +16,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     //PIDDataSet TurnPara={4,0.1,0.2};
     PIDDataSet TestPara={1.5,0.1,0.15};
     PIDDataSet TurnPara={1.5,0.1,0.12};
-    PIDDataSet Hard={2.6,0.1,0.1};
+    PIDDataSet Hard={3.0,0.1,0.1};
     PIDDataSet straight={1.0,0.0,0.0};
     // SIXSEVEEN 77777777777777777777
     timer stopwatch;
@@ -25,11 +25,11 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     Scrapper.set(true);
     RunIndex(100);
     TurnMaxTimePID(TurnPara, 90, 0.3, true); // turns to matchloader
-    MoveTimePID(TurnPara, 40, 0.85, 0.2, 90,false); // move into matchloader
+    MoveTimePID(TurnPara, 43, 0.85, 0.2, 90,false); // move into matchloader
     MoveTimePID(TurnPara, -75, 0.9, 0.3, 90,false); // move backwards to long goal
     HighScore();
     wait(30,msec);
-    Gyro.setHeading(90,degrees);
+    // Gyro.setHeading(90,degrees);
     MoveTimePID(TurnPara, -10, 1.0, 0.3, 90,false); // move into long goal
     Scrapper.set(false);
     MoveEncoderPID(TurnPara, -70, 2.5, 0.3, 90,true); // go away from long goal 
@@ -46,7 +46,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     Scrapper.set(true); // activates scraper
     wait(50,msec); // lets us coast a bit
     TurnMaxTimePID(TurnPara, 135, 0.2, true); // turns to long goal
-    MoveEncoderPID(TestPara, -90, 22.4, 0.3, 135,true); // goes to between long goal and matchload
+    MoveEncoderPID(TestPara, -90, 23.5, 0.3, 135,true); // goes to between long goal and matchload
     TurnMaxTimePID(TurnPara, 90, 0.24, false); // turns to score on long goal
 
     MoveTimePID(TestPara, -60, 0.3, 0.1, 90,false); // move to long goal
@@ -57,7 +57,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     // Gyro.setHeading(90,degrees);
     NeutralScore();
     MoveTimePID(straight, 100, 0.40, 0.2, 89, false); // goes into matchload
-    MoveTimePID(straight, 40, 0.9, 0.2, 89, false); // slows down
+    MoveTimePID(straight, 43, 0.95, 0.2, 89, false); // slows down
 
     MoveEncoderPID(TestPara, 70, 5.1, 0.1, 90, false); // moves backwards
     TurnMaxTimePID(TurnPara, 135, 0.4, false); // turns to face middle
@@ -69,7 +69,7 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     MiddleScore();
     std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
     wait(100,msec);
-    RunIndex(70);
+    RunIndex(60);
     wait(300,msec);
     std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
 
