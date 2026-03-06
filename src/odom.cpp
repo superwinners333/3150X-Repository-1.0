@@ -432,6 +432,65 @@ void OdomUpdate(){
   }
 }
 
+// Vertical distance from the center of the bot to the horizontal tracking wheel (in inches, positive is when the wheel is behind the center)
+double odomx_dist_from_center = 2.71875;
+double odomx_diameter = 2.75; // Diameter of the horizontal tracker wheel (in inches)
+
+void OdomUpdateX() {
+  Zeroing(true,true); 
+  double prev_heading_rad = globalHeading;
+  double prev_left_in = 0, prev_right_in = 0;
+
+  double prev_horizontal_pos_deg = 0;
+  double d_local_x_in = 0, d_local_y_in = 0;
+  double local_polar_angle_rad = 0;
+
+
+  while (true) {
+    ChassisDataSet SensorVals = ChassisUpdate();
+    double true_heading = globalHeading+SensorVals.HDG;
+    double heading_rad = degToRad(true_heading);
+
+    double horizontal_pos_deg = horizontal_tracker.position(degrees);
+    double left_in = SensorVals.Left;
+    double right_in = SensorVals.Right;
+    double d_heading_rad = heading_rad - prev_heading_rad;
+    double d_horizontal_in = (horizontal_pos_deg - prev_horizontal_pos_deg) * odomx_diameter * M_PI / 360.0; // horizontal tracker delta (inches)
+    double d_left_in = left_in - prev_right_in;   // Left wheel delta (inches)
+    double d_right_in = right_in - prev_right_in; // Right wheel delta (inches)
+
+    // Calculate local movement based on heading change
+    if (fabs(d_heading_rad) < 1e-6) {
+      d_local_x_in = d_horizontal_in;
+      d_local_y_in = (d_left_in + d_right_in) / 2.0;
+    } else {
+      double sin_multiplier = 2.0 * sin(d_heading_rad / 2.0); // helps get chord length
+      d_local_x_in = sin_multiplier * ((d_horizontal_in / d_heading_rad) + odomx_dist_from_center);
+      double d_local_y_left_in = sin_multiplier * (d_left_in / d_heading_rad + dist_between_wheels / 2.0);
+      double d_local_y_right_in = sin_multiplier * (d_right_in / d_heading_rad + dist_between_wheels / 2.0);
+      d_local_y_in = (d_local_y_left_in + d_local_y_right_in) / 2.0;
+    }
+
+    if (fabs(d_local_x_in) < 1e-6 && fabs(d_local_y_in) < 1e-6) {
+      local_polar_angle_rad = 0;
+    } else {
+      local_polar_angle_rad = atan2(d_local_y_in, d_local_x_in);
+    }
+    double polar_radius_in = sqrt(pow(d_local_x_in, 2) + pow(d_local_y_in, 2));
+    double polar_angle_rad = local_polar_angle_rad - heading_rad - (d_heading_rad / 2);
+
+    CPos.x += polar_radius_in * cos(polar_angle_rad);
+    CPos.y += polar_radius_in * sin(polar_angle_rad);
+    
+    prev_heading_rad = heading_rad;
+    prev_horizontal_pos_deg = horizontal_pos_deg;
+    prev_left_in = left_in;
+    prev_right_in = right_in;
+
+    wait(10, msec);
+  }
+}
+
 
 // things to do
 /*

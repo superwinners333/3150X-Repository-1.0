@@ -65,6 +65,8 @@ ChassisDataSet ChassisUpdate()
   // std::cout << get_dist_travelled(RB.position(degrees)) << std::endl;
   // std::cout << -1 << std::endl;
 
+  CDS.hor = odomx.position(degrees); 
+
   CDS.Avg=(CDS.Left+CDS.Right)/2;
 
   CDS.Diff=CDS.Left-CDS.Right;

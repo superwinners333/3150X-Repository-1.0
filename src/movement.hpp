@@ -16,6 +16,8 @@ struct ChassisDataSet{
   int Diff;     // Left - Right
   double HDG;   // Robot heading
 
+  double hor;
+
   double backD;
   double leftD;
   double rightD;

@@ -22,6 +22,7 @@ extern inertial Gyro;
 extern digital_out Lift;
 extern digital_out Funnel;
 
+extern rotation odomx;
 extern distance backSensor;
 extern distance leftSensor;
 extern distance rightSensor;

@@ -15,6 +15,7 @@ extern double globalHeading; // starting heading relative to the field
 extern Point CPos; // our current position
 extern bool odomTracking; // if we should be tracking odom
 extern void OdomUpdate(); // odom tracking function
+extern void OdomUpdateX();
 extern bool inRangeOf(double range, double target, double check); // checks if the two values are in range of each other
 extern void startTracking(Point start); // start tracking odom
 

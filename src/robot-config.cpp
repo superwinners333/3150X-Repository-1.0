@@ -31,10 +31,12 @@ digital_out LiftUp = digital_out(Brain.ThreeWirePort.D);
 digital_out LiftDown = digital_out(Brain.ThreeWirePort.E);
 digital_out Funnel = digital_out(Brain.ThreeWirePort.A); // back descore / low goal funnel
 
+rotation odomx = rotation(PORT3,false); // positive should be to the right
 inertial Gyro = inertial(PORT11);
 distance backSensor = distance(PORT18);
 distance leftSensor = distance(PORT17);
 distance rightSensor = distance(PORT1);
+
 
 // Important variables
 const double wheelDiam = 3.25;
