@@ -18,6 +18,10 @@ struct ChassisDataSet{
 
   double hor;
 
+  double Average;
+  double AbsoluteLeft;
+  double AbsoluteRight;
+
   double backD;
   double leftD;
   double rightD;
@@ -30,8 +34,11 @@ struct PIDDataSet{
   double kd;
 };
 
-extern bool dist_reset;
-extern void Zeroing(bool dist, bool HDG);
+extern double Old_distance;
+extern double odom_left_offset;  
+extern double odom_right_offset; 
+
+extern void Zeroing(bool dist, bool HDG,bool odom);
 extern ChassisDataSet ChassisUpdate();
 extern ChassisDataSet ChassisUpdate2();
 extern void Move(int left, int right);

@@ -24,32 +24,34 @@ int JX;
 
 
 
-bool dist_reset = false;
-/** Resets the robot's drive train and inertial sensor
- * 
- * @param dist the distance encoder reset
- * @param HDG the gyro heading reset
- */
-void Zeroing(bool dist, bool HDG)
-{
+// --- ROBOT POSITIONING & ODOMETRY ---
+double Old_distance=0;
+double odom_left_offset = 0;  
+double odom_right_offset = 0; 
+
+void Zeroing(bool dist, bool HDG, bool odom)
+{ 
+  ChassisDataSet SensorVals;
+  
   if(dist){
-  dist_reset = true;
-  LF.resetPosition();
-  LM.resetPosition();
-  LB.resetPosition();
-  RF.resetPosition();
-  RM.resetPosition();
-  RB.resetPosition();
+    if(!odom){
+      SensorVals=ChassisUpdate();
+      odom_left_offset += (LF.position(degrees)+LM.position(degrees)+LB.position(degrees))/3.0;
+      odom_right_offset += (RF.position(degrees)+RM.position(degrees)+RB.position(degrees))/3.0;  
+      Old_distance = SensorVals.Avg;
+    }
+    LF.resetPosition();
+    LM.resetPosition();
+    LB.resetPosition();
+    RF.resetPosition();
+    RM.resetPosition();
+    RB.resetPosition();
   }
   if(HDG){
     Gyro.setHeading(0,degrees);
   }
 }
 
-// global odom variables
-double globalX = 0;
-double globalY = 0;
-double prevAvg = 0;
 
 
 ChassisDataSet ChassisUpdate()
@@ -71,6 +73,10 @@ ChassisDataSet ChassisUpdate()
 
   CDS.Diff=CDS.Left-CDS.Right;
   CDS.HDG=Gyro.heading(degrees);
+
+  CDS.Average = CDS.Avg-Old_distance;
+  CDS.AbsoluteLeft = odom_left_offset + (LF.position(degrees)+LM.position(degrees)+LB.position(degrees))/3.0;
+  CDS.AbsoluteRight = odom_right_offset + (RF.position(degrees)+RM.position(degrees)+RB.position(degrees))/3.0;
 
   CDS.backD = backSensor.objectDistance(inches) - 4.2; // distance - distance of distance sensor from the edge of the bot
   CDS.leftD = leftSensor.objectDistance(inches) - 0.1;
@@ -175,7 +181,7 @@ int PrevE;//Error at t-1
  */
 void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double ABSHDG,bool brake){
   double CSpeed=0;
-  Zeroing(true,false);
+  Zeroing(true,false,true);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -351,7 +357,7 @@ void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHD
  */
 void CurveEncoderPID(PIDDataSet KVals, int SpeedL, int SpeedR, double dist,double AccT, double ABSHDG,bool brake) {
   double CSpeedL=0, CSpeedR=0;
-  Zeroing(true,false);
+  Zeroing(true,false,true);
   ChassisDataSet SensorVals;
   SensorVals = ChassisUpdate();
   double PVal=0, IVal=0, DVal=0, LGV=0;//define local gyro variable.
@@ -400,7 +406,7 @@ void CurveEncoderPID(PIDDataSet KVals, int SpeedL, int SpeedR, double dist,doubl
 double trackwidth = 10.728346;
 void curvePID(PIDDataSet KVals, int Speed, double radius, double dist, double AccT, double ABSHDG, bool brake) {
   double CSpeed=0;
-  Zeroing(true,false);
+  Zeroing(true,false,true);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0, IVal=0, DVal=0, LGV=0, Correction=0;//define local gyro variable.

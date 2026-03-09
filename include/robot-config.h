@@ -26,9 +26,27 @@ extern rotation odomx;
 extern distance backSensor;
 extern distance leftSensor;
 extern distance rightSensor;
+extern distance frontSensor;
+
+extern bumper jumpbutton;
 
 extern const double wheelDiam;
 extern const double wheelToMotorRatio;
+
+extern const double DistanceBetweenWheel;
+extern const double horizontal_tracker_diameter;
+extern const double horizontal_tracker_dist_from_center;
+extern const double wheel_distance_in;
+extern bool heading_correction;
+extern bool dir_change_start;
+extern bool dir_change_end;  
+
+extern double min_output;
+extern double max_slew_accel_fwd;
+extern double max_slew_decel_fwd;
+extern double max_slew_accel_rev;
+extern double max_slew_decel_rev;
+extern double chase_power;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

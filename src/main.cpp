@@ -12,6 +12,8 @@
 #include "screen_gui.hpp"
 #include "movement.hpp"
 #include "odom.hpp"
+#include "Odometry.hpp"
+#include "VirtualTargetPursuit.hpp"
 #include "routes/routes.hpp"
 
 using namespace vex;
@@ -69,11 +71,12 @@ Brain.Screen.setPenWidth(3); // important
 waitUntil(!Gyro.isCalibrating());
 
 
-Zeroing(true,true);
+Zeroing(true,true,true);
 
 wait(100,msec); // just a small delay
 
 // thread Odom = thread(OdomUpdate); // runs the odom stuff
+thread odom = thread(OdomWithX);
 
 
 Brain.Screen.clearScreen();
@@ -101,6 +104,7 @@ AutonLogic();
 // wait(5,sec);
 // drawLogo();
 
+// flappybird();
 
   // All activities that occur before the competition starts
   // Example: clearing encoders, setting servo positions, ...
@@ -109,7 +113,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 4; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 30; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -125,7 +129,7 @@ void autonomous(void) {
   
   //Do not change the below
   PIDDataSet TestPara={4,0.1,0.2};
-  Zeroing(true,true);
+  Zeroing(true,true,true);
 
   switch (AutoSelectorVal) {
     // high side autos
@@ -178,8 +182,8 @@ int DriveTask(void){
   {
     EXIT=true;
     odomTracking = false;
-    RV=-Controller1.Axis3.position(percent)+(Controller1.Axis1.position(percent)*turnConst);
-    LV=-Controller1.Axis3.position(percent)-(Controller1.Axis1.position(percent)*turnConst);
+    RV=Controller1.Axis3.position(percent)-(Controller1.Axis1.position(percent)*turnConst);
+    LV=Controller1.Axis3.position(percent)+(Controller1.Axis1.position(percent)*turnConst);
     Move(LV,RV);
   }
 
@@ -405,6 +409,7 @@ void usercontrol(void) {
   // User control code here, inside the loop
   while (1) {
     
+    // flappybird();
     task Dtask=task(DriveTask);
     task Atask=task(ATask);
     task Ptask=task(PTask);

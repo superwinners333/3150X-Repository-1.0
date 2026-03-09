@@ -12,3 +12,12 @@ double get_dist_travelled(double degreesTravelled) {
     // std::cout << degreesTravelled * wheelToMotorRatio / 360 * (M_PI*wheelDiam) << std::endl;
     return fabs(degreesTravelled * wheelToMotorRatio / 360.0 * (M_PI*wheelDiam));
 }
+
+double normalizeTarget(double angle) {
+      if (angle - Gyro.rotation() > 180) {
+    while (angle - Gyro.rotation() > 180) angle -= 360;
+  } else if (angle - Gyro.rotation() < -180) {
+    while (angle - Gyro.rotation() < -180) angle += 360;
+  }
+  return angle;
+}

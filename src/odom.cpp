@@ -76,7 +76,7 @@ double pointHeading(Point current, Point target) {
 */
 void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
 {
-  Zeroing(true,false);
+  Zeroing(true,false,true);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double outputSpeed = 0.0;
@@ -375,7 +375,7 @@ double dist_between_wheels = 10.728346; // distance between the wheels in inches
 bool odomTracking = true;
 
 void OdomUpdate(){
-  Zeroing(true,true);
+  Zeroing(true,true,true);
 
   
   double prev_heading_rad = globalHeading;
@@ -391,12 +391,6 @@ void OdomUpdate(){
     double d_heading_rad = heading_rad - prev_heading_rad; // change in heading
     double d_left_in = left_in - prev_left_in; // change in left and right distances
     double d_right_in = right_in - prev_right_in;
-
-    if (dist_reset) {
-      d_left_in = 0.0;
-      d_right_in = 0.0;
-      dist_reset = false;
-    }
 
     // checks if there is change in heading
     if (fabs(d_heading_rad) < 1e-6) {
@@ -433,11 +427,11 @@ void OdomUpdate(){
 }
 
 // Vertical distance from the center of the bot to the horizontal tracking wheel (in inches, positive is when the wheel is behind the center)
-double odomx_dist_from_center = 2.71875;
+double odomx_dist_from_center = 6.417323;
 double odomx_diameter = 2.75; // Diameter of the horizontal tracker wheel (in inches)
 
 void OdomUpdateX() {
-  Zeroing(true,true); 
+  Zeroing(true,true,true); 
   double prev_heading_rad = globalHeading;
   double prev_left_in = 0, prev_right_in = 0;
 
@@ -451,7 +445,7 @@ void OdomUpdateX() {
     double true_heading = globalHeading+SensorVals.HDG;
     double heading_rad = degToRad(true_heading);
 
-    double horizontal_pos_deg = horizontal_tracker.position(degrees);
+    double horizontal_pos_deg = odomx.position(degrees);
     double left_in = SensorVals.Left;
     double right_in = SensorVals.Right;
     double d_heading_rad = heading_rad - prev_heading_rad;
@@ -499,14 +493,14 @@ void OdomUpdateX() {
 * figure out hwo to use the position calculations if we reset
 * or figure out how to use the current move functions without resetting
 * add a constant or do smth to make encoders more accurate
-* add a move to point functioon
+* add a move to point function
 */
 
 void MoveToPoint(PIDDataSet DistK, PIDDataSet HeadK, Point target, double Speed, double timeout, double curveFactor, bool brake)
 {
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
-  Zeroing(true,false);
+  Zeroing(true,false,true);
   double outputSpeed = 0.0;
 
   double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
@@ -810,7 +804,7 @@ void boohoo(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, double
 
   double startdist = dist;
 
-  while (!settled & Brain.Timer.value() < 5.0) { // maybe try to just stop when dist < x if settled does not work
+  while (!settled && Brain.Timer.value() < 5.0) { // maybe try to just stop when dist < x if settled does not work
     SensorVals = ChassisUpdate();
 
     dist = pointDist(CPos, target);
@@ -880,3 +874,4 @@ void boohoo(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, double
     wait(100,msec);}
   else CStop();
 }
+

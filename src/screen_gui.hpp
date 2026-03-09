@@ -18,5 +18,15 @@ extern void AutoSelection();
 extern void AutonLogic();
 extern void greyScreen();
 
+struct hitbox {
+  double x;
+  double y;
+  double width;
+  double height;
+};
+
+extern void flappybird();
+
+
 extern void drawLogo();
 #endif

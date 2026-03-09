@@ -3,6 +3,10 @@
 #include "cstring"
 #include <iostream>
 #include <string>
+#include <random>
+#include <limits>
+#include <cstdlib> 
+#include <ctime>   
 
 void drawCurvedRectangle(int xPos, int yPos, int length, int height, int radius);
 void drawField(void);
@@ -559,6 +563,125 @@ void fillTiltedRectangle(int centerX, int centerY, double width, double height)
         Brain.Screen.drawLine(Xs, Ys, Xe, Ye);
     }
 }
+
+bool collision(hitbox a, hitbox b) { // detects if the hitboxes are collided
+  if ((b.x >= a.x && b.x <= (a.x+a.width)) || (a.x >= b.x && a.x <= (b.x+b.width))) {
+    if ((b.y >= a.y && b.y <= (a.y+a.height)) || (a.y >= b.y && a.y <= (b.y+b.height))) {
+      return true;
+    }
+  }
+  return false;
+}
+
+int randomnum(int min, int max) {
+    std::srand(std::time(nullptr)); 
+    int randomNum = std::rand(); 
+    int rangedNum = (std::rand() % ((max-min)+1)) + min;
+    return rangedNum;
+}
+
+hitbox pipe1;
+hitbox pipe2;
+hitbox pipe3;
+hitbox pipe4;
+hitbox bird;
+
+// 480 by 240
+
+void flappybird() {
+  pipe1 = {300,0,30,90}; // 60 pixel gap between each pipe
+  pipe2 = {300,150,30,90};
+  pipe3 = {540,0,30,90}; // 60 pixel gap between each pipe
+  pipe4 = {540,150,30,90};
+  bird = {50,136,15,15};
+
+  Brain.Screen.setPenColor("#000000");
+  Brain.Screen.drawRectangle(0,0,480,240,"#52d0e7"); // fills the background
+  Brain.Screen.drawRectangle(pipe1.x,pipe1.y,pipe1.width,pipe1.height,"#2bff00");
+  Brain.Screen.drawRectangle(pipe2.x,pipe2.y,pipe2.width,pipe2.height,"#2bff00");
+  Brain.Screen.drawRectangle(pipe3.x,pipe3.y,pipe3.width,pipe3.height,"#2bff00");
+  Brain.Screen.drawRectangle(pipe4.x,pipe4.y,pipe4.width,pipe4.height,"#2bff00");
+  Brain.Screen.drawRectangle(bird.x,bird.y,bird.width,bird.height,"#ff0000"); 
+  wait(2,sec);
+
+  int score = 0;
+  int pipespeed = -2;
+  double displacement = 0, jumpvelocity = -130, velocity = 0, gravity = 750, time = 0.02;
+  bool collided = (collision(bird,pipe1) || collision(bird,pipe2) || collision(bird,pipe3) || collision(bird,pipe4));
+
+  while (!collided) {
+    pipe1.x += pipespeed; // moves pipes
+    pipe2.x += pipespeed;
+    pipe3.x += pipespeed;
+    pipe4.x += pipespeed;
+    
+    // pipe regeneration
+    int gap = 100;
+    if (pipe1.x <= 0) { // resets if it goes of the screen
+      score+=1;
+      pipe1.x = 470;
+      pipe2.x = 470;
+      gap = randomnum(15,165); // moves the gap position
+      pipe1.height = gap;
+      pipe2.y = gap + 60;
+      pipe2.height = 240 - (gap+60);
+    }
+    if (pipe3.x <= 0) { // resets if it goes of the screen
+      score+=1;
+      pipe3.x = 470;
+      pipe4.x = 470;
+      gap = randomnum(15,165); // moves the gap position
+      pipe3.height = gap;
+      pipe4.y = gap + 60;
+      pipe4.height = 240 - (gap+60);
+    }
+
+    // bird position logic
+    displacement = ((velocity*time) + (0.5*gravity*time*time));
+    velocity += (gravity*time);
+    // std::cout<<"distplacement: "<<displacement<<std::endl;
+    // std::cout<<"velocity: "<<velocity<<std::endl;
+    
+    bird.y += displacement;
+    if (bird.y > 225) bird.y = 225; // prevents bird from going off the screen
+    else if (bird.y < 0) bird.y = 0;
+
+    // jump logic
+    bool jumpPress = false;
+    if ((jumpbutton.pressing() || Controller1.ButtonLeft.pressing()) && !jumpPress) {
+      jumpPress = true;
+      velocity = jumpvelocity;
+    }
+    else if (!jumpbutton.pressing() && !Controller1.ButtonLeft.pressing()) jumpPress = false;
+
+    // displaying the screen
+    Brain.Screen.drawRectangle(0,0,480,240,"#52d0e7"); // fills the background
+    Brain.Screen.drawRectangle(pipe1.x,pipe1.y,pipe1.width,pipe1.height,"#2bff00");
+    Brain.Screen.drawRectangle(pipe2.x,pipe2.y,pipe2.width,pipe2.height,"#2bff00");
+    Brain.Screen.drawRectangle(pipe3.x,pipe3.y,pipe3.width,pipe3.height,"#2bff00");
+    Brain.Screen.drawRectangle(pipe4.x,pipe4.y,pipe4.width,pipe4.height,"#2bff00");
+    Brain.Screen.drawRectangle(bird.x,bird.y,bird.width,bird.height,"#ff0000");
+    // score printing
+    Brain.Screen.setCursor(1,1);
+    Brain.Screen.setFont(mono30);
+    Brain.Screen.setPenColor("#000000");
+    Brain.Screen.setFillColor("#52d0e7");
+    Brain.Screen.print(score);
+
+    collided = (collision(bird,pipe1) || collision(bird,pipe2) || collision(bird,pipe3) || collision(bird,pipe4)); // collision check
+    wait(20,msec);
+  }
+  Brain.Screen.drawRectangle(0,0,480,240,"#FFFFFF"); // fills the background
+  Brain.Screen.setPenColor("#000000");
+  Brain.Screen.setFillColor("#FFFFFF");
+  Brain.Screen.setFont(mono40);
+  Brain.Screen.setCursor(3,4);
+  Brain.Screen.print("You died!");
+  Brain.Screen.setCursor(4,3);
+  Brain.Screen.print("final score: %d",score);
+  wait(2,sec);
+}
+
 
 
 

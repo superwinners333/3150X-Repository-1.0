@@ -2,6 +2,6 @@
 #define HELPER_FUNCTIONS_H
 
 extern double get_dist_travelled(double degreesTravelled);
-
+extern double normalizeTarget(double angle);
 
 #endif
