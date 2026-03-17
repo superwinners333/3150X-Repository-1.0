@@ -12,16 +12,19 @@ extern motor LB;
 extern motor RB;
 extern motor LeftRoller;
 extern motor RightRoller;
-extern motor TopRoller;
+extern motor lever;
+
+
 extern digital_out Scrapper;
 extern digital_out LiftUp;
 extern digital_out LiftDown;
-extern digital_out DoubleP;
+extern digital_out lock;
 extern digital_out Wings;
 extern inertial Gyro;
 extern digital_out Lift;
 extern digital_out Funnel;
 
+extern rotation levertracker;
 extern rotation odomx;
 extern distance backSensor;
 extern distance leftSensor;

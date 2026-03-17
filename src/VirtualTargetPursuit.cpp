@@ -157,7 +157,7 @@ static void computeVirtualTarget(
     double speed = drift.speed;
     
     // Cap drift velocity to prevent runaway compensation
-    v_drift = vtpClamp(v_drift, -30.0, 30.0);
+    v_drift = vtpClamp(v_drift, -20.0, 20.0);
     
     double T = cfg.prediction_horizon;
     
@@ -169,9 +169,7 @@ static void computeVirtualTarget(
     double comp_y =  lateral_displacement * sin(heading_rad);
     
     // Distance fade: smooth S-curve (smoothstep) over 5"
-    // Starts fading at 5" but very gradually, preventing the sudden
-    // compensation drop-off that causes heading snap at the target.
-    //   5" = 100%, 4" = 90%, 3" = 65%, 2" = 35%, 1" = 10%, 0" = 0%
+    // Fades faster to prevent overshoot in final approach
     double t_dist = vtpClamp(dist_to_target / 5.0, 0.0, 1.0);
     double dist_fade = t_dist * t_dist * (3.0 - 2.0 * t_dist);  // smoothstep
     comp_x *= dist_fade;
@@ -182,9 +180,9 @@ static void computeVirtualTarget(
     comp_x *= speed_fade;
     comp_y *= speed_fade;
     
-    // Cap compensation magnitude to 50% of distance to target
+    // Cap compensation magnitude to 15% of distance to target (tighter for accuracy)
     double comp_mag = hypot(comp_x, comp_y);
-    double max_comp = dist_to_target * 0.50;
+    double max_comp = dist_to_target * 0.15;
     if (comp_mag > max_comp && comp_mag > 0.01) {
         double scale = max_comp / comp_mag;
         comp_x *= scale;
@@ -279,6 +277,7 @@ void driveToPointVTP(
     // Let 2 loops pass to build velocity estimate
     int warmup_loops = 0;
     
+    int direct_mode_frames = 0;  // counts frames spent in direct_mode (orbit recovery)
     bool perpendicular_line = false, prev_perpendicular_line = true;
     while (Brain.Timer.value() < timeout_ms) {
         ChassisDataSet SensorVals = ChassisUpdate();
@@ -365,10 +364,15 @@ void driveToPointVTP(
             double am = (curr_x - target_x) * vy_filter.get() - (curr_y - target_y) * vx_filter.get();
             od.pushAM(am > 0 ? 1.0 : -1.0);
         }
-        if (!od.direct_mode && od.grace_frames > 80) {
-            if (od.div_frames > 35 && od.min_dist < 10.0) od.direct_mode = true;
-            if (od.consistentAM() && od.div_frames > 30 && od.min_dist < 10.0) od.direct_mode = true;
-            if (od.no_progress > 400 && dist_real < 25.0 && spd > 1.0) od.direct_mode = true;
+        // Fast short-move orbit guard: if we already got close once and then
+        // diverge while still carrying speed, enter direct mode immediately.
+        if (!od.direct_mode && od.min_dist < 6.0 && dist_real > od.min_dist + 2.0 && spd > 8.0) {
+            od.direct_mode = true;
+        }
+        if (!od.direct_mode && od.grace_frames > 20) {
+            if (od.div_frames > 18 && od.min_dist < 16.0) od.direct_mode = true;
+            if (od.consistentAM() && od.div_frames > 14 && od.min_dist < 18.0) od.direct_mode = true;
+            if (od.no_progress > 240 && dist_real < 30.0 && spd > 1.0) od.direct_mode = true;
             if (od.direct_mode)
                 std::cout << "VTP: ORBIT detected d=" << dist_real << " min=" << od.min_dist << std::endl;
         }
@@ -377,8 +381,9 @@ void driveToPointVTP(
             virtual_x = target_x;
             virtual_y = target_y;
             dx_virt = dx_real; dy_virt = dy_real; dist_virt = dist_real;
-            abs_max_speed = fmin(abs_max_speed, 45.0);
+            abs_max_speed = fmin(abs_max_speed, 28.0);
             IVal = 0;  // Kill integral windup
+            direct_mode_frames++;  // track time in orbit recovery for bailout
             if (dist_real < 1.5) {
                 od.reset(); od.min_dist = dist_real;
                 std::cout << "VTP: Orbit recovery" << std::endl;
@@ -410,6 +415,9 @@ void driveToPointVTP(
         // wheels create massive lateral thrust → overshoot → orbit.
         // At 4": max correction = 12 (gentle). At 20"+: unclamped.
         double max_correction = vtpClamp(dist_real * 3.0, 3.0, fabs(Correction));
+        if (fabs(angle_error) > 60.0) {
+            max_correction = fmax(max_correction, 45.0);
+        }
         Correction = vtpClamp(Correction, -max_correction, max_correction);
         
         // Additional fade within 3" — coast in nearly straight
@@ -424,23 +432,52 @@ void driveToPointVTP(
         // (if it's driving the spin) and add active counter-spin.
         // Prevents angular momentum runaway → overshoot → orbit.
         // Threshold 90°/s — normal arcs peak ~70-80, dangerous spins hit 150+.
-        if (dist_real < cfg.decel_distance * 2.0 && fabs(omega) > 90.0) {
-            double excess = omega - copysign(90.0, omega);
+        if (dist_real < cfg.decel_distance * 2.5 && fabs(omega) > 60.0) {
+            double excess = omega - copysign(60.0, omega);
             // Only scale down if correction is driving the spin (same sign)
             if (Correction * omega > 0) {
-                double omega_scale = vtpClamp(90.0 / fabs(omega), 0.3, 1.0);
+                double omega_scale = vtpClamp(60.0 / fabs(omega), 0.15, 1.0);
                 Correction *= omega_scale;
             }
             // Active counter-spin proportional to excess angular velocity
-            Correction -= 0.15 * excess;
+            Correction -= 0.35 * excess;
         }
         
         // ── 7. SPEED CONTROL ──
         // Use real distance for deceleration (not virtual — we care about actual arrival)
         double speed_ratio = vtpClamp(dist_real / cfg.decel_distance, 0.0, 1.0);
         double base_speed = final_decel_speed + (abs_max_speed - final_decel_speed) * speed_ratio;
+
+        // Heading gate: reduce translational speed for large heading error,
+        // especially near 180 deg where driving forward makes divergence worse.
+        // Map cos(error) from [-1, 1] to [0, 1], then clamp a small floor.
+        double heading_gate = vtpClamp((cos(vtpDegToRad(angle_error)) + 1.0) * 0.5, 0.10, 1.0);
+        // Apply linear heading gate modulation (not squared) to preserve momentum
+        // while turning. Pivot caps handle rotation priority independently.
+        base_speed *= heading_gate;
+
+        // Spin gate: when angular velocity is very high, suppress translation
+        // to prevent tangential orbiting around the target.
+        // Only applied in the final approach (< 1.5x decel_distance) to avoid
+        // cutting speed at the start of a new movement with inherited angular momentum.
+        if (dist_real < cfg.decel_distance * 1.5 && fabs(omega) > 100.0) {
+            double omega_gate = vtpClamp(100.0 / fabs(omega), 0.20, 1.0);
+            base_speed *= omega_gate;
+        }
+
+        // Pivot-priority near target: if heading error is large, cap translation
+        // so the robot rotates to face the goal instead of tracing an orbit.
+        // Only apply to brake moves — non-brake uses heading gate for modulation.
+        // Tight threshold (0.8x decel_distance): apply caps only in final ~19" approach.
+        if (brake && dist_real < cfg.decel_distance * 0.8 && fabs(angle_error) > 35.0) {
+            // Raised caps (was 4/8/12) — needs more forward motion to close distance
+            // while pivoting, otherwise robot spins in place and orbits.
+            double pivot_cap = (fabs(angle_error) > 110.0) ? 10.0 :
+                               (fabs(angle_error) > 75.0 ? 16.0 : 22.0);
+            base_speed = fmin(base_speed, pivot_cap);
+        }
         
-        // Min speed floor
+        // Min speed floor — enforce universally to prevent excessive deceleration
         if (dist_real > 3.0 && base_speed < cfg.min_speed) {
             base_speed = cfg.min_speed;
         }
@@ -484,12 +521,6 @@ void driveToPointVTP(
             VTPTracker::output(target_x, target_y);
             VTPTracker::displayOnController(target_x, target_y, dist_real);
         }
-        // ── DEBUG OUTPUT (every 100ms) ──
-        if (warmup_loops % 10 == 0) {
-            double comp_mag_dbg = hypot(virtual_x - target_x, virtual_y - target_y);
-            printf("VTP_DBG:vLat=%.1f comp=%.2f spd=%.0f dist=%.1f base=%.0f aErr=%.1f omega=%.0f\n",
-                   drift.v_lateral, comp_mag_dbg, drift.speed, dist_real, base_speed, angle_error, omega);
-        }
         
         // Cosine scaling — reduce forward speed when angle error is large
         // Ramps in with distance: no effect far away (robot arcs smoothly),
@@ -498,6 +529,16 @@ void driveToPointVTP(
         double cos_scale = fabs(cos(vtpDegToRad(angle_error)));
         double cos_intensity = vtpClamp(1.0 - dist_real / (cfg.decel_distance * 2.0), 0.0, 1.0);
         base_speed *= (1.0 - cos_intensity * (1.0 - (0.5 + 0.5 * cos_scale)));
+        
+        // Final min_speed enforcement to prevent excessive deceleration from cosine scaling
+        base_speed = fmax(base_speed, cfg.min_speed);
+        
+        // ── DEBUG OUTPUT (every 100ms) — print AFTER all speed calculations ──
+        if (warmup_loops % 10 == 0) {
+            double comp_mag_dbg = hypot(virtual_x - target_x, virtual_y - target_y);
+            printf("VTP_DBG:vLat=%.1f comp=%.2f spd=%.0f dist=%.1f base=%.0f aErr=%.1f omega=%.0f\n",
+                   drift.v_lateral, comp_mag_dbg, drift.speed, dist_real, base_speed, angle_error, omega);
+        }
         
         // ── 8. MOTOR MIXING ──
         double left_corr  = moving_forward ?  Correction : -Correction;
@@ -525,12 +566,21 @@ void driveToPointVTP(
         right_speed = vtpClamp(right_speed, prev_right_out - max_delta, prev_right_out + max_delta);
         prev_left_out  = left_speed;
         prev_right_out = right_speed;
+
+        if (warmup_loops % 10 == 0) {
+            double left_actual = (LF.velocity(percent) + LM.velocity(percent) + LB.velocity(percent)) / 3.0;
+            double right_actual = (RF.velocity(percent) + RM.velocity(percent) + RB.velocity(percent)) / 3.0;
+            printf("VTP_OUT:cmdL=%.1f cmdR=%.1f velL=%.1f velR=%.1f\n",
+                   left_speed, right_speed, left_actual, right_actual);
+        }
         
         // ── 9. OUTPUT ──
         Move(left_speed, right_speed);
-         perpendicular_line = ((CPos.y - target_y) * -cos(degToRad(normalizeTarget(SensorVals.HDG + add))) <= (CPos.x - target_x) * sin(degToRad(normalizeTarget(SensorVals.HDG + add))) + exittolerance);
-        if(perpendicular_line && !prev_perpendicular_line) {
-        break;
+        perpendicular_line = ((CPos.y - target_y) * -cos(degToRad(normalizeTarget(SensorVals.HDG + add))) <=
+                              (CPos.x - target_x) * sin(degToRad(normalizeTarget(SensorVals.HDG + add))) + exittolerance);
+        // Only allow perpendicular-line handoff when already near the target.
+        if (perpendicular_line && !prev_perpendicular_line && dist_real < 3.0) {
+            break;
         }
         prev_perpendicular_line = perpendicular_line;
         // ── 10. EXIT CONDITIONS ──
@@ -542,6 +592,42 @@ void driveToPointVTP(
             }
         } else {
             settle_timer = 0;
+        }
+
+        double relaxed_exit_dist = fmax(cfg.position_tolerance * 2.0, 4.0);
+        double close_pass_exit_dist = fmax(cfg.position_tolerance * 3.0, 7.0);
+        if (od.direct_mode && dist_real < relaxed_exit_dist) {
+            std::cout << "VTP: direct-mode near-target exit" << std::endl;
+            break;
+        }
+        if (od.min_dist < relaxed_exit_dist && dist_real < relaxed_exit_dist + 1.0 && od.no_progress > 20) {
+            std::cout << "VTP: near-target bailout" << std::endl;
+            break;
+        }
+        // Non-brake exit logic: get close enough and transition to next movement
+        // Two cases:
+        //   1. Normal close-pass exit: made close approach, orbit detected or just too far away
+        //   2. Orbit escape: if orbit detected, exit immediately to avoid timeout
+        if (!brake && od.min_dist < close_pass_exit_dist) {
+            // Case 1: Close pass was made (got within 7"), now diverging slightly
+            // For non-brake, we don't need precision—just exit when reasonably close (< 12")
+            // This allows the next movement to start before timeout
+            if (dist_real > od.min_dist + 1.5 && dist_real < 12.0) {
+                std::cout << "VTP: close-pass chain exit" << std::endl;
+                break;
+            }
+            // Case 2: Orbit detected and we're stuck—exit immediately to prevent timeout
+            // Don't wait for precise distance, just escape the orbit
+            if (od.direct_mode && od.no_progress > 15) {
+                std::cout << "VTP: non-brake orbit escape exit" << std::endl;
+                break;
+            }
+        }
+        // Bail out only after 400ms in direct mode with no progress — gives orbit
+        // recovery enough time to finish the turn before giving up.
+        if (brake && od.direct_mode && direct_mode_frames > 40) {
+            std::cout << "VTP: brake orbit bailout" << std::endl;
+            break;
         }
         
         // Chain exit (non-braking)
@@ -660,17 +746,20 @@ void driveToPointVTPAngle(
             double am = (curr_x - target_x) * vy_filter.get() - (curr_y - target_y) * vx_filter.get();
             od.pushAM(am > 0 ? 1.0 : -1.0);
         }
-        if (!od.direct_mode && od.grace_frames > 80) {
-            if (od.div_frames > 35 && od.min_dist < 10.0) od.direct_mode = true;
-            if (od.consistentAM() && od.div_frames > 30 && od.min_dist < 10.0) od.direct_mode = true;
-            if (od.no_progress > 400 && dist_real < 25.0 && spd > 1.0) od.direct_mode = true;
+        if (!od.direct_mode && od.min_dist < 6.0 && dist_real > od.min_dist + 2.0 && spd > 8.0) {
+            od.direct_mode = true;
+        }
+        if (!od.direct_mode && od.grace_frames > 20) {
+            if (od.div_frames > 18 && od.min_dist < 16.0) od.direct_mode = true;
+            if (od.consistentAM() && od.div_frames > 14 && od.min_dist < 18.0) od.direct_mode = true;
+            if (od.no_progress > 240 && dist_real < 30.0 && spd > 1.0) od.direct_mode = true;
             if (od.direct_mode)
                 std::cout << "VTPAngle: ORBIT detected d=" << dist_real << std::endl;
         }
         if (od.direct_mode) {
             virtual_x = target_x; virtual_y = target_y;
             dx_virt = target_x - curr_x; dy_virt = target_y - curr_y;
-            abs_max_speed = fmin(abs_max_speed, 45.0);
+            abs_max_speed = fmin(abs_max_speed, 28.0);
             IVal = 0;
             if (dist_real < 1.5) { od.reset(); od.min_dist = dist_real; }
         }
@@ -706,6 +795,9 @@ void driveToPointVTPAngle(
         // ── STEERING AUTHORITY LIMIT ──
         if (!heading_phase) {
             double max_corr_a = vtpClamp(dist_real * 3.0, 3.0, fabs(Correction));
+            if (fabs(angle_error) > 60.0) {
+                max_corr_a = fmax(max_corr_a, 45.0);
+            }
             Correction = vtpClamp(Correction, -max_corr_a, max_corr_a);
         }
         if (dist_real < 3.0 && !heading_phase) {
@@ -715,19 +807,38 @@ void driveToPointVTPAngle(
         }
         
         // ── ANGULAR VELOCITY LIMITER ──
-        if (dist_real < cfg.decel_distance * 2.0 && fabs(omega) > 90.0 && !heading_phase) {
-            double excess = omega - copysign(90.0, omega);
+        if (dist_real < cfg.decel_distance * 2.5 && fabs(omega) > 60.0 && !heading_phase) {
+            double excess = omega - copysign(60.0, omega);
             if (Correction * omega > 0) {
-                double omega_scale = vtpClamp(90.0 / fabs(omega), 0.3, 1.0);
+                double omega_scale = vtpClamp(60.0 / fabs(omega), 0.15, 1.0);
                 Correction *= omega_scale;
             }
-            Correction -= 0.15 * excess;
+            Correction -= 0.35 * excess;
         }
         
         // Speed
         double speed_ratio = vtpClamp(dist_real / cfg.decel_distance, 0.0, 1.0);
         double base_speed = final_decel_speed + (abs_max_speed - final_decel_speed) * speed_ratio;
-        if (dist_real > 3.0 && base_speed < cfg.min_speed) base_speed = cfg.min_speed;
+        
+        // Heading gate in translate phase: suppress forward speed at high angle
+        // error so the robot pivots into line before committing to the run.
+        if (!heading_phase) {
+            double heading_gate = vtpClamp((cos(vtpDegToRad(angle_error)) + 1.0) * 0.5, 0.10, 1.0);
+            // Apply linear heading gate modulation to preserve momentum while turning.
+            base_speed *= heading_gate;
+        }
+        if (!heading_phase && dist_real < cfg.decel_distance * 2.5 && fabs(omega) > 100.0) {
+            double omega_gate = vtpClamp(100.0 / fabs(omega), 0.20, 1.0);
+            base_speed *= omega_gate;
+        }
+        // Tight threshold: apply caps only in final ~19" approach.
+        if (brake && dist_real < cfg.decel_distance * 0.8 && fabs(angle_error) > 35.0) {
+            double pivot_cap = (fabs(angle_error) > 110.0) ? 4.0 :
+                               (fabs(angle_error) > 75.0 ? 8.0 : 12.0);
+            base_speed = fmin(base_speed, pivot_cap);
+        }
+        if (dist_real > 3.0 && fabs(angle_error) < 70.0 && base_speed < cfg.min_speed)
+            base_speed = cfg.min_speed;
         
         // ── DRIFT-ADJUSTED DECELERATION ──
         double drift_frac_a = fabs(drift.v_lateral) / fmax(drift.speed, 1.0);
@@ -772,6 +883,13 @@ void driveToPointVTPAngle(
         left_speed  = vtpClamp(left_speed,  prev_left_out  - max_delta, prev_left_out  + max_delta);
         right_speed = vtpClamp(right_speed, prev_right_out - max_delta, prev_right_out + max_delta);
         prev_left_out = left_speed; prev_right_out = right_speed;
+
+        if (warmup_loops % 10 == 0) {
+            double left_actual = (LF.velocity(percent) + LM.velocity(percent) + LB.velocity(percent)) / 3.0;
+            double right_actual = (RF.velocity(percent) + RM.velocity(percent) + RB.velocity(percent)) / 3.0;
+            printf("VTPA_OUT:cmdL=%.1f cmdR=%.1f velL=%.1f velR=%.1f\n",
+                   left_speed, right_speed, left_actual, right_actual);
+        }
         
         Move(left_speed, right_speed);
         
@@ -780,6 +898,14 @@ void driveToPointVTPAngle(
         if (dist_real < cfg.position_tolerance && heading_error < cfg.heading_tolerance) {
             settle_timer += 10;
             if (settle_timer >= cfg.settle_time_ms) break;
+        } else if (dist_real < fmax(cfg.position_tolerance * 2.0, 3.0)
+                && heading_error < fmax(cfg.heading_tolerance * 3.0, 15.0)
+                && (od.direct_mode || od.no_progress > 20)) {
+            settle_timer += 10;
+            if (settle_timer >= fmax(cfg.settle_time_ms * 0.5, 20.0)) break;
+        } else if (!brake && od.min_dist < fmax(cfg.position_tolerance * 3.0, 7.0)
+                && dist_real > od.min_dist + 2.0) {
+            break;
         } else {
             settle_timer = 0;
         }
@@ -941,10 +1067,13 @@ void curveVTP(
             double am = (curr_x - target_x) * vy_filter.get() - (curr_y - target_y) * vx_filter.get();
             od.pushAM(am > 0 ? 1.0 : -1.0);
         }
-        if (!od.direct_mode && od.grace_frames > 80) {
-            if (od.div_frames > 35 && od.min_dist < 10.0) od.direct_mode = true;
-            if (od.consistentAM() && od.div_frames > 30 && od.min_dist < 10.0) od.direct_mode = true;
-            if (od.no_progress > 400 && dist_to_target < 25.0 && spd > 1.0) od.direct_mode = true;
+        if (!od.direct_mode && od.min_dist < 6.0 && dist_to_target > od.min_dist + 2.0 && spd > 8.0) {
+            od.direct_mode = true;
+        }
+        if (!od.direct_mode && od.grace_frames > 20) {
+            if (od.div_frames > 18 && od.min_dist < 16.0) od.direct_mode = true;
+            if (od.consistentAM() && od.div_frames > 14 && od.min_dist < 18.0) od.direct_mode = true;
+            if (od.no_progress > 240 && dist_to_target < 30.0 && spd > 1.0) od.direct_mode = true;
             if (od.direct_mode)
                 std::cout << "CurveVTP: ORBIT detected d=" << dist_to_target << std::endl;
         }
@@ -955,7 +1084,7 @@ void curveVTP(
         if (od.direct_mode) {
             virtual_carrot_x = target_x;
             virtual_carrot_y = target_y;
-            abs_max_speed = fmin(abs_max_speed, 45.0);
+            abs_max_speed = fmin(abs_max_speed, 28.0);
             IVal = 0;
             if (dist_to_target < 1.5) {
                 od.reset(); od.min_dist = dist_to_target;
@@ -1006,18 +1135,35 @@ void curveVTP(
         double angular_out = PVal + IVal + DVal;
         
         // ── ANGULAR VELOCITY LIMITER ──
-        if (dist_to_target < cfg.decel_distance * 2.0 && fabs(omega) > 90.0) {
-            double excess = omega - copysign(90.0, omega);
+        if (dist_to_target < cfg.decel_distance * 2.5 && fabs(omega) > 60.0) {
+            double excess = omega - copysign(60.0, omega);
             if (angular_out * omega > 0) {
-                double omega_scale = vtpClamp(90.0 / fabs(omega), 0.3, 1.0);
+                double omega_scale = vtpClamp(60.0 / fabs(omega), 0.15, 1.0);
                 angular_out *= omega_scale;
             }
-            angular_out -= 0.15 * excess;
+            angular_out -= 0.35 * excess;
         }
         
         // ── Speed control ──
         double speed_ratio = vtpClamp(dist_to_target / cfg.decel_distance, 0.0, 1.0);
         double lateral_out = final_decel_speed + (abs_max_speed - final_decel_speed) * speed_ratio;
+
+        // Keep curve translation modest while heading error is large.
+        double heading_gate_c = vtpClamp((cos(vtpDegToRad(angle_error)) + 1.0) * 0.5, 0.10, 1.0);
+        // Apply linear heading gate modulation to preserve momentum while turning.
+        lateral_out *= heading_gate_c;
+
+        // Spin gate for curve mode to reduce orbit risk during aggressive turns.
+        if (dist_to_target < cfg.decel_distance * 2.5 && fabs(omega) > 100.0) {
+            double omega_gate = vtpClamp(100.0 / fabs(omega), 0.20, 1.0);
+            lateral_out *= omega_gate;
+        }
+        // Tight threshold: apply caps only in final ~19" approach.
+        if (brake && dist_to_target < cfg.decel_distance * 0.8 && fabs(angle_error) > 35.0) {
+            double pivot_cap = (fabs(angle_error) > 110.0) ? 4.0 :
+                               (fabs(angle_error) > 75.0 ? 8.0 : 12.0);
+            lateral_out = copysign(fmin(fabs(lateral_out), pivot_cap), lateral_out);
+        }
         
         // Predictive braking for curve
         // Lateral drift handled by VTP + horizontal tracking wheel
@@ -1058,6 +1204,13 @@ void curveVTP(
         left_speed  = vtpClamp(left_speed,  prev_left_out  - max_delta, prev_left_out  + max_delta);
         right_speed = vtpClamp(right_speed, prev_right_out - max_delta, prev_right_out + max_delta);
         prev_left_out = left_speed; prev_right_out = right_speed;
+
+        if (warmup_loops % 10 == 0) {
+            double left_actual = (LF.velocity(percent) + LM.velocity(percent) + LB.velocity(percent)) / 3.0;
+            double right_actual = (RF.velocity(percent) + RM.velocity(percent) + RB.velocity(percent)) / 3.0;
+            printf("VTPC_OUT:cmdL=%.1f cmdR=%.1f velL=%.1f velR=%.1f\n",
+                   left_speed, right_speed, left_actual, right_actual);
+        }
         
         Move(left_speed, right_speed);
         
@@ -1067,6 +1220,16 @@ void curveVTP(
             if (dist_to_target < cfg.position_tolerance && heading_err < cfg.heading_tolerance) {
                 settle_timer += 10;
                 if (settle_timer > cfg.settle_time_ms) break;
+            } else if (dist_to_target < fmax(cfg.position_tolerance * 2.0, 3.0)
+                    && heading_err < fmax(cfg.heading_tolerance * 3.0, 15.0)
+                    && (od.direct_mode || od.no_progress > 20)) {
+                settle_timer += 10;
+                if (settle_timer >= fmax(cfg.settle_time_ms * 0.5, 20.0)) break;
+            } else if (od.min_dist < fmax(cfg.position_tolerance * 3.0, 7.0)
+                    && dist_to_target < fmax(cfg.position_tolerance * 4.0, 10.0)
+                    && heading_err < fmax(cfg.heading_tolerance * 4.0, 25.0)
+                    && od.no_progress > 20) {
+                break;
             } else {
                 settle_timer = 0;
             }

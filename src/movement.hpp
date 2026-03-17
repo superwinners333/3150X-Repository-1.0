@@ -41,9 +41,12 @@ extern double odom_right_offset;
 extern void Zeroing(bool dist, bool HDG,bool odom);
 extern ChassisDataSet ChassisUpdate();
 extern ChassisDataSet ChassisUpdate2();
+extern void Move(double left, double right);
 extern void Move(int left, int right);
 extern void BStop();
 extern void CStop();
+
+void RunLever(int val);
 extern void RunRoller(int val);
 extern void RunTopRoller(int val);
 extern void RunIndex(int val);

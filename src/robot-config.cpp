@@ -21,16 +21,18 @@ motor RB = motor(PORT13, ratio6_1, true); // flipped
 
 motor LeftRoller = motor(PORT20, ratio6_1, false);
 motor RightRoller = motor(PORT8, ratio6_1, true); // right
-// motor TopRoller = motor(PORT21, ratio18_1, true);
 
-digital_out Scrapper = digital_out(Brain.ThreeWirePort.G);
-digital_out Lift = digital_out(Brain.ThreeWirePort.B);
-digital_out DoubleP = digital_out(Brain.ThreeWirePort.F);
-digital_out Wings = digital_out(Brain.ThreeWirePort.H);
-digital_out LiftUp = digital_out(Brain.ThreeWirePort.D);
-digital_out LiftDown = digital_out(Brain.ThreeWirePort.E);
+motor lever = motor(PORT15, ratio36_1, true); // lever arm
+
+digital_out Scrapper = digital_out(Brain.ThreeWirePort.G); // scraper
+digital_out Lift = digital_out(Brain.ThreeWirePort.B); // changes scoring modes
+digital_out lock = digital_out(Brain.ThreeWirePort.F); // blocks front of intake
+digital_out Wings = digital_out(Brain.ThreeWirePort.H); // wings
+digital_out LiftUp = digital_out(Brain.ThreeWirePort.D); // old
+digital_out LiftDown = digital_out(Brain.ThreeWirePort.E); // old
 digital_out Funnel = digital_out(Brain.ThreeWirePort.A); // back descore / low goal funnel
 
+rotation levertracker = rotation(PORT14, false); // for lever tracking
 rotation odomx = rotation(PORT3,false); // positive should be to the right
 inertial Gyro = inertial(PORT11);
 distance backSensor = distance(PORT18);

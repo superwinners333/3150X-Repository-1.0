@@ -65,22 +65,22 @@ struct VTPConfig {
 // Default configuration — a good starting point for a 6-motor omni drive
 inline VTPConfig getDefaultVTPConfig() {
     VTPConfig cfg;
-    cfg.drift_gain             = 0.20;
-    cfg.prediction_horizon     = 0.08;
+    cfg.drift_gain             = 0.08;
+    cfg.prediction_horizon     = 0.03;
     cfg.velocity_filter_size   = 8;
     cfg.lateral_friction_coeff = 0.55;
     cfg.cornering_stiffness    = 1.0;
     cfg.lookahead_distance     = 8.0;
     cfg.min_lookahead          = 3.0;
     cfg.curvature_lookahead_scale = 2.0;
-    cfg.decel_distance         = 10.0;
-    cfg.min_speed              = 10.0;
-    cfg.max_slew_rate          = 20.0;
-    cfg.position_tolerance     = 1.0;
-    cfg.heading_tolerance      = 3.0;
-    cfg.settle_time_ms         = 40.0;
-    cfg.anti_orbit_threshold   = 2.0;
-    cfg.decel_rate             = 250.0;
+    cfg.decel_distance         = 24.0;
+    cfg.min_speed              = 4.0;
+    cfg.max_slew_rate          = 8.0;
+    cfg.position_tolerance     = 2.5;
+    cfg.heading_tolerance      = 12.0;
+    cfg.settle_time_ms         = 20.0;
+    cfg.anti_orbit_threshold   = 0.4;
+    cfg.decel_rate             = 150.0;
     return cfg;
 }
 

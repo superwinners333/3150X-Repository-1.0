@@ -45,4 +45,5 @@ extern void curveToPoint(Point target, double speed, double curveP, bool brake);
 extern void straightToPoint(PIDDataSet turnK, PIDDataSet HeadK, PIDDataSet DistK, Point target, double speed, double timeout, bool brake);
 
 extern void boohoo(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, double min, double timeout, bool brake);
+extern void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, double min, double timeout, bool brake);
 #endif

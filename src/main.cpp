@@ -42,6 +42,7 @@ void pre_auton(void) {
   Scrapper.set(false);
   Funnel.set(false);
   Wings.set(false);
+  levertracker.setPosition(0,degrees);
   confirmed = false;
   confirmed2 = false;
   PX=0;
@@ -211,7 +212,6 @@ int ATask(void)
     {
       RunIndex(-60); // 40
       NeutralScore();
-      Funnel.set(true);
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
@@ -221,7 +221,7 @@ int ATask(void)
     else if (Controller1.ButtonL1.pressing()==1) 
     {
       RunIndex(100);
-      NeutralScore();
+      lock.set(true);
     }
     /*
     else if(Controller1.ButtonDown.pressing())
@@ -261,7 +261,7 @@ int PTask(void)
     {
       ButtonPressingX=1;
       XTaskActiv=1;
-      DoubleP.set(true);
+      Lift.set(true);
     }
 
     else if(!Controller1.ButtonX.pressing())ButtonPressingX=0;
@@ -270,30 +270,19 @@ int PTask(void)
     {
       ButtonPressingX=1;
       XTaskActiv=0;
-      DoubleP.set(false);
+      Lift.set(false);
     }
     */
 
 
 
 
-    //----------------------------------------- SCRAPPER
-      // Toggles Scrapper
-    /*
-    if(YTaskActiv==0&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
-    {
-      ButtonPressingY=1;
-      YTaskActiv=1;
-      Scrapper.set(true);
-    }
-    else if(!Controller1.ButtonY.pressing())ButtonPressingY=0;
-    else if(YTaskActiv==1&&Controller1.ButtonY.pressing()&&ButtonPressingY==0)
-    {
-      ButtonPressingY=1;
-      YTaskActiv=0;
-      Scrapper.set(false);
-    }
-    */
+    //----------------------------------------- LEVER
+      // Runs Lever
+    if(Controller1.ButtonY.pressing()) RunLever(-100);
+    else if (Controller1.ButtonX.pressing()) RunLever(100);
+    else RunLever(0);
+
   // -------------------------------------- Scrapper
     // Toggles Scrapper
     if(BTaskActiv == 0) Scrapper.set(false); // turns off scrapper after auton in case if its on

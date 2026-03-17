@@ -20,20 +20,24 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
 
     PIDDataSet TestPara={1.5,0.1,0.15}; // for basic turning
     PIDDataSet CorrectionPara = {1.0,0.0,0.0}; // for basic correction
-    PIDDataSet DrivePara = {1.2, 0.0, 4.0}; 
+    PIDDataSet DrivsePara = {1.2, 0.0, 4.0}; 
 
     PIDDataSet APara = {1.2,0.5,0.26};
-    PIDDataSet BPara = {1.0,0.0,0.0}; // for 
-    PIDDataSet CPara = {1.2,0.0,0.0};
+    PIDDataSet BPara = {2.8,0.0,0.2}; // for 
+    PIDDataSet CPara = {2.0,0.1,0.0};
 
 
     // AccuratePID(MovePara, TurnPara, 1.0, 5.0, 100, 5.0, 0, true);
     globalHeading = 0;
-    Point target = {-12.0,24.0};
-    Point target2 = {0.0,0.0};
+    Point target = {-8.0,70.0};
+    Point target2 = {-16.0,80.0};
+    Point target3 = {-70.0,85.0};
 
-    Point places[4] = {{-6.0,12.0},{-8.0,11.0},{-28.0,0.0},{-29.0,-7.0}}; // creates an array of points
-    double placelength = sizeof(places) / sizeof(places[0]); // gets number of elements in the array
+    Point a1 = {-8,23.0};
+    Point b1 = {-74.0,30.0};
+    Point c1 = {-70.0,85.0};
+    Point d1 = {-16.0,80.0};
+
 
     // startTracking({0.0,0.0});
 
@@ -47,14 +51,32 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
 
     // driveToPointVTP(CPara,-9.8,21.6,100.0,90.0,10000,true);
     // driveToPointVTP(CPara,-32.0,0.0,100.0,90.0,10000,true);
-    driveToPointVTP(CPara,8.0,100.0,100.0,100.0,3,false);
-
     std::cout<<"hi"<<std::endl;
-    driveToPointVTP(CPara,16.0,110.0,100.0,100.0,3,false);
-    wait(200,msec);
-    driveToPointVTP(CPara,90.0,115.0,100.0,100.0,3,false);
-    driveToPointVTP(CPara,90.0,95.0,100.0,40.0,3,true);
+    std::cout<<"hi"<<std::endl;
+    std::cout<<"hi"<<std::endl;
+    std::cout<<"hi"<<std::endl;
+    // driveToPointVTP(CPara,8.0,70.0,100.0,100.0,3,false);
 
+    // // std::cout<<"hi"<<std::endl;
+    // driveToPointVTP(CPara,16.0,80.0,100.0,100.0,3,false);
+    // wait(200,msec);
+    // driveToPointVTP(CPara,70.0,85.0,100.0,90.0,3,false);
+    // driveToPointVTP(CPara,70.0,95.0,100.0,40.0,3,true);
+
+    // globalHeading = 0;
+    // boohoo(BPara, MovePara, a1, 100.0,90.0,5.0,false);
+    // boohoo(BPara, MovePara, b1, 100.0,90.0,5.0,true);
+    // TurnMaxTimePID(TestPara, 180.0, 0.3, false);
+    // MoveTimePID(TestPara, 100.0, 0.7, 0.5, 180.0, false);
+    // MoveTimePID(TestPara, -100.0, 1.2, 0.5, 180.0, false);
+    // CPos = longGoalReset(CPos);
+    // wait(50,msec);
+    // boohoo(BPara, MovePara, c1, -100.0,-90.0,5.0,false);
+
+    boohoo2(BPara, MovePara, a1, 100.0,90.0,5.0,false);
+    boohoo2(BPara, MovePara, b1, 60.0,40.0,5.0,false);
+    boohoo2(BPara, MovePara, c1, 100.0,90.0,5.0,false);
+    boohoo2(BPara, MovePara, d1, 100.0,90.0,5.0,false);
     
     wait(10,sec);
 

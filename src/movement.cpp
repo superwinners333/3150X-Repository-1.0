@@ -86,7 +86,7 @@ ChassisDataSet ChassisUpdate()
 }
 
 
-void Move(int left, int right)
+void Move(double left, double right)
 {
   LF.setMaxTorque(100,percent);
   LM.setMaxTorque(100,percent);
@@ -101,6 +101,11 @@ void Move(int left, int right)
   RF.spin(forward,(double)right/100.0*11,volt);
   RM.spin(forward,(double)right/100.0*11,volt);
   RB.spin(forward,(double)right/100.0*11,volt);
+}
+
+void Move(int left, int right)
+{
+  Move((double)left, (double)right);
 }
 
 void BStop()
@@ -148,6 +153,12 @@ void RunIndex(int val)
   RightRoller.setMaxTorque(100,percent);
   RightRoller.spin(forward,(double)val/100.0*12,volt);
   RightRoller.setBrake(hold);
+}
+
+void RunLever(int val) {
+  lever.setMaxTorque(100,percent);
+  lever.spin(forward,(double)val/100.0*12,volt);
+  lever.setBrake(hold);
 }
 
 // default means that its like that when the code is off
@@ -217,7 +228,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
 
     Correction=PVal+IVal+DVal/0.02; 
 
-    Move(CSpeed+Correction,CSpeed-Correction); 
+    Move(CSpeed-Correction,CSpeed+Correction); 
     PrevE=LGV;
     wait(20, msec);
   }
@@ -259,7 +270,7 @@ void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
 
     Correction=PVal+IVal+DVal/0.02;
 
-    Move(CSpeed+Correction,CSpeed-Correction);
+    Move(CSpeed-Correction,CSpeed+Correction);
     PrevE=LGV;
     wait(20, msec);
   }
@@ -337,7 +348,7 @@ void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHD
 
     Correction=PVal+IVal+DVal/0.02;
 
-    Move(-CSpeed+Correction,-CSpeed-Correction);
+    Move(CSpeed-Correction,CSpeed+Correction);
     PrevE=LGV;
     wait(20, msec);
   }
@@ -384,7 +395,7 @@ void CurveEncoderPID(PIDDataSet KVals, int SpeedL, int SpeedR, double dist,doubl
 
     Correction=PVal+IVal+DVal/0.02; 
 
-    Move(CSpeedL+Correction,CSpeedR-Correction); 
+    Move(CSpeedL-Correction,CSpeedR+Correction); 
     PrevE=LGV;
 
     wait(20, msec);
