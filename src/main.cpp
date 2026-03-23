@@ -198,25 +198,16 @@ int ATask(void)
 {
     while(true)
   {
-    if (Controller1.ButtonDown.pressing()==1)
-    {
-      // MIDDLE GOAL SCORING
-      RunIndex(100); // 60
-      MiddleScore();
-    }
-    else if (DownTaskActiv == 1) {
-      RunIndex(35);
-      MiddleScore();
-    }
-    else if (Controller1.ButtonL2.pressing()==1)
+    if (Controller1.ButtonL2.pressing()==1)
     {
       RunIndex(-60); // 40
-      NeutralScore();
+      lock.set(true);
+      Lift.set(true);
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
       RunIndex(100); 
-      HighScore();
+      lock.set(true);
     }
     else if (Controller1.ButtonL1.pressing()==1) 
     {
@@ -234,7 +225,7 @@ int ATask(void)
     else
     {
       RunIndex(0);
-      NeutralScore();
+      lock.set(true);
     } 
   }
   
@@ -318,28 +309,32 @@ int PTask(void)
 
   // -------------------------------------- WINGS
     // Toggles WINGS
-    // if (DownTaskActiv == 0) Wings.set(true);
-    // if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
-    // {
-    //   ButtonPressingDown=1;
-    //   DownTaskActiv=1;  
-    // }
-    // else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
-    // else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
-    // {
-    //   ButtonPressingDown=1;
-    //   DownTaskActiv=0;
-    // }
-    
-    if(Controller1.ButtonR2.pressing())
+    // if (DownTaskActiv == 0) Lift.set(true);
+    if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
     {
+      Lift.set(false);
       Wings.set(false);
-      // DownTaskActiv = 1;
+      ButtonPressingDown=1;
+      DownTaskActiv=1;  
     }
-    else if(!Controller1.ButtonR2.pressing()) 
-    {
-      Wings.set(true);
-      DownTaskActiv = 0;
+    else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
+    else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0) 
+    { // lift is activated
+      Lift.set(true);
+      ButtonPressingDown=1;
+      DownTaskActiv=0;
+    }
+    
+    if (DownTaskActiv == 1) {
+      if(Controller1.ButtonR2.pressing())
+      {
+        Wings.set(false);
+      }
+      else if(!Controller1.ButtonR2.pressing()) 
+      { 
+        Wings.set(true);
+        // DownTaskActiv = 0;
+      }
     }
 
     if(Controller1.ButtonRight.pressing()) 

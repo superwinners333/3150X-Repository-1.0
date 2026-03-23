@@ -23,7 +23,7 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     PIDDataSet DrivsePara = {1.2, 0.0, 4.0}; 
 
     PIDDataSet APara = {1.2,0.5,0.26};
-    PIDDataSet BPara = {2.8,0.0,0.2}; // for 
+    PIDDataSet BPara = {2.8,0.05,0.2}; // for 
     PIDDataSet CPara = {2.0,0.1,0.0};
 
 
@@ -34,9 +34,14 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     Point target3 = {-70.0,85.0};
 
     Point a1 = {-8,23.0};
-    Point b1 = {-74.0,30.0};
-    Point c1 = {-70.0,85.0};
-    Point d1 = {-16.0,80.0};
+    Point b1 = {-70.0,30.0};
+    Point c1 = {-65.0,65.0};
+    Point d1 = {-16.0,70.0};
+
+    Point r1 = {-2.0,15.0};
+    Point r2 = {-30,-3.4};
+    Point r3 = {-32,17.0};
+    Point r4 = {-26.2,7.6};
 
 
     // startTracking({0.0,0.0});
@@ -73,10 +78,10 @@ void mangoskills() { // NEGATIVE TURNS TO THE LEFT
     // wait(50,msec);
     // boohoo(BPara, MovePara, c1, -100.0,-90.0,5.0,false);
 
-    boohoo2(BPara, MovePara, a1, 100.0,90.0,5.0,false);
-    boohoo2(BPara, MovePara, b1, 60.0,40.0,5.0,false);
-    boohoo2(BPara, MovePara, c1, 100.0,90.0,5.0,false);
-    boohoo2(BPara, MovePara, d1, 100.0,90.0,5.0,false);
+    boohoo2(BPara, MovePara, r1, 95.0,90.0,5.0,false);
+    boohoo2(BPara, MovePara, r2, 100.0,45.0,5.0,false);
+    boohoo2(BPara, MovePara, r3, -80,-20.0,5.0,false);
+    boohoo2(BPara, MovePara, r4, 70.0,60.0,5.0,false);
     
     wait(10,sec);
 

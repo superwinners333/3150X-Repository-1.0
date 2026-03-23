@@ -704,6 +704,30 @@ double predictEHeadFromPredictMath(Point previous, Point current, Point target,
   return wrapTo180(predictedEHead);
 }
 
+Point closestPassPoint(double heading, Point current, Point target) {
+    // Convert heading to direction vector (assuming 0° = north, clockwise positive)
+    double headRad = heading * M_PI / 180.0;
+    double dx = sin(headRad);
+    double dy = cos(headRad);
+
+    // Vector from current position to target
+    double vx = target.x - current.x;
+    double vy = target.y - current.y;
+
+    // Project target vector onto heading direction (dot product)
+    // Direction vector is already unit length so no normalization needed
+    double t = vx * dx + vy * dy;
+
+    // Clamp to forward direction only (bot travels straight ahead, not backwards)
+    if (t < 0) t = 0.0;
+
+    Point closest;
+    closest.x = current.x + dx * t;
+    closest.y = current.y + dy * t;
+
+    return closest;
+}
+
 
 void boohoo(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, double min, double timeout, bool brake) {
   ChassisDataSet SensorVals = ChassisUpdate();
@@ -862,7 +886,7 @@ void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, doubl
   double dist = pointDist(CPos, target);
   Brain.Timer.reset(); // resets timer for exiting
 
-  double outputSpeed = 0.0, rawSpeed = 0.0, correction = 0.0, prevTargetHeading = 0.0;
+  double outputSpeed = 0.0, rawSpeed = 0.0, correction = 0.0, prevTargetHeading = 0.0, percent_dist = 100.0;
   double E_dist = 0.0, PrevE_dist = 0.0, P_dist = 0.0, I_dist = 0.0, D_dist = 0.0;
   double E_head = 0.0, PrevE_head = 0.0, P_head = 0.0, I_head = 0.0, D_head = 0.0;
   double dt = 10.0;
@@ -879,14 +903,13 @@ void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, doubl
   Point prevPos = CPos;
   Point predictedpoint;
   double predictedE_head = 0.0;
-  double prevCorrection = 0.0;
 
 
   while (!orbit && !settled && Brain.Timer.value() < timeout) { // maybe try to just stop when dist < x if settled does not work
     SensorVals = ChassisUpdate();
 
     dist = pointDist(CPos, target);
-    double percent_dist = (dist / startdist) * 100.0; // percent of movement done
+    percent_dist = (dist / startdist) * 100.0; // percent of movement done
 
     E_dist = percent_dist;
     P_dist = DistK.kp*E_dist;
@@ -909,6 +932,8 @@ void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, doubl
     outputSpeed += speedChange; // accelerates
 
 
+
+
     cyclecount++;
     if (cyclecount == 3) {
     std::cout << "actual:  " << CPos.x << ", " << CPos.y << "  distance: " << dist << std::endl;
@@ -921,8 +946,9 @@ void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, doubl
     }
 
 
+
+
     // heading PID adjustment calculations
-    predictedE_head = predictEHeadFromPredictMath(prevPos, CPos, target, SensorVals.HDG, (max < 0), dt, outputSpeed, E_head, dist, &predictedpoint);
     targetHeading = pointHeading(CPos, target);
     if (max < 0) targetHeading += 180.0; // for backwards movement
     if (targetHeading > 180) targetHeading -= 360.0;
@@ -931,91 +957,67 @@ void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, doubl
     while (E_head > 180) E_head -= 360;
     while (E_head < -180) E_head += 360;
 
-    double headingBlend = clampDouble(dist / 24.0, 0.15, 0.50); // Less prediction drift
-    double controlE_head = wrapTo180((1.0 - headingBlend) * E_head + headingBlend * predictedE_head);
-    double controlEAbs = fabs(controlE_head);
+    P_head = HeadK.kp*E_head;
+    I_head += HeadK.ki*E_head*(dt/1000.0);
+    D_head = (HeadK.kd*(E_head-PrevE_head)) / (dt/1000.0);
 
-    // Slight error shaping keeps early curve while preserving authority on larger misses.
-    double shapedE_head = 0.0;
-    if (controlEAbs > 0.20) {
-      double shapePower = (controlEAbs > 24.0) ? 1.05 : 0.90;
-      shapedE_head = (controlE_head >= 0.0 ? 1.0 : -1.0) * pow(controlEAbs, shapePower);
-    }
+    double nearDist = 4.0;
+    double farDist = 30.0;
+    double maxScale = 2.0;  // more correction when starting close
+    double minScale = 0.8;  // less correction when starting far
 
-    P_head = HeadK.kp * shapedE_head;
-
-    double iZone = clampDouble(8.0 + (dist * 0.55), 8.0, 32.0);
-    if (controlEAbs <= iZone) I_head += HeadK.ki * controlE_head * (dt / 1000.0);
-    else I_head *= 0.90;
-    I_head = clampDouble(I_head, -35.0, 35.0);
-
-    D_head = (HeadK.kd * (controlE_head - PrevE_head)) / (dt / 1000.0);
-
-    double nearDist = 6.0;
-    double farDist = 24.0;
-    double maxScale = 2.4;  // Strong correction early on
-    double minScale = 0.2;  // Soft correction when arriving
-
-    double t = (dist - nearDist) / (farDist - nearDist);
+    double t = (startdist - nearDist) / (farDist - nearDist);
     t = clampDouble(t, 0.0, 1.0);
-    double baseCorrectionScale = minScale + (maxScale - minScale) * t;
-    double headingScale = clampDouble(controlEAbs / 30.0, 0.80, 1.50);
-    double speedNorm = clampDouble(fabs(outputSpeed) / std::max(1.0, fabs(max)), 0.20, 1.0);
-    double speedScale = clampDouble(0.70 + (0.90 * speedNorm), 0.70, 1.60); // Much stronger scaling with speed
-    double correctionScale = baseCorrectionScale * headingScale * speedScale;
+    double correctionScale = maxScale - (maxScale - minScale) * t;
 
-    double turnFF = 0.0;
-    if (controlEAbs > 5.0) {
-      turnFF = (controlE_head >= 0.0 ? 1.0 : -1.0) * (2.8 + 0.18 * fabs(outputSpeed) + 0.08 * controlEAbs); // Scale up FF significantly based on speed
-    }
+    correction = (P_head + I_head + D_head) * correctionScale; // correction
 
-    double rawCorrection = ((P_head + I_head + D_head) * correctionScale) + turnFF;
-    double correctionBudget = clampDouble((fabs(outputSpeed) * 0.90) + 15.0 + (0.28 * controlEAbs), 20.0, 95.0); // Allow more correction output at high speeds
-    if (dist < 6.0) correctionBudget = std::min(correctionBudget, 20.0); // Severely limit budget near end
 
-    correction = clampDouble(rawCorrection, -correctionBudget, correctionBudget);
+    // double nearDist2 = 5.0;
+    // double farDist2 = 30.0;
+    // double shortScale = 2.8;
+    // double longScale = 1.0;
 
-    double headDeadband = 0.60;
-    if (controlEAbs < headDeadband) correction = 0.0;
+    // double distFactor = clampDouble((startdist - nearDist2) / (farDist2 - nearDist2), 0.0, 1.0);
+    // double maxCorrection = shortScale - (shortScale - longScale) * distFactor;
 
-    double minEffectiveCorrection = clampDouble(2.5 + (0.08 * fabs(outputSpeed)), 2.5, 15.0);
-    if (dist < 8.0) minEffectiveCorrection *= (dist / 8.0); // Don't force turns near the end
+    // // Reduce correction multiplier when heading error is small to prevent oscillation
+    // double smallHeading = 20.0;    // below this E_head, correction starts scaling down
+    // double largeHeading = 20.0;   // above this E_head, full correction applies
+    // double minHeadScale = 0.3;    // minimum scale when E_head is near zero
 
-    if (controlEAbs >= 2.0 && fabs(correction) < minEffectiveCorrection) {
-      double correctionSignSource = (fabs(correction) > 1e-6) ? correction : controlE_head;
-      correction = (correctionSignSource >= 0.0 ? 1.0 : -1.0) * minEffectiveCorrection;
-    }
+    // double headFactor = clampDouble((fabs(E_head) - smallHeading) / (largeHeading - smallHeading), 0.0, 1.0);
+    // double headScale = minHeadScale + (1.0 - minHeadScale) * headFactor;
 
-    double correctionStepBudget = 10.0 + (0.25 * fabs(outputSpeed)); // Allow the correction to ramp up much faster at high speeds
-    correction = clampDouble(correction, prevCorrection - correctionStepBudget, prevCorrection + correctionStepBudget);
+    // maxCorrection *= headScale;
 
-    if (dist < 10.0) {
-      correction *= (dist / 10.0); // Rapidly decay correction near end directly to stop overturning
-    }
+    // double correctionpercent = (percent_dist / 100.0) * maxCorrection;
 
-    // Let the bot rotate harder by lowering minimum forward speed when heading error is large.
-    double minSign = (min >= 0.0 ? 1.0 : -1.0);
-    if (fabs(min) > 1e-6) {
-      double minScaleForTurn = 1.0;
-      if (controlEAbs > 15.0) { // start slowing down earlier for tight turns
-        minScaleForTurn = clampDouble(1.0 - ((controlEAbs - 15.0) / 60.0), 0.40, 1.0); // lower floor more aggressively
-      }
-      double dynamicMinAbs = fabs(min) * minScaleForTurn;
-      if (dist < 8.0) dynamicMinAbs = std::min(dynamicMinAbs, fabs(min) * 0.75);
 
-      if (fabs(outputSpeed) < dynamicMinAbs) outputSpeed = minSign * dynamicMinAbs;
-    }
+    double correctionpercent = (((percent_dist+10.0) / 100.0) * 2.0);
+    if (correctionpercent < 0.8) correctionpercent = 0.8;
+    correction *= (correctionpercent);
 
-    if (controlEAbs > 32.0 && dist > 6.0) outputSpeed *= 0.75; // slow momentum more aggressively if sliding past turn
+    if (dist < 3.0 && correction > 50.0) correction = 50.0; // cap correction at low distances to prevent overshooting
+    else if (dist < 3.0 && correction < -50.0) correction = -50.0;
 
-    // if (fabs(E_head) > 90) outputSpeed = 0.0;
+    if (fabs(E_head) > 90) outputSpeed *= 0.5;
 
-    predictedpoint = predictNextPoint(prevPos, CPos, dt, outputSpeed, controlE_head, dist); // calculates next predicted point
+
+
+    // MOVE THIS TO BELOW THE PEAKDIST UPDATE 
+    predictedpoint = predictNextPoint(prevPos, CPos, dt, outputSpeed, E_head, dist); // calculates next predicted point
     int predicteddist = pointDist(predictedpoint, target);
-    if (peakdist <= predicteddist && fabs(percent_dist) < 80) { // if we are predicted to be moving away from the target, increase correction to try to fix it
-      correction *= 1.5; // if we are predicted to be moving away from the target, increase correction to try to fix it
-      outputSpeed *= 0.1; // slow down to try to fix it
-      predictedpoint = predictNextPoint(prevPos, CPos, dt, outputSpeed, controlE_head, dist); // recalculate predicted point
+    if (peakdist <= predicteddist && fabs(percent_dist) <= 80) { // if we are predicted to be moving away from the target, increase correction to try to fix it
+      double drift = predicteddist - dist; // how far off target we're predicted to go
+      double maxDrift = 10.0;              // drift distance at which we apply max correction scale
+      double minScale = 1.2;              // multiplier for small predicted drift
+      double maxScale = 3.0;              // multiplier for large predicted drift
+
+      double driftRatio = clampDouble(drift / maxDrift, 0.0, 1.0);
+      double driftScale = minScale + (maxScale - minScale) * driftRatio;
+
+      correction *= driftScale;
       orbitcorrection = true;
     }
 
@@ -1023,31 +1025,25 @@ void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, doubl
       peakdist = dist;
       orbittime = 0.0;
     }
-    else if (dist >= peakdist && fabs(percent_dist) < 70) orbittime += dt;
+    else if (dist >= peakdist && fabs(percent_dist) < 70) {
+      orbittime += dt;
+    }
     if (orbittime >= 20.0) orbit = true;
-    
-
-    // if (fabs(E_head) > 90) outputSpeed *= -1.0;
 
     // tells the bot how much to run each side
     if (correction > 90.0) correction = 90.0;
     else if (correction < -90.0) correction = -90.0;
-    // cyclecount2++;
-    // if (cyclecount2 == 3) {
-    //   std::cout << "outputspeed: " << outputSpeed << std::endl;
-    //   cyclecount2 = 0;
-    // }
     Move(outputSpeed-correction,outputSpeed+correction);
 
 
     // exit condition
-    settled = dist <= 1.8;
+    settled = dist <= 1.7;
 
-    PrevE_head = controlE_head; // updates previous headings
+
+    PrevE_head = E_head; // updates previous headings
     PrevE_dist = E_dist;
     prevPos = CPos;
     prevTargetHeading = targetHeading;
-    prevCorrection = correction;
     if (orbit || settled) {
       if (pointDist(predictedpoint, target) > dist) {
         break;
@@ -1059,7 +1055,7 @@ void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, doubl
   if (orbit) {
     std::cout << "ORBIT DETECTED" << std::endl;
   }
-  std::cout << "FINAL: " << "x: " << CPos.x << "  y: " << CPos.y << "  distance: " << dist << "  target heading: " << targetHeading << std::endl;
+  std::cout << "FINAL: " << "x: " << CPos.x << "  y: " << CPos.y << "  distance: " << dist << "  percent dist: " << percent_dist << std::endl;
   std::cout << " " << std::endl;
   std::cout << " " << std::endl;
   if(brake) {
@@ -1067,3 +1063,5 @@ void boohoo2(PIDDataSet HeadK, PIDDataSet DistK, Point target, double max, doubl
     wait(100,msec);}
   else CStop();
 }
+
+

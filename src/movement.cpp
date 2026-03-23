@@ -147,12 +147,15 @@ void CStop()
 
 void RunIndex(int val)
 {
-  LeftRoller.setMaxTorque(100,percent);
-  LeftRoller.spin(forward,(double)val/100.0*12,volt);
-  LeftRoller.setBrake(hold);
-  RightRoller.setMaxTorque(100,percent);
-  RightRoller.spin(forward,(double)val/100.0*12,volt);
-  RightRoller.setBrake(hold);
+  // LeftRoller.setMaxTorque(100,percent);
+  // LeftRoller.spin(forward,(double)val/100.0*12,volt);
+  // LeftRoller.setBrake(hold);
+  // RightRoller.setMaxTorque(100,percent);
+  // RightRoller.spin(forward,(double)val/100.0*12,volt);
+  // RightRoller.setBrake(hold);
+  Roller.setMaxTorque(100,percent);
+  Roller.spin(forward,(double)val/100.0*12,volt);
+  Roller.setBrake(hold);
 }
 
 void RunLever(int val) {
@@ -165,18 +168,35 @@ void RunLever(int val) {
 // its should be in the high or neutral position as default
 void MiddleScore(void)
 {
-  LiftUp.set(false);
-  LiftDown.set(true); // set this to false if its neutral default
+  // LiftUp.set(false);
+  // LiftDown.set(true); // set this to false if its neutral default
 }
 void NeutralScore(void)
 {
-  LiftUp.set(false);
-  LiftDown.set(false); // set this to false if its neutral default
+  // LiftUp.set(false);
+  // LiftDown.set(false); // set this to false if its neutral default
 }
 void HighScore(void)
 {
-  LiftUp.set(true);
-  LiftDown.set(false); // set this to true if its neutral default
+  // LiftUp.set(true);
+  // LiftDown.set(false); // set this to true if its neutral default
+}
+
+double wrapAngle(double angle){
+  while(angle <= -180) angle += 360;
+  while(angle > 180) angle -= 360;
+  return angle;
+}
+
+bool liftUp = false;
+void leverLift(bool up) {
+  if (up) {
+    lift.set(true);
+  }
+  else {
+    lift.set(false);
+  }
+  liftUp = up;
 }
 
 int PrevE;//Error at t-1
@@ -453,121 +473,120 @@ void curvePID(PIDDataSet KVals, int Speed, double radius, double dist, double Ac
   else CStop();
 }
 
+// PIDDataSet TestPara={2,0.1,0.295};
 
-/*
-void AccuratePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake)
-{
-  // Zeroing(true,false);
-  ChassisDataSet SensorVals;
-  SensorVals=ChassisUpdate();
-  double outputSpeed = 0.0;
+/** Moves the robot to a specific point. Negative speed moves backwards
+ * the robot forward. Positive value moves it backward. 
+ * @param KVals the PID constants (use TestPara={2,0.1,0.295})
+ * @param target_x the x coordinate of the target point, in inches
+ * @param target_y the y coordinate of the target point, in inches
+ * @param max_speed the maximum speed to move at, from -100 to 100
+ * @param final_decel_speed the speed to decelerate to when within decel_distance, from 0 to abs(max_speed)
+ * @param timeout_ms the maximum time to spend trying to reach the point, in milliseconds
+ * @param brake Brake at end, or chain into next movement
+ * @param decel_distance the distance from the target at which to start decelerating, in inches (default 8.0)
+ * @param Matchload_distance the distance from the target at which to set the scraper to matchload position (default -1, meaning disabled)
+ * @param depoly_distance the distance from the target at which to set the scraper to deploy position (default -1, meaning disabled)
+ */
 
-  double P_heading=0.0, I_heading=0.0, D_heading=0.0, E_heading=0.0, PrevE_heading=0.0; // heading PID variables
-  double P_dist=0.0, I_dist=0.0, D_dist=0.0, E_dist=0.0, PrevE_dist=0.0; // distance PID variables
+void driveToPoint(PIDDataSet KVals, double target_x, double target_y, double max_speed, double final_decel_speed, double timeout_ms, bool brake, double decel_distance, double Matchload_distance, double depoly_distance) {
 
-  double rawSpeed=0.0, Correction=0.0; // motor input variables
-  double dt = 20.0; // how often the PID error checks loops in ms
+    Brain.Timer.reset();
+    double distance_threshold = 0.1;
+    double settling_zone = 1;
+    double robot_radius = 2.41;
 
-  Brain.Timer.reset(); // resets brain timer for exit
-
-  int settledTime = 200; // exit variable
-
-  // TUNEABLE EXIT VARIABLES
-  double exitError = 1.0;        // how close to target before stopping
-  double exitDerivative = 2.0;   // how still the robot must be
-  int exitTime = 150;              // ms required to be stable
-  // int timeout = 0;               // ms max runtime
-
-  if (timeout <= 0) timeout = 5.0; // creates a default exit time 
-  bool settled = false, timedOut = false;
-
-  double speedSign = Speed / (fabs(Speed));
-
-  double startAvg = SensorVals.Avg;
-  double startL = SensorVals.Left; // gets starting left side encoder movement
-  double startR = SensorVals.Right; // gets starting right side encoder movement
-
-  // ---------------------------------------------------------------
-  // ------------------------ main PID loop ------------------------
-  // ---------------------------------------------------------------
-  while (!settled && !timedOut) {
-    SensorVals = ChassisUpdate(); // gets drivetrain values
+    double PVal = 0, IVal = 0, DVal = 0;
+    double PrevE = 0;
+    double Correction = 0;
     
-    double left_moved = SensorVals.Left - startL; // gets distance that left side moved
-    double right_moved = SensorVals.Right - startR; // gets distance that right side moved
+    // Anti-orbit: Track minimum distance to target
+    double min_raw_distance = 1000000.0; // Initialize with a very large number
 
-    double dist_moved = (left_moved + right_moved) / 2.0; // averages left moved and right moved
-    double percent_dist = (dist_moved / dist) * 100.0;
+    bool moving_forward = (max_speed >= 0);
+    double abs_max_speed = fabs(max_speed); // absolute max speed
+    final_decel_speed = fmin(fabs(final_decel_speed), abs_max_speed); // Ensure final decel speed is not greater than max speed
+    final_decel_speed = fmax(final_decel_speed, 0); // Ensure final decel speed is not negative
 
-    // distance PID calculations
-    E_dist = -(100.0 - percent_dist);
-    P_dist = DistK.kp*E_dist;
-    I_dist += (DistK.ki+(dist/1000.0))*E_dist*(dt/1000.0);
-    D_dist = (DistK.kd*(E_dist-PrevE_dist)) / (dt/1000.0);
+    while (Brain.Timer.value() < timeout_ms) {
+        ChassisDataSet SensorVals = ChassisUpdate();
 
-    // std::cout << D_dist << std::endl;
+        double dx = target_x - CPos.x;
+        double dy = target_y - CPos.y;
+        double raw_distance = sqrt(dx*dx + dy*dy);
+        
+        // Anti-orbit exit condition:
+        // If we are close (e.g. within 15 cm) and distance starts increasing, exit.
+        if (raw_distance < min_raw_distance) {
+          min_raw_distance = raw_distance; // update our closest distance
+        } else if (raw_distance > min_raw_distance + 0.5 && raw_distance < 7) { 
+          std::cout << "Anti-orbit triggered. Exiting drive loop." << std::endl;
+          break; // exits loop if we start moving away from the target after getting close
+        }
 
-    rawSpeed = P_dist + I_dist + D_dist + ((dist/4.3) * (E_dist / fabs(E_dist))); // output speed
+        double speed_factor = 0.05 * abs_max_speed;
+        double distance_factor = fmin(raw_distance / 5.0, 1.0);
+        double effective_momentum = speed_factor * distance_factor;
 
-    if (Speed < 0) rawSpeed = rawSpeed * -1.0;
-    if (fabs(rawSpeed) > fabs(Speed)) { // clamps outputSpeed at max speed
-      if (Speed >= 0 && rawSpeed >= 0) rawSpeed = Speed;
-      else if (Speed < 0 && rawSpeed < 0) rawSpeed = Speed;
+        double distance = fmax(raw_distance - robot_radius + effective_momentum, 0.0); 
+        if (distance <= distance_threshold) break; 
+
+        double target_angle = radToDeg(atan2(dx, dy));
+        if (!moving_forward) target_angle = wrapAngle(target_angle + 180.0); // reverse target angle when moving backwards
+
+        double angle_error = wrapAngle(target_angle - SensorVals.HDG); // error for heading
+
+        if (Matchload_distance >= fabs(distance)) {
+          Scrapper.set(false);
+        }
+        if (depoly_distance >= fabs(distance)) {
+          Scrapper.set(true);
+        }
+        if (distance <= settling_zone) { // If we're close enough, stop correcting heading
+            Correction = 0;
+            PrevE = 0;
+            IVal = 0;
+        } else { // PID calculations for heading correction
+            PVal = KVals.kp * angle_error;
+            IVal= IVal+KVals.ki*angle_error*0.01;
+            DVal = KVals.kd * wrapAngle(angle_error - PrevE);
+            PrevE = angle_error;
+            Correction = PVal + IVal + DVal/0.01;
+        }
+
+
+        double ratio = raw_distance / decel_distance; // ratio of current distance to deceleration distance
+        ratio = fmin(fmax(ratio, 0.0), 1.0); // When outside decel_distance, ratio is 1 (full speed). When at target, ratio is 0 (final_decel_speed).
+
+        double base_speed = final_decel_speed + ((abs_max_speed - final_decel_speed) * ratio); // linear deceleration
+
+        double min_move_speed = final_decel_speed + 5;
+        if (base_speed < min_move_speed) base_speed = min_move_speed; // ensure we don't go too slow until we're very close
+
+        double left_correction_term = moving_forward ? Correction : -Correction; // invert correction when moving backwards
+        double right_correction_term = moving_forward ? -Correction : Correction; // opposite correction for right side
+
+        double left_speed = base_speed + left_correction_term; // add correction to base speed (left side)
+        double right_speed = base_speed + right_correction_term; // add correction to base speed (right side)
+
+        if (!moving_forward) { // invert speeds when moving backwards
+          left_speed *= -1.0;
+          right_speed *= -1.0;
+        }
+
+        double max_req = fmax(fabs(left_speed), fabs(right_speed)); // find the maximum required speed
+        if (max_req > abs_max_speed) { // if the required speed exceeds max, scale both speeds down proportionally
+          left_speed  = (left_speed / max_req) * abs_max_speed;
+          right_speed = (right_speed / max_req) * abs_max_speed;
+        }
+
+        Move(left_speed, right_speed);
+        wait(10, msec);
     }
-
-    double speedChange = rawSpeed - outputSpeed; // gets change in speed
-    if (speedChange > maxAccel) speedChange = maxAccel;
-    if (speedChange < -maxAccel) speedChange = -maxAccel;
-    outputSpeed += speedChange; // accelerates
-
-
-    // heading PID adjustment calculations
-    E_heading = SensorVals.HDG-ABSHDG;
-    if (E_heading > 180) E_heading -= 360;
-    else if (E_heading < -180) E_heading += 360;
-    P_heading = HeadK.kp*E_heading;
-    I_heading += HeadK.ki*E_heading*(dt/1000.0);
-    D_heading = (HeadK.kd*(E_heading-PrevE_heading)) / (dt/1000.0);
-
-    Correction = P_heading + I_heading + D_heading; // correction
-
-
-    // tells the bot how much to run each side
-    Move(outputSpeed+Correction,outputSpeed-Correction);
-    
-    PrevE_heading = E_heading; // updates previous headings
-    PrevE_dist = E_dist;
-
-
-    // distance exit conditions calculations
-    // (dist_moved+0.95336)/(1.01514)
-    bool errorSmall = fabs(dist - dist_moved) <= exitError;
-    bool derivativeSmall = fabs(D_dist) <= exitDerivative;
-
-    if (errorSmall && derivativeSmall) settledTime += dt; // if we are close to the target, start counting
-    else settledTime = 0; // if we start adjusting again, stop counting
-
-
-    // exit condition checks
-    settled = settledTime >= exitTime; 
-    timedOut = Brain.Timer.value() >= timeout;
-
-    std::cout << "Timer: " << Brain.Timer.value() << std::endl;
-    std::cout << "distance: " << dist_moved << std::endl;
-    std::cout << "error: " << E_dist << std::endl;
-    std::cout << "percent: " << percent_dist << std::endl;
-    std::cout << " " << std::endl;
-
-    if (settled || timedOut) break; // if either exit condition is met, exit
-
-    wait(20,msec); // wait to stop constant looping
-  }
-
-  std::cout << "exit" << std::endl;
-  std::cout << "actual: " << SensorVals.backD <<std::endl;
-  if(brake){BStop(); // braking logic
-  wait(200,msec);}
-  else CStop();
+    IVal = 0;
+    if (brake) {
+        BStop();
+        wait(100, msec);
+    }
+    // When chaining (brake=false), don't stop motors — next function takes over
 }
-
-*/

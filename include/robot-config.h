@@ -10,6 +10,7 @@ extern motor RF;
 extern motor RM;
 extern motor LB;
 extern motor RB;
+extern motor Roller;
 extern motor LeftRoller;
 extern motor RightRoller;
 extern motor lever;
