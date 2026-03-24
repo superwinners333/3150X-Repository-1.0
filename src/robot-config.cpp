@@ -16,14 +16,14 @@ motor LM = motor(PORT8, ratio6_1, true);
 motor LB = motor(PORT9, ratio6_1, true); 
 // RIGHT SIDE
 motor RF = motor(PORT18, ratio6_1, false);
-motor RM = motor(PORT12, ratio6_1, false);
-motor RB = motor(PORT15, ratio6_1, false); 
+motor RM = motor(PORT6, ratio6_1, false);
+motor RB = motor(PORT14, ratio6_1, false); 
 
-motor Roller = motor(PORT11, ratio6_1, true); // left
+motor Roller = motor(PORT1, ratio6_1, true); // left
 // motor LeftRoller = motor(PORT20, ratio6_1, false);
 // motor RightRoller = motor(PORT8, ratio6_1, true); // right
 
-motor lever = motor(PORT19, ratio36_1, true); // lever arm
+motor lever = motor(PORT5, ratio36_1, true); // lever arm
 
 digital_out Scrapper = digital_out(Brain.ThreeWirePort.G); // scraper
 digital_out Lift = digital_out(Brain.ThreeWirePort.B); // changes scoring modes
@@ -36,7 +36,7 @@ digital_out Funnel = digital_out(Brain.ThreeWirePort.A); // back descore / low g
 rotation levertracker = rotation(PORT21, false); // for lever tracking
 rotation odomx = rotation(PORT5,false); // positive should be to the right
 inertial Gyro = inertial(PORT6);
-distance backSensor = distance(PORT1);
+distance backSensor = distance(PORT2);
 distance leftSensor = distance(PORT12);
 distance rightSensor = distance(PORT3);
 distance frontSensor = distance(PORT4);
