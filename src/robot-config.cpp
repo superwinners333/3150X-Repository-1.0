@@ -15,8 +15,8 @@ motor LF = motor(PORT7, ratio6_1, true);
 motor LM = motor(PORT8, ratio6_1, true);
 motor LB = motor(PORT9, ratio6_1, true); 
 // RIGHT SIDE
-motor RF = motor(PORT18, ratio6_1, false);
-motor RM = motor(PORT6, ratio6_1, false);
+motor RF = motor(PORT16, ratio6_1, false);
+motor RM = motor(PORT11, ratio6_1, false);
 motor RB = motor(PORT14, ratio6_1, false); 
 
 motor Roller = motor(PORT1, ratio6_1, true); // left
@@ -25,13 +25,14 @@ motor Roller = motor(PORT1, ratio6_1, true); // left
 
 motor lever = motor(PORT5, ratio36_1, true); // lever arm
 
-digital_out Scrapper = digital_out(Brain.ThreeWirePort.G); // scraper
-digital_out Lift = digital_out(Brain.ThreeWirePort.B); // changes scoring modes
-digital_out lock = digital_out(Brain.ThreeWirePort.F); // blocks front of intake
+digital_out Scrapper = digital_out(Brain.ThreeWirePort.D); // scraper
+digital_out Lift = digital_out(Brain.ThreeWirePort.E); // changes scoring modes
+digital_out lock = digital_out(Brain.ThreeWirePort.B); // blocks front of intake
 digital_out Wings = digital_out(Brain.ThreeWirePort.H); // wings
-digital_out LiftUp = digital_out(Brain.ThreeWirePort.D); // old
-digital_out LiftDown = digital_out(Brain.ThreeWirePort.E); // old
+digital_out LiftUp = digital_out(Brain.ThreeWirePort.F); // old
+digital_out LiftDown = digital_out(Brain.ThreeWirePort.G); // old
 digital_out Funnel = digital_out(Brain.ThreeWirePort.A); // back descore / low goal funnel
+// pistake is port C
 
 rotation levertracker = rotation(PORT21, false); // for lever tracking
 rotation odomx = rotation(PORT5,false); // positive should be to the right

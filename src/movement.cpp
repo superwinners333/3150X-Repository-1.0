@@ -191,10 +191,10 @@ double wrapAngle(double angle){
 bool liftUp = false;
 void leverLift(bool up) {
   if (up) {
-    lift.set(true);
+    Lift.set(false);
   }
   else {
-    lift.set(false);
+    Lift.set(true);
   }
   liftUp = up;
 }

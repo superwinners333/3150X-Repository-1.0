@@ -38,10 +38,10 @@ bool SP;
 bool EXIT;
 void pre_auton(void) {
    EXIT=false;
-  NeutralScore();
   Scrapper.set(false);
   Funnel.set(false);
   Wings.set(false);
+  leverLift(true);
   levertracker.setPosition(0,degrees);
   confirmed = false;
   confirmed2 = false;
@@ -205,6 +205,7 @@ int ButtonPressingUp;
 int leverSpeed = 100;
 
 int maxLeverAngle = 125;
+bool lowgoal = false;
 
 int ATask(void)
 {
@@ -213,31 +214,22 @@ int ATask(void)
     if (Controller1.ButtonL2.pressing()==1)
     {
       RunIndex(-75); // 40
-      lock.set(true);
-      leverLift(true);
+      lock.set(false);
     }
     else if (Controller1.ButtonR1.pressing()==1)
     {
       RunIndex(100); 
-      lock.set(true);
+      lock.set(false);
     }
     else if (Controller1.ButtonL1.pressing()==1) 
     {
       RunIndex(100);
-      lock.set(true);
+      lock.set(false);
     }
-    /*
-    else if(Controller1.ButtonDown.pressing())
-    {
-      if (DownTaskActiv == 1) RunIndex(60);
-      else RunIndex(60); // 40
-      MiddleScore();
-    }
-    */
-    else if (!Controller1.ButtonLeft.pressing() && !Controller1.ButtonUp.pressing() && RightTaskActiv == 0)
+    else if (!Controller1.ButtonLeft.pressing() && !Controller1.ButtonUp.pressing() && RightTaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing())
     {
       RunIndex(0);
-      lock.set(true);
+      lock.set(false);
     } 
   }
   
@@ -277,14 +269,26 @@ int PTask(void)
 
     //----------------------------------------- LEVER
       // Runs Lever
-    if(Controller1.ButtonLeft.pressing() && levertracker.angle(degrees) > 3) {
-      RunLever(-100);
-      RunIndex(-100);
-    }
-    else if (Controller1.ButtonUp.pressing() && levertracker.angle(degrees) < maxLeverAngle) {
+    // if(Controller1.ButtonLeft.pressing() && levertracker.angle(degrees) > 3) {
+    //   RunLever(-100);
+    //   RunIndex(-100);
+    // }
+    // else if (Controller1.ButtonUp.pressing() && levertracker.angle(degrees) < maxLeverAngle) {
+    //   RunLever(100);
+    //   RunIndex(100);
+    //   lock.set(true);
+    // }
+    // else RunLever(0);
+
+    if (Controller1.ButtonX.pressing()) {
       RunLever(100);
       RunIndex(100);
-      lock.set(false);
+      lock.set(true);
+    }
+    else if (Controller1.ButtonY.pressing()) {
+      RunLever(-100);
+      // RunIndex(-100);
+      lock.set(true);
     }
     else RunLever(0);
 
@@ -313,45 +317,45 @@ int PTask(void)
       upwards = true;
     }
     if (RightTaskActiv==1) {
-      if (upwards) {
-        if (liftUp) maxLeverAngle = 135;
-        else maxLeverAngle = 115;
-        RunIndex(100);
-        lock.set(false);
-        if (levertracker.angle(degrees) < maxLeverAngle) runLever(leverSpeed);
-        else upwards = false;
-      }
-      else {
-        RunIndex(-100);
-        if (levertracker.angle(degrees) > 3) runLever(-leverSpeed);
-        else RightTaskActiv=0;
-      }
-      if (levertime > 1.0) {
-        RightTaskActiv=0;
-        RunLever(0);
-      }
+      RightTaskActiv = 0;
+      // if (upwards) {
+      //   if (liftUp) maxLeverAngle = 135;
+      //   else maxLeverAngle = 115;
+      //   RunIndex(100);
+      //   lock.set(true);
+      //   if (levertracker.angle(degrees) < maxLeverAngle) RunLever(leverSpeed);
+      //   else upwards = false;
+      // } 
+      // else {
+      //   RunIndex(-100);
+      //   if (levertracker.angle(degrees) > 3) RunLever(-leverSpeed);
+      //   else RightTaskActiv=0;
+      // }
+      // if (levertime > 1.0) {
+      //   RightTaskActiv=0;
+      //   RunLever(0);
+      // }
     }
   
 
-  // -------------------------------------- WINGS
-    // Toggles WINGS
+  // -------------------------------------- lift
+    // Toggles lift
     // if (DownTaskActiv == 0) Lift.set(true);
-    if (ATaskActiv == 1) {
-      if(DownTaskActiv==0&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
-      {
-        if (liftUp) LeverLift(false);
-        else leverLift(true);
-        ButtonPressingDown=1;
-        DownTaskActiv=1;  
+    if (RightTaskActiv == 0) {
+      if (!Controller1.ButtonL2.pressing() && BTaskActiv == 0) {
+        leverLift(liftUp);
+        if(Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
+        {
+          if (liftUp) liftUp = false;
+          else liftUp = true;
+          ButtonPressingDown=1;
+        }
+        else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
+      } 
+      else {
+        Lift.set(false);
       }
-      else if(!Controller1.ButtonDown.pressing())ButtonPressingDown=0;
-      else if(DownTaskActiv==1&&Controller1.ButtonDown.pressing()&&ButtonPressingDown==0) 
-      {
-        if (liftUp) LeverLift(false);
-        else leverLift(true);
-        ButtonPressingDown=1;
-        DownTaskActiv=0;
-      }
+
       if (liftUp) {
         leverSpeed = 100;
         maxLeverAngle = 135;
@@ -360,8 +364,9 @@ int PTask(void)
         leverSpeed = 60;
         maxLeverAngle = 115;
       }
-
     }
+
+
 
     if(Controller1.ButtonR2.pressing())
     {
@@ -373,6 +378,8 @@ int PTask(void)
       // DownTaskActiv = 0;
     }
 
+
+
     if(Controller1.ButtonRight.pressing()) 
     {
       Funnel.set(true);
@@ -381,20 +388,6 @@ int PTask(void)
     {
       Funnel.set(false);
     }
-    
-  // if(UpTaskActiv==0&&Controller1.ButtonUp.pressing()&&ButtonPressingUp==0)
-  //   {
-  //     ButtonPressingUp=1;
-  //     UpTaskActiv=1;
-  //   }
-
-  //   else if(!Controller1.ButtonUp.pressing())ButtonPressingUp=0;
-
-  //   else if(UpTaskActiv==1&&Controller1.ButtonUp.pressing()&&ButtonPressingUp==0)
-  //   {
-  //     ButtonPressingUp=1;
-  //     UpTaskActiv=0;
-  //   }
   }
 
   return 0;
