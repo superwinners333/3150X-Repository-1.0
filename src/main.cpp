@@ -43,6 +43,7 @@ void pre_auton(void) {
   Wings.set(false);
   leverLift(true);
   levertracker.setPosition(0,degrees);
+  levertracker.resetPosition();
   confirmed = false;
   confirmed2 = false;
   PX=0;
@@ -280,17 +281,19 @@ int PTask(void)
     // }
     // else RunLever(0);
 
-    if (Controller1.ButtonX.pressing()) {
-      RunLever(100);
-      RunIndex(100);
-      lock.set(true);
-    }
-    else if (Controller1.ButtonY.pressing()) {
-      RunLever(-100);
-      // RunIndex(-100);
-      lock.set(true);
-    }
-    else RunLever(0);
+    if (RightTaskActiv == 0) {
+      if (Controller1.ButtonX.pressing()) {
+        RunLever(100);
+        RunIndex(100);
+        lock.set(true);
+      }
+      else if (Controller1.ButtonY.pressing()) {
+        RunLever(-100);
+        // RunIndex(-100);
+        lock.set(true);
+      }
+      else RunLever(0);
+    } 
 
   // -------------------------------------- Scrapper
     // Toggles Scrapper
@@ -317,26 +320,28 @@ int PTask(void)
       upwards = true;
     }
     if (RightTaskActiv==1) {
-      RightTaskActiv = 0;
-      // if (upwards) {
-      //   if (liftUp) maxLeverAngle = 135;
-      //   else maxLeverAngle = 115;
-      //   RunIndex(100);
-      //   lock.set(true);
-      //   if (levertracker.angle(degrees) < maxLeverAngle) RunLever(leverSpeed);
-      //   else upwards = false;
-      // } 
-      // else {
-      //   RunIndex(-100);
-      //   if (levertracker.angle(degrees) > 3) RunLever(-leverSpeed);
-      //   else RightTaskActiv=0;
-      // }
-      // if (levertime > 1.0) {
-      //   RightTaskActiv=0;
-      //   RunLever(0);
-      // }
+      // RightTaskActiv = 0;
+      if (upwards) {
+        if (liftUp) maxLeverAngle = 115;
+        else maxLeverAngle = 135;
+        RunIndex(100);
+        lock.set(true);
+        if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
+        else upwards = false;
+        Brain.Screen.clearScreen();
+    Brain.Screen.setCursor(2,2);
+    Brain.Screen.print(levertracker.position(degrees));
+      } 
+      else {
+        RunIndex(-100);
+        if (levertracker.position(degrees) > 3) RunLever(-100);
+        else RightTaskActiv=0;
+      }
+      if (levertime.value() > 1.0) {
+        RightTaskActiv=0;
+        RunLever(0);
+      }
     }
-  
 
   // -------------------------------------- lift
     // Toggles lift
