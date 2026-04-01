@@ -326,18 +326,19 @@ int PTask(void)
         else maxLeverAngle = 135;
         RunIndex(100);
         lock.set(true);
-        if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
+        if (liftUp && levertracker.position(degrees) < 55) RunLever(50); // runs the lever slow to get the blocks in a line
+        else if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
         else upwards = false;
         Brain.Screen.clearScreen();
-    Brain.Screen.setCursor(2,2);
-    Brain.Screen.print(levertracker.position(degrees));
+        // Brain.Screen.setCursor(2,2);
+        // Brain.Screen.print(levertracker.position(degrees));
       } 
       else {
         RunIndex(-100);
         if (levertracker.position(degrees) > 3) RunLever(-100);
         else RightTaskActiv=0;
       }
-      if (levertime.value() > 1.0) {
+      if (levertime.value() > 1.1) {
         RightTaskActiv=0;
         RunLever(0);
       }
