@@ -321,6 +321,8 @@ int PTask(void)
     }
     if (RightTaskActiv==1) {
       // RightTaskActiv = 0;
+      bool wait = false;
+      double exittime = 0;
       if (upwards) {
         if (liftUp) maxLeverAngle = 115;
         else maxLeverAngle = 135;
@@ -328,11 +330,20 @@ int PTask(void)
         lock.set(true);
         if (liftUp && levertracker.position(degrees) < 55) RunLever(50); // runs the lever slow to get the blocks in a line
         else if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
-        else upwards = false;
-        Brain.Screen.clearScreen();
+        else {
+          upwards = false;
+          wait = true;
+          exittime = levertime.value() + 0.1; // time to wait for before exiting
+        }
+        // Brain.Screen.clearScreen();
         // Brain.Screen.setCursor(2,2);
         // Brain.Screen.print(levertracker.position(degrees));
       } 
+      else if (wait) {
+        if (levertime.value() > exittime) { // pauses to let the lever settle
+          wait = false; // unpauses
+        }
+      }
       else {
         RunIndex(-100);
         if (levertracker.position(degrees) > 3) RunLever(-100);
