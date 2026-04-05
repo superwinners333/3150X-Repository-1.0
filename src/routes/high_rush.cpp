@@ -1,5 +1,6 @@
 #include "../movement.hpp"
 #include "../helper_functions.hpp"
+#include "../odom.hpp"
 #include "vex.h"
 #include <iostream>
 //PID Straight and turn arguments:
@@ -11,13 +12,52 @@
 // PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake)
 
 void high_rush() { // NEGATIVE TURNS TO THE LEFT
-    // declare initial conditions
-    PIDDataSet TurnPara={1.5,0.1,0.12};
-    PIDDataSet TestPara={1.5,0.1,0.15};
+  // declare initial conditions
+  PIDDataSet TurnPara={1.5,0.1,0.12};
+  PIDDataSet TestPara={2,0.1,0.3};
+  PIDDataSet DrivePara={2.4,0.12,0.1};
+  PIDDataSet curvePara={1.9,0.1,0.24};
 
-    timer stopwatch;
+  timer stopwatch;
+  // CPos.y = 24.75;
+  // CPos.x = 56.5;
 
-    RunIndex(100);
+  RunIndex(100);
+  driveToPoint(DrivePara, -3, 15, 100, 95, 2, false);
+  
+  Scrapper.set(true);
+  driveToPoint(DrivePara, -39.3, 2, 100, 40, 2.6, false);
+  MoveTimePID(TestPara, 50, 0.9, 0.02, -180, false);
+  CPos.y = -10.0;
+  driveToPoint(DrivePara, -36, 17, -80, -20, 2.6, false);
+  wait(50,msec);
+  leverFull(80);
+  CPos.y = (41.0-24.75);
+  MoveEncoderPID(TurnPara, 100, 1.5, 0.2, 175, false);
+  MoveEncoderPID(TurnPara, 110, 3, 0.3, 130, false); 
+  MoveEncoderPID(TurnPara, 110, 6, 0.2, 90, false); // aggressively curves
+  Wings.set(false); // lowers wings
+
+  MoveEncoderPID(TurnPara, -110, 4.5, 0.4, -100, false); // straightens the bot out 
+
+  MoveEncoderPID(TurnPara, -80, 16, 0.2, 179, false); // backs up to wing
+  wait(150,msec);
+  Move(40,0);
+  wait(100,msec);
+  std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
+  wait(2000,msec);
+
+  int screenheading = Gyro.heading(degrees);
+  Brain.Screen.clearScreen();
+  Brain.Screen.setFont(monoL);
+  Brain.Screen.setPenColor("#808080");
+  Brain.Screen.setCursor(3,10);
+  Brain.Screen.print("HEADING:");
+  Brain.Screen.setCursor(4,10);
+  Brain.Screen.print(screenheading);
+}
+
+/*
     MoveEncoderPID(TurnPara, -100, 10.5, 0.2, -30, false); // goes forward
     Scrapper.set(true);
     CurveEncoderPID(TurnPara, 10, -100, 10, 0.2, 0, false);
@@ -48,13 +88,4 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
     wait(100,msec);
     std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
     wait(2000,msec);
-
-    int screenheading = Gyro.heading(degrees);
-    Brain.Screen.clearScreen();
-    Brain.Screen.setFont(monoL);
-    Brain.Screen.setPenColor("#808080");
-    Brain.Screen.setCursor(3,10);
-    Brain.Screen.print("HEADING:");
-    Brain.Screen.setCursor(4,10);
-    Brain.Screen.print(screenheading);
-}
+    */

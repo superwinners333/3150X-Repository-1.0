@@ -5,6 +5,8 @@
 #include "helper_functions.hpp"
 #include "movement.hpp"
 #include "odom.hpp"
+#include "Odometry.hpp"
+#include "VirtualTargetPursuit.hpp"
 
 #include <iostream>
 #include <vector>
@@ -431,8 +433,58 @@ void CurveEncoderPID(PIDDataSet KVals, int SpeedL, int SpeedR, double dist,doubl
   else CStop();
 }
 
+timer autolevertime;
+void leverFull(int speed) {
+  autolevertime.clear();
+  int levering = 1;
+  bool upwards = true;
+  double exittime = 0;
+  bool waiting = false;
+  int maxLeverAngle;
+  int leverSpeed = 100;
 
+  if (liftUp) {
+    leverSpeed = 100;
+    maxLeverAngle = 135;
+  }
+  else {
+    leverSpeed = 60;
+    maxLeverAngle = 115;
+  }
 
+  while (levering == 1) {
+    if (upwards) {
+      if (liftUp) maxLeverAngle = 115;
+      else maxLeverAngle = 135;
+      RunIndex(100);
+      lock.set(true);
+      if (levertracker.position(degrees) < maxLeverAngle) RunLever(fabs(speed)); // leverspeed
+      else {
+        upwards = false;
+        waiting = true;
+        exittime = autolevertime.value() + 0.3; // time to wait for before exiting
+      }
+    } 
+    else if (waiting) {
+      if (autolevertime.value() > exittime) { // pauses to let the lever settle
+        waiting = false; // unpauses
+      }
+    }
+    else {
+      RunIndex(-100);
+      if (levertracker.position(degrees) > 3) RunLever(-100);
+      else levering=0;
+    }
+    if (autolevertime.value() > 1.2) { // time before assuming the lever has stalled and exiting
+      levering=0;
+      RunLever(0);
+      RunIndex(0);
+    }
+    wait(10,msec);
+  }
+  RunIndex(0);
+  RunLever(0);
+}
 
 double trackwidth = 10.728346;
 void curvePID(PIDDataSet KVals, int Speed, double radius, double dist, double AccT, double ABSHDG, bool brake) {
@@ -490,7 +542,6 @@ void curvePID(PIDDataSet KVals, int Speed, double radius, double dist, double Ac
  */
 
 void driveToPoint(PIDDataSet KVals, double target_x, double target_y, double max_speed, double final_decel_speed, double timeout_ms, bool brake, double decel_distance, double Matchload_distance, double depoly_distance) {
-
     Brain.Timer.reset();
     double distance_threshold = 0.1;
     double settling_zone = 1;
@@ -500,53 +551,125 @@ void driveToPoint(PIDDataSet KVals, double target_x, double target_y, double max
     double PrevE = 0;
     double Correction = 0;
     
-    // Anti-orbit: Track minimum distance to target
-    double min_raw_distance = 1000000.0; // Initialize with a very large number
+    double min_raw_distance = 1000000.0;
+    double max_correction = 1000000.0;
+
+    Point targetpoint = {target_x, target_y};
+  
+    double initial_dist = pointDist(CPos,targetpoint);
+
+    double closest_approach = 999.0;
+    int frames_since_closest = 0;
 
     bool moving_forward = (max_speed >= 0);
-    double abs_max_speed = fabs(max_speed); // absolute max speed
-    final_decel_speed = fmin(fabs(final_decel_speed), abs_max_speed); // Ensure final decel speed is not greater than max speed
-    final_decel_speed = fmax(final_decel_speed, 0); // Ensure final decel speed is not negative
+    int add = moving_forward ? 0 : 180;
+    double abs_max_speed = fabs(max_speed);
+    final_decel_speed = fmin(fabs(final_decel_speed), abs_max_speed);
+    final_decel_speed = fmax(final_decel_speed, 0);
+
+    VTPVelocityFilter vx_filter(8);
+    VTPVelocityFilter vy_filter(8);
+
+    double prev_x = CPos.x, prev_y = CPos.y;
+    double prev_time = Brain.Timer.value();
+    int loop_count = 0;
+
+    double prev_h_tracker_deg = odomx.position(degrees);
+    double prev_heading = ChassisUpdate().HDG;
+    VTPVelocityFilter lat_vel_filter(6);
+
+    // ── Perpendicular line state — NOT static ──
+    bool prev_perpendicular_line = true;
+
+    // global_target_x = target_x;
+    // global_target_y = target_y;
 
     while (Brain.Timer.value() < timeout_ms) {
         ChassisDataSet SensorVals = ChassisUpdate();
+        double curr_x = CPos.x;
+        double curr_y = CPos.y;
+        double curr_time = Brain.Timer.value();
+        double dt = curr_time - prev_time;
+        if (dt < 0.005) dt = 0.005;
 
-        double dx = target_x - CPos.x;
-        double dy = target_y - CPos.y;
+        double dx = target_x - curr_x;
+        double dy = target_y - curr_y;
         double raw_distance = sqrt(dx*dx + dy*dy);
-        
-        // Anti-orbit exit condition:
-        // If we are close (e.g. within 15 cm) and distance starts increasing, exit.
+
+        double raw_vx = (curr_x - prev_x) / dt;
+        double raw_vy = (curr_y - prev_y) / dt;
+        if (fabs(raw_vx) > 100.0) raw_vx = 0.0;
+        if (fabs(raw_vy) > 100.0) raw_vy = 0.0;
+        vx_filter.add(raw_vx);
+        vy_filter.add(raw_vy);
+        double spd = hypot(vx_filter.get(), vy_filter.get());
+
+        double curr_theta = SensorVals.HDG;
+        double omega_deg = wrapAngle(curr_theta - prev_heading) / dt;
+        double lateral_vel = 0.0;
+
+        double curr_h_deg = odomx.position(degrees);
+        double delta_h_deg = curr_h_deg - prev_h_tracker_deg;
+        double delta_h_inches = delta_h_deg * horizontal_tracker_diameter * M_PI / 360.0;
+        double delta_heading_rad = degToRad(omega_deg * dt);
+        double rotation_component = horizontal_tracker_dist_from_center * delta_heading_rad;
+        double pure_lateral = delta_h_inches - rotation_component;
+        lat_vel_filter.add(pure_lateral / dt);
+        lateral_vel = lat_vel_filter.get();
+        prev_h_tracker_deg = curr_h_deg;
+        prev_heading = curr_theta;
+
+        if (raw_distance < closest_approach) {
+            closest_approach = raw_distance;
+            frames_since_closest = 0;
+        } else {
+            frames_since_closest++;
+        }
+
+        double target_angle_raw = radToDeg(atan2(dx, dy));
+        if (!moving_forward)
+            target_angle_raw = wrapAngle(target_angle_raw + 180.0);
+        double raw_angle_error = wrapAngle(target_angle_raw - curr_theta);
+        double abs_raw_ae = fabs(raw_angle_error);
+
+        if (loop_count > 30 && closest_approach < 8.0 &&
+            raw_distance > closest_approach + 1.5 &&
+            abs_raw_ae > 45.0 && frames_since_closest > 5) {
+            std::cout << "Divergence exit raw=" << raw_distance
+                      << " closest=" << closest_approach
+                      << " ae=" << abs_raw_ae << std::endl;
+            break;
+        }
+
         if (raw_distance < min_raw_distance) {
-          min_raw_distance = raw_distance; // update our closest distance
-        } else if (raw_distance > min_raw_distance + 0.5 && raw_distance < 7) { 
-          std::cout << "Anti-orbit triggered. Exiting drive loop." << std::endl;
-          break; // exits loop if we start moving away from the target after getting close
+            min_raw_distance = raw_distance;
+        } else if (raw_distance > min_raw_distance + 0.5 && raw_distance < 7) {
+            std::cout << "Anti-orbit triggered. Exiting drive loop." << std::endl;
+            break;
         }
 
         double speed_factor = 0.05 * abs_max_speed;
         double distance_factor = fmin(raw_distance / 5.0, 1.0);
         double effective_momentum = speed_factor * distance_factor;
 
-        double distance = fmax(raw_distance - robot_radius + effective_momentum, 0.0); 
-        if (distance <= distance_threshold) break; 
+        double distance = fmax(raw_distance - robot_radius + effective_momentum, 0.0);
+        if (distance <= distance_threshold) break;
 
         double target_angle = radToDeg(atan2(dx, dy));
-        if (!moving_forward) target_angle = wrapAngle(target_angle + 180.0); // reverse target angle when moving backwards
+        if (!moving_forward) target_angle = wrapAngle(target_angle + 180.0);
 
-        double angle_error = wrapAngle(target_angle - SensorVals.HDG); // error for heading
-
+        double angle_error = wrapAngle(target_angle - SensorVals.HDG);
         if (Matchload_distance >= fabs(distance)) {
           Scrapper.set(false);
         }
         if (depoly_distance >= fabs(distance)) {
           Scrapper.set(true);
         }
-        if (distance <= settling_zone) { // If we're close enough, stop correcting heading
+        if (distance <= settling_zone) {
             Correction = 0;
             PrevE = 0;
             IVal = 0;
-        } else { // PID calculations for heading correction
+        } else {
             PVal = KVals.kp * angle_error;
             IVal= IVal+KVals.ki*angle_error*0.01;
             DVal = KVals.kd * wrapAngle(angle_error - PrevE);
@@ -554,39 +677,94 @@ void driveToPoint(PIDDataSet KVals, double target_x, double target_y, double max
             Correction = PVal + IVal + DVal/0.01;
         }
 
-
-        double ratio = raw_distance / decel_distance; // ratio of current distance to deceleration distance
-        ratio = fmin(fmax(ratio, 0.0), 1.0); // When outside decel_distance, ratio is 1 (full speed). When at target, ratio is 0 (final_decel_speed).
-
-        double base_speed = final_decel_speed + ((abs_max_speed - final_decel_speed) * ratio); // linear deceleration
-
-        double min_move_speed = final_decel_speed + 5;
-        if (base_speed < min_move_speed) base_speed = min_move_speed; // ensure we don't go too slow until we're very close
-
-        double left_correction_term = moving_forward ? Correction : -Correction; // invert correction when moving backwards
-        double right_correction_term = moving_forward ? -Correction : Correction; // opposite correction for right side
-
-        double left_speed = base_speed + left_correction_term; // add correction to base speed (left side)
-        double right_speed = base_speed + right_correction_term; // add correction to base speed (right side)
-
-        if (!moving_forward) { // invert speeds when moving backwards
-          left_speed *= -1.0;
-          right_speed *= -1.0;
+        if (initial_dist*0.2 < distance) {
+          if (max_correction > fabs(Correction)) {
+            max_correction = fabs(Correction);
+          }
+          if (fabs(Correction) > max_correction) {
+            int signCorrection = (Correction > 0) ? 1 : -1;
+            Correction = signCorrection * max_correction;
+          }
         }
 
-        double max_req = fmax(fabs(left_speed), fabs(right_speed)); // find the maximum required speed
-        if (max_req > abs_max_speed) { // if the required speed exceeds max, scale both speeds down proportionally
-          left_speed  = (left_speed / max_req) * abs_max_speed;
-          right_speed = (right_speed / max_req) * abs_max_speed;
+        double ratio = raw_distance / decel_distance;
+        ratio = fmin(fmax(ratio, 0.0), 1.0);
+
+        double base_speed = final_decel_speed +
+                            ((abs_max_speed - final_decel_speed) * ratio);
+
+        double min_move_speed = final_decel_speed + 5;
+        if (base_speed < min_move_speed) base_speed = min_move_speed;
+
+        double left_correction_term = moving_forward ? Correction : -Correction;
+        double right_correction_term = moving_forward ? -Correction : Correction;
+
+        double left_speed = base_speed + left_correction_term;
+        double right_speed = base_speed + right_correction_term;
+
+        if (!moving_forward) {
+            left_speed *= -1.0;
+            right_speed *= -1.0;
+        }
+
+        double max_req = fmax(fabs(left_speed), fabs(right_speed));
+        if (max_req > abs_max_speed) {
+            left_speed  = (left_speed / max_req) * abs_max_speed;
+            right_speed = (right_speed / max_req) * abs_max_speed;
         }
 
         Move(left_speed, right_speed);
+
+        // ── LATERAL-ERROR LANDING EXIT ──
+        if (raw_distance < 4.0 && spd > 3.0 && loop_count > 15) {
+            double approach_vel_raw =
+                (dx * vx_filter.get() + dy * vy_filter.get()) /
+                fmax(raw_distance, 0.1);
+            double approach_ratio = approach_vel_raw / fmax(spd, 0.1);
+
+            if (approach_ratio > 0.5) {
+                double vx = vx_filter.get();
+                double vy = vy_filter.get();
+                double lateral_error = fabs(dx * vy - dy * vx) / fmax(spd, 0.1);
+
+                double braking_time_est = spd / fmax(60.0, 10.0);
+                double lateral_drift_during_braking = fabs(lateral_vel) * braking_time_est;
+                double predicted_lateral_error = lateral_error + lateral_drift_during_braking;
+
+                if (predicted_lateral_error < 1.5) {
+                    std::cout << "Landing exit raw=" << raw_distance
+                              << " lat_err=" << lateral_error
+                              << " pred_lat=" << predicted_lateral_error
+                              << " approach=" << approach_ratio << std::endl;
+                    break;
+                }
+            }
+        }
+
+        // ── PERPENDICULAR LINE EXIT (not static!) ──
+        bool perpendicular_line =
+            ((curr_y - target_y) *
+                 -cos(degToRad(normalizeTarget(SensorVals.HDG + add))) <=
+             (curr_x - target_x) *
+                     sin(degToRad(normalizeTarget(SensorVals.HDG + add))) +
+                 1.0);
+        if (perpendicular_line && !prev_perpendicular_line) {
+            std::cout << "Perp exit raw=" << raw_distance << std::endl;
+            break;
+        }
+        prev_perpendicular_line = perpendicular_line;
+
+        prev_x = curr_x;
+        prev_y = curr_y;
+        prev_time = curr_time;
+        loop_count++;
         wait(10, msec);
     }
+    // count += 1;
     IVal = 0;
+    // std::cout<<count<< "st movement "<<"X: "<<x_pos<<" Y: "<<y_pos<<std::endl;
     if (brake) {
         BStop();
         wait(100, msec);
     }
-    // When chaining (brake=false), don't stop motors — next function takes over
 }

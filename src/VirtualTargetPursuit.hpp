@@ -91,9 +91,9 @@ class VTPVelocityFilter {
     int max_size;
 public:
     VTPVelocityFilter(int size = 5) : sum(0.0), max_size(size) {}
-    
+
     void reset() { buffer.clear(); sum = 0.0; }
-    
+
     void add(double val) {
         buffer.push_back(val);
         sum += val;
@@ -102,7 +102,7 @@ public:
             buffer.pop_front();
         }
     }
-    
+
     double get() const {
         if (buffer.empty()) return 0.0;
         return sum / (double)buffer.size();

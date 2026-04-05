@@ -56,6 +56,7 @@ extern void HighScore(void);
 
 extern bool liftUp;
 extern void leverLift(bool up);
+extern void leverFull(int speed);
 
 extern int PrevE;
 extern void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double ABSHDG,bool brake);

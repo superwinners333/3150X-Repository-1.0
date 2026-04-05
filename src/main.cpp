@@ -38,6 +38,7 @@ bool SP;
 bool EXIT;
 void pre_auton(void) {
    EXIT=false;
+  odomLift.set(false);
   Scrapper.set(false);
   Funnel.set(false);
   Wings.set(false);
@@ -50,6 +51,10 @@ void pre_auton(void) {
   JX=0;
   AutoSelectorVal=0; // 0 = default
   SP=false;
+
+  double global_target_x = 0;
+  double global_target_y = 0;
+
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   Gyro.calibrate();
@@ -115,7 +120,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 30; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 3; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -178,8 +183,9 @@ int RV;
 int LV;
 
 bool middleActiv = false;
-double turnConst = 2.75/3.25;
+double turnConst = 3.25/3.25;
 int DriveTask(void){
+  odomLift.set(true);
   while(true)
   {
     EXIT=true;
@@ -195,6 +201,7 @@ int V;
 bool TopIntake = false;
 int UpTaskActiv,DownTaskActiv;
 int ButtonPressingRight,RightTaskActiv;
+int ButtonPressingR1,R1TaskActiv;
 int ButtonPressingLeft,LeftTaskActiv;
 int ButtonPressingX,XTaskActiv;
 int ButtonPressingY,YTaskActiv;
@@ -217,17 +224,12 @@ int ATask(void)
       RunIndex(-75); // 40
       lock.set(false);
     }
-    else if (Controller1.ButtonR1.pressing()==1)
-    {
-      RunIndex(100); 
-      lock.set(false);
-    }
     else if (Controller1.ButtonL1.pressing()==1) 
     {
       RunIndex(100);
       lock.set(false);
     }
-    else if (!Controller1.ButtonLeft.pressing() && !Controller1.ButtonUp.pressing() && RightTaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing())
+    else if (!Controller1.ButtonLeft.pressing() && !Controller1.ButtonUp.pressing() && RightTaskActiv == 0 && R1TaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing())
     {
       RunIndex(0);
       lock.set(false);
@@ -269,19 +271,8 @@ int PTask(void)
 
 
     //----------------------------------------- LEVER
-      // Runs Lever
-    // if(Controller1.ButtonLeft.pressing() && levertracker.angle(degrees) > 3) {
-    //   RunLever(-100);
-    //   RunIndex(-100);
-    // }
-    // else if (Controller1.ButtonUp.pressing() && levertracker.angle(degrees) < maxLeverAngle) {
-    //   RunLever(100);
-    //   RunIndex(100);
-    //   lock.set(true);
-    // }
-    // else RunLever(0);
 
-    if (RightTaskActiv == 0) {
+    if (RightTaskActiv == 0 && R1TaskActiv == 0) {
       if (Controller1.ButtonX.pressing()) {
         RunLever(100);
         RunIndex(100);
@@ -313,14 +304,13 @@ int PTask(void)
     }
 
     // -------------------------------------- Double Park
-    // TOGGLES Double Park
-    if(RightTaskActiv==0&&Controller1.ButtonRight.pressing()) {
+    // Activates lever (with acceleration)
+    if(RightTaskActiv==0&&R1TaskActiv==0&&Controller1.ButtonRight.pressing()) {
       RightTaskActiv=1;
       levertime.clear();
       upwards = true;
     }
     if (RightTaskActiv==1) {
-      // RightTaskActiv = 0;
       bool wait = false;
       double exittime = 0;
       if (upwards) {
@@ -328,16 +318,13 @@ int PTask(void)
         else maxLeverAngle = 135;
         RunIndex(100);
         lock.set(true);
-        if (liftUp && levertracker.position(degrees) < 55) RunLever(50); // runs the lever slow to get the blocks in a line
+        if (liftUp && levertracker.position(degrees) < 35) RunLever(50); // runs the lever slow to get the blocks in a line
         else if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
         else {
           upwards = false;
           wait = true;
-          exittime = levertime.value() + 0.1; // time to wait for before exiting
+          exittime = levertime.value() + 0.3; // time to wait for before exiting
         }
-        // Brain.Screen.clearScreen();
-        // Brain.Screen.setCursor(2,2);
-        // Brain.Screen.print(levertracker.position(degrees));
       } 
       else if (wait) {
         if (levertime.value() > exittime) { // pauses to let the lever settle
@@ -349,16 +336,52 @@ int PTask(void)
         if (levertracker.position(degrees) > 3) RunLever(-100);
         else RightTaskActiv=0;
       }
-      if (levertime.value() > 1.1) {
+      if (levertime.value() > 1.2) { // time before assuming the lever has stalled and exiting
         RightTaskActiv=0;
+        RunLever(0);
+      }
+    }
+
+    // Lever with NO acceleration
+    if(RightTaskActiv==0&&R1TaskActiv==0&&Controller1.ButtonR1.pressing()) {
+      R1TaskActiv=1;
+      levertime.clear();
+      upwards = true;
+    }
+    if (R1TaskActiv==1) {
+      bool wait = false;
+      double exittime = 0;
+      if (upwards) {
+        if (liftUp) maxLeverAngle = 115;
+        else maxLeverAngle = 135;
+        RunIndex(100);
+        lock.set(true);
+        if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
+        else {
+          upwards = false;
+          wait = true;
+          exittime = levertime.value() + 0.3; // time to wait for before exiting
+        }
+      } 
+      else if (wait) {
+        if (levertime.value() > exittime) { // pauses to let the lever settle
+          wait = false; // unpauses
+        }
+      }
+      else {
+        RunIndex(-100);
+        if (levertracker.position(degrees) > 3) RunLever(-100);
+        else R1TaskActiv=0;
+      }
+      if (levertime.value() > 1.2) { // time before assuming the lever has stalled and exiting
+        R1TaskActiv=0;
         RunLever(0);
       }
     }
 
   // -------------------------------------- lift
     // Toggles lift
-    // if (DownTaskActiv == 0) Lift.set(true);
-    if (RightTaskActiv == 0) {
+    if (RightTaskActiv == 0 && R1TaskActiv == 0) {
       if (!Controller1.ButtonL2.pressing() && BTaskActiv == 0) {
         leverLift(liftUp);
         if(Controller1.ButtonDown.pressing()&&ButtonPressingDown==0)
@@ -384,27 +407,17 @@ int PTask(void)
     }
 
 
-
-    if(Controller1.ButtonR2.pressing())
-    {
-      Wings.set(false);
-    }
-    else
-    { 
-      Wings.set(true);
-      // DownTaskActiv = 0;
-    }
-
-
-
-    if(Controller1.ButtonRight.pressing()) 
-    {
-      Funnel.set(true);
-    }
-    else if (!Controller1.ButtonRight.pressing() && !Controller1.ButtonL2.pressing()) 
-    {
-      Funnel.set(false);
-    }
+    if (liftUp) {
+      if(Controller1.ButtonR2.pressing())
+      {
+        Wings.set(false);
+      }
+      else
+      { 
+        Wings.set(true);
+      }
+    } 
+    else Wings.set(false);
   }
 
   return 0;

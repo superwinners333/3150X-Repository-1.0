@@ -29,14 +29,15 @@ digital_out Scrapper = digital_out(Brain.ThreeWirePort.D); // scraper
 digital_out Lift = digital_out(Brain.ThreeWirePort.E); // changes scoring modes
 digital_out lock = digital_out(Brain.ThreeWirePort.B); // blocks front of intake
 digital_out Wings = digital_out(Brain.ThreeWirePort.A); // wings
-digital_out LiftUp = digital_out(Brain.ThreeWirePort.F); // old
+digital_out odomLift = digital_out(Brain.ThreeWirePort.F); // lifts odometry wheels up and down
+// pistake is port C
+digital_out LiftUp = digital_out(Brain.ThreeWirePort.H); // old
 digital_out LiftDown = digital_out(Brain.ThreeWirePort.G); // old
 digital_out Funnel = digital_out(Brain.ThreeWirePort.H); // back descore / low goal funnel
-// pistake is port C
 
 rotation levertracker = rotation(PORT17, false); // for lever tracking
-rotation odomx = rotation(PORT5,false); // positive should be to the right
-inertial Gyro = inertial(PORT6);
+rotation odomx = rotation(PORT10,true); // positive should be to the right
+inertial Gyro = inertial(PORT14);
 distance backSensor = distance(PORT2);
 distance leftSensor = distance(PORT12);
 distance rightSensor = distance(PORT3);
@@ -53,8 +54,8 @@ const double wheelToMotorRatio = 36.0/48.0; // make sure one of the numbers is a
 
 
 const double DistanceBetweenWheel = 10.75;
-const double horizontal_tracker_diameter = 2.75;
-const double horizontal_tracker_dist_from_center = 6.417323;
+const double horizontal_tracker_diameter = 1.95;
+const double horizontal_tracker_dist_from_center = 1.25;
 const double wheel_distance_in = (36.0 / 48.0) * 3.3 * M_PI;
 bool heading_correction = true; // Use heading correction when the bot is stationary
 

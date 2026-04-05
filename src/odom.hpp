@@ -20,6 +20,7 @@ extern bool inRangeOf(double range, double target, double check); // checks if t
 
 extern double degToRad(double deg);
 extern double radToDeg(double rad);
+double pointDist(Point a, Point b);
 
 extern void startTracking(Point start); // start tracking odom
 
