@@ -241,6 +241,8 @@ int ATask(void)
 
 timer levertime;
 bool upwards = true;
+double exittime = 0;
+bool waiting = false;
 
 int PTask(void)
 {
@@ -304,15 +306,16 @@ int PTask(void)
     }
 
     // -------------------------------------- Double Park
+
     // Activates lever (with acceleration)
     if(RightTaskActiv==0&&R1TaskActiv==0&&Controller1.ButtonRight.pressing()) {
       RightTaskActiv=1;
       levertime.clear();
       upwards = true;
+      exittime = 0;
+      waiting = false;
     }
     if (RightTaskActiv==1) {
-      bool wait = false;
-      double exittime = 0;
       if (upwards) {
         if (liftUp) maxLeverAngle = 115;
         else maxLeverAngle = 135;
@@ -320,24 +323,29 @@ int PTask(void)
         lock.set(true);
         if (liftUp && levertracker.position(degrees) < 35) RunLever(50); // runs the lever slow to get the blocks in a line
         else if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
-        else {
+        else { // THIS IS THE ACCELERATING CODE
           upwards = false;
-          wait = true;
+          waiting = true;
           exittime = levertime.value() + 0.3; // time to wait for before exiting
         }
       } 
-      else if (wait) {
+      else if (waiting) { // THIS IS THE ACCELERATING CODE
         if (levertime.value() > exittime) { // pauses to let the lever settle
-          wait = false; // unpauses
+          waiting = false; // unpauses
         }
       }
-      else {
+      else { // THIS IS THE ACCELERATING CODE
         RunIndex(-100);
         if (levertracker.position(degrees) > 3) RunLever(-100);
         else RightTaskActiv=0;
       }
-      if (levertime.value() > 1.2) { // time before assuming the lever has stalled and exiting
-        RightTaskActiv=0;
+      // auto exit code to prevent stalling
+      if (levertime.value() > 1.3 && liftUp) { // less time because lever moves faster for long goal
+        R1TaskActiv=0; 
+        RunLever(0);
+      }
+      else if (levertime.value() > 1.6) { // more time cause lever moves slower for middle goal
+        R1TaskActiv=0;
         RunLever(0);
       }
     }
@@ -347,10 +355,10 @@ int PTask(void)
       R1TaskActiv=1;
       levertime.clear();
       upwards = true;
+      exittime = 0;
+      waiting = false;
     }
     if (R1TaskActiv==1) {
-      bool wait = false;
-      double exittime = 0;
       if (upwards) {
         if (liftUp) maxLeverAngle = 115;
         else maxLeverAngle = 135;
@@ -359,21 +367,26 @@ int PTask(void)
         if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
         else {
           upwards = false;
-          wait = true;
+          waiting = true;
           exittime = levertime.value() + 0.3; // time to wait for before exiting
         }
       } 
-      else if (wait) {
+      else if (waiting) {
         if (levertime.value() > exittime) { // pauses to let the lever settle
-          wait = false; // unpauses
+          waiting = false; // unpauses
         }
       }
       else {
         RunIndex(-100);
         if (levertracker.position(degrees) > 3) RunLever(-100);
-        else R1TaskActiv=0;
+        else R1TaskActiv = 0;
       }
-      if (levertime.value() > 1.2) { // time before assuming the lever has stalled and exiting
+      // auto exit code to prevent stalling
+      if (levertime.value() > 1.3 && liftUp) { // less time because lever moves faster for long goal
+        R1TaskActiv=0; 
+        RunLever(0);
+      }
+      else if (levertime.value() > 1.6) { // more time cause lever moves slower for middle goal
         R1TaskActiv=0;
         RunLever(0);
       }
@@ -401,7 +414,7 @@ int PTask(void)
         maxLeverAngle = 135;
       }
       else {
-        leverSpeed = 60;
+        leverSpeed = 65;
         maxLeverAngle = 115;
       }
     }

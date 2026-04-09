@@ -26,7 +26,7 @@ motor Roller = motor(PORT1, ratio6_1, true); // left
 motor lever = motor(PORT5, ratio36_1, true); // lever arm
 
 digital_out Scrapper = digital_out(Brain.ThreeWirePort.D); // scraper
-digital_out Lift = digital_out(Brain.ThreeWirePort.E); // changes scoring modes
+digital_out Lift = digital_out(Brain.ThreeWirePort.G); // changes scoring modes
 digital_out lock = digital_out(Brain.ThreeWirePort.B); // blocks front of intake
 digital_out Wings = digital_out(Brain.ThreeWirePort.A); // wings
 digital_out odomLift = digital_out(Brain.ThreeWirePort.F); // lifts odometry wheels up and down
