@@ -55,7 +55,7 @@ const double wheelToMotorRatio = 36.0/48.0; // make sure one of the numbers is a
 
 const double DistanceBetweenWheel = 10.75;
 const double horizontal_tracker_diameter = 1.95;
-const double horizontal_tracker_dist_from_center = 1.25;
+const double horizontal_tracker_dist_from_center = 1.0;
 const double wheel_distance_in = (36.0 / 48.0) * 3.3 * M_PI;
 bool heading_correction = true; // Use heading correction when the bot is stationary
 

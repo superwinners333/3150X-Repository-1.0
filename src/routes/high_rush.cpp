@@ -23,24 +23,33 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
   // CPos.x = 56.5;
 
   RunIndex(100);
+  RunLever(-100);
   driveToPoint(DrivePara, -3, 15, 100, 95, 2, false);
-  
+  levertracker.setPosition(0,degrees);
+  RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, -39.3, 2, 100, 40, 2.6, false);
-  MoveTimePID(TestPara, 50, 0.9, 0.02, -180, false);
+  driveToPoint(DrivePara, -33.3, 9, 85, 50, 2.6, false, 5.0);
+  // wait(100,msec);
+  // std::cout<< CPos.x <<std::endl;
+  MoveTimePID(TestPara, 55, 1.2, 0.02, -180, false);
   CPos.y = -10.0;
-  driveToPoint(DrivePara, -36, 17, -80, -20, 2.6, false);
+  driveToPoint(DrivePara, -35.5, 15, -80, -20, 2.6, true);
   wait(50,msec);
+  Move(-40,-40);
   leverFull(80);
+  Move(0,0);
+  wait(50,msec);
   CPos.y = (41.0-24.75);
-  MoveEncoderPID(TurnPara, 100, 1.5, 0.2, 175, false);
-  MoveEncoderPID(TurnPara, 110, 3, 0.3, 130, false); 
-  MoveEncoderPID(TurnPara, 110, 6, 0.2, 90, false); // aggressively curves
+  CPos.x = (23.0-56.5);
+  wait(50,msec);
+  // driveToPoint(DrivePara, -28, 10, -80, -20, 2.6, false);
+  MoveEncoderPID(TurnPara, 100, 2, 0.2, 160, false);
+  MoveEncoderPID(TurnPara, 110, 9, 0.3, 90, false); 
   Wings.set(false); // lowers wings
 
-  MoveEncoderPID(TurnPara, -110, 4.5, 0.4, -100, false); // straightens the bot out 
+  TurnMaxTimePID(TurnPara, -180, 0.2, false); // turns to matchload
 
-  MoveEncoderPID(TurnPara, -80, 16, 0.2, 179, false); // backs up to wing
+  MoveEncoderPID(TurnPara, -80, 17, 0.2, 179, false); // backs up to wing
   wait(150,msec);
   Move(40,0);
   wait(100,msec);

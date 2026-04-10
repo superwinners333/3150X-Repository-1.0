@@ -258,7 +258,7 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
     BStop();
     wait(120,msec);
   }
-  else CStop();
+  // else CStop();
 }
 
 /** Moves the robot forward or backward. Negative speed moves
