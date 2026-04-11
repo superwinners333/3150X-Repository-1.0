@@ -37,7 +37,7 @@ digital_out Funnel = digital_out(Brain.ThreeWirePort.H); // back descore / low g
 
 rotation levertracker = rotation(PORT17, false); // for lever tracking
 rotation odomx = rotation(PORT10,true); // positive should be to the right
-inertial Gyro = inertial(PORT14);
+inertial Gyro = inertial(PORT3);
 distance backSensor = distance(PORT2);
 distance leftSensor = distance(PORT12);
 distance rightSensor = distance(PORT3);

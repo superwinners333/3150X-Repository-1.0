@@ -214,7 +214,7 @@ int PrevE;//Error at t-1
  */
 void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double ABSHDG,bool brake){
   double CSpeed=0;
-  Zeroing(true,false,true);
+  Zeroing(true,false,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
