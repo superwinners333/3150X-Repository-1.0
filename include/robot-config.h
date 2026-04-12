@@ -25,6 +25,7 @@ extern inertial Gyro;
 extern digital_out Lift;
 extern digital_out Funnel;
 extern digital_out odomLift;
+extern digital_out Pistake;
 
 extern rotation levertracker;
 extern rotation odomx;

@@ -30,9 +30,10 @@ digital_out Lift = digital_out(Brain.ThreeWirePort.G); // changes scoring modes
 digital_out lock = digital_out(Brain.ThreeWirePort.B); // blocks front of intake
 digital_out Wings = digital_out(Brain.ThreeWirePort.A); // wings
 digital_out odomLift = digital_out(Brain.ThreeWirePort.F); // lifts odometry wheels up and down
-// pistake is port C
+digital_out Pistake = digital_out(Brain.ThreeWirePort.C); // piston for intake, used for low goal scoring
+
 digital_out LiftUp = digital_out(Brain.ThreeWirePort.H); // old
-digital_out LiftDown = digital_out(Brain.ThreeWirePort.G); // old
+digital_out LiftDown = digital_out(Brain.ThreeWirePort.H); // old
 digital_out Funnel = digital_out(Brain.ThreeWirePort.H); // back descore / low goal funnel
 
 rotation levertracker = rotation(PORT17, false); // for lever tracking
@@ -43,7 +44,7 @@ distance leftSensor = distance(PORT12);
 distance rightSensor = distance(PORT3);
 distance frontSensor = distance(PORT4);
 
-bumper jumpbutton = bumper(Brain.ThreeWirePort.C);
+bumper jumpbutton = bumper(Brain.ThreeWirePort.H);
 
 
 // Important variables
