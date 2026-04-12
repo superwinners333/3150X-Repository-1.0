@@ -1,6 +1,7 @@
 #include "../movement.hpp"
 #include "../helper_functions.hpp"
 #include "../odom.hpp"
+#include "../Odometry.hpp"
 #include "vex.h"
 #include <iostream>
 //PID Straight and turn arguments:
@@ -19,8 +20,8 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
   PIDDataSet curvePara={1.9,0.1,0.24};
 
   timer stopwatch;
-  // CPos.y = 24.75;
-  // CPos.x = 56.5;
+  ORIGIN_Y = 24.75;
+  ORIGIN_X = 56.5;
 
   RunIndex(100);
   RunLever(-100);
@@ -28,23 +29,24 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, -33.3, 9, 85, 50, 2.6, false, 5.0);
+  driveToPoint(DrivePara, -30, 9, 75, 40, 2.6, false, 5.0);
   // wait(100,msec);
   // std::cout<< CPos.x <<std::endl;
   MoveTimePID(TestPara, 55, 1.2, 0.02, -180, false);
   CPos.y = -10.0;
-  driveToPoint(DrivePara, -35.5, 15, -80, -20, 2.6, true);
-  wait(50,msec);
+  driveToPoint(DrivePara, -35.5, 15, -80, -20, 2.6, false);
   Move(-40,-40);
-  leverFull(80);
+  wait(50,msec);
+  leverFull(100);
   Move(0,0);
   wait(50,msec);
   CPos.y = (41.0-24.75);
   CPos.x = (23.0-56.5);
   wait(50,msec);
-  // driveToPoint(DrivePara, -28, 10, -80, -20, 2.6, false);
-  MoveEncoderPID(TurnPara, 100, 2, 0.2, 160, false);
-  MoveEncoderPID(TurnPara, 110, 9, 0.3, 90, false); 
+  // driveToPoint(DrivePara, -24, 10, 80, 20, 2.6, false);
+  MoveEncoderPID(TurnPara, 100, 4, 0.2, 160, false);
+  TurnMaxTimePID(TurnPara, -150, 0.2, false);
+  MoveEncoderPID(TurnPara, -100, 9, 0.3, -150, false); 
   Wings.set(false); // lowers wings
 
   TurnMaxTimePID(TurnPara, -180, 0.2, false); // turns to matchload

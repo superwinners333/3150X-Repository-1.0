@@ -120,8 +120,8 @@ void OdomWithX() {
 // ===============================
 double FRONT_X = 0.0,  FRONT_Y = 6.0;
 double BACK_X  = -4.5,  BACK_Y  = -4.5;
-double LEFT_X  = -4.5, LEFT_Y  = 1.5;
-double RIGHT_X =  4.5, RIGHT_Y = 1.5;
+double LEFT_X  = -3.5, LEFT_Y  = 3.0;
+double RIGHT_X =  3.5, RIGHT_Y = 1.5;
 
 double ORIGIN_X = 0.0; 
 double ORIGIN_Y = 0.0;
