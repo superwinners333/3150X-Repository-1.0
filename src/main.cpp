@@ -110,7 +110,7 @@ while(!confirmed2 && !EXIT) // waits for auto selection
 // determines which auto to run and creates confirm menu
 AutonLogic(); 
 // wait(5,sec);
-drawLogo();
+// drawLogo();
 
 // flappybird();
 
