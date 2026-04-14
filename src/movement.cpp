@@ -270,7 +270,6 @@ void MoveEncoderPID(PIDDataSet KVals, int Speed, double dist,double AccT, double
  */
 void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
   double CSpeed=0;
-  // Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -304,7 +303,6 @@ void TurnMaxTimePID(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
 
 void MaxTimePIDTurnOneSide(PIDDataSet KVals,double DeltaAngle,double TE, bool brake){
   double CSpeed=0;
-  // Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -342,7 +340,6 @@ if(RV>=0)RV=0;
 
 void MoveTimePID(PIDDataSet KVals, int Speed, double TE,double AccT,double ABSHDG, bool brake) {
   double CSpeed=0;
-  // Zeroing(true,false);
   ChassisDataSet SensorVals;
   SensorVals=ChassisUpdate();
   double PVal=0;
@@ -462,7 +459,7 @@ void leverFull(int speed) {
       else {
         upwards = false;
         waiting = true;
-        exittime = autolevertime.value() + 0.3; // time to wait for before exiting
+        exittime = autolevertime.value() + 0.0; // time to wait for before exiting
       }
     } 
     else if (waiting) {
@@ -472,8 +469,9 @@ void leverFull(int speed) {
     }
     else {
       RunIndex(-100);
-      if (levertracker.position(degrees) > 3) RunLever(-100);
-      else levering=0;
+      // if (levertracker.position(degrees) > 3) RunLever(-100);
+      // else levering=0;
+      levering = 0;
     }
     if (autolevertime.value() > 1.2) { // time before assuming the lever has stalled and exiting
       levering=0;
@@ -482,6 +480,75 @@ void leverFull(int speed) {
     }
     wait(10,msec);
   }
+  RunIndex(0);
+  RunLever(0);
+}
+
+void leverHalf(int speed) {
+  autolevertime.clear();
+  int levering = 1;
+  bool upwards = true;
+  double exittime = 0;
+  bool waiting = false;
+  int maxLeverAngle;
+  int leverSpeed = 100;
+
+  if (liftUp) {
+    leverSpeed = 100;
+    maxLeverAngle = 135;
+  }
+  else {
+    leverSpeed = 60;
+    maxLeverAngle = 115;
+  }
+
+  while (levering == 1) {
+    if (upwards) {
+      if (liftUp) maxLeverAngle = 58;
+      else maxLeverAngle = 68;
+      RunIndex(100);
+      lock.set(true);
+      if (levertracker.position(degrees) < maxLeverAngle) RunLever(fabs(speed)); // leverspeed
+      else {
+        upwards = false;
+        waiting = true;
+        exittime = autolevertime.value() + 0.0; // time to wait for before exiting
+      }
+    } 
+    else if (waiting) {
+      if (autolevertime.value() > exittime) { // pauses to let the lever settle
+        waiting = false; // unpauses
+      }
+    }
+    else {
+      RunIndex(-100);
+      // if (levertracker.position(degrees) > 3) RunLever(-100);
+      // else levering=0;
+      levering = 0;
+    }
+    if (autolevertime.value() > 1.2) { // time before assuming the lever has stalled and exiting
+      levering=0;
+      RunLever(0);
+      RunIndex(0);
+    }
+    wait(10,msec);
+  }
+  RunIndex(0);
+  RunLever(0);
+}
+void leverDown() {
+  autolevertime.clear();
+  int levering = 1;
+  RunIndex(-100);
+  RunLever(-100);
+  while (levering == 1) {
+    if (autolevertime.value() > 0.5 || levertracker.position(degrees) < 3) { // time before assuming the lever has stalled and exiting
+      levering=0;
+      RunLever(0);
+      RunIndex(0);
+    }
+    wait(10,msec);
+  } 
   RunIndex(0);
   RunLever(0);
 }

@@ -29,32 +29,38 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, -30, 9, 75, 40, 2.6, false, 5.0);
+  driveToPoint(DrivePara, -34.5, 9, 80, 35, 2.6, true);
   // wait(100,msec);
   // std::cout<< CPos.x <<std::endl;
-  MoveTimePID(TestPara, 55, 1.2, 0.02, -180, false);
+  MoveTimePID(TestPara, 40, 1.3, 0.02, -180, false);
   CPos.y = -10.0;
-  driveToPoint(DrivePara, -35.5, 15, -80, -20, 2.6, false);
+  driveToPoint(DrivePara, -34.6, 15, -80, -40, 2.6, false);
+  MoveTimePID(TestPara, 50, 0.15, 0.02, -180, false);
+  MoveTimePID(TestPara, -60, 0.1, 0.02, -180, false);
   Move(-40,-40);
-  wait(50,msec);
-  leverFull(100);
+  wait(100,msec);
+  leverFull(80);
   Move(0,0);
   wait(50,msec);
   CPos.y = (41.0-24.75);
   CPos.x = (23.0-56.5);
   wait(50,msec);
   // driveToPoint(DrivePara, -24, 10, 80, 20, 2.6, false);
-  MoveEncoderPID(TurnPara, 100, 4, 0.2, 160, false);
+  MoveEncoderPID(TurnPara, 100, 4.5, 0.2, 170, false);
   TurnMaxTimePID(TurnPara, -150, 0.2, false);
-  MoveEncoderPID(TurnPara, -100, 9, 0.3, -150, false); 
+  Scrapper.set(false);
+  MoveEncoderPID(TurnPara, -100, 4, 0.3, -150, false); 
   Wings.set(false); // lowers wings
-
+  RunLever(-100);
+  RunIndex(-100);
   TurnMaxTimePID(TurnPara, -180, 0.2, false); // turns to matchload
-
-  MoveEncoderPID(TurnPara, -80, 17, 0.2, 179, false); // backs up to wing
+  MoveEncoderPID(TurnPara, -80, 12, 0.2, 179, false); // backs up to wing
+  RunLever(0);
+  RunIndex(0);
   wait(150,msec);
-  Move(40,0);
+  Move(40,-5);
   wait(100,msec);
+  // Scrapper.set(true);
   std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
   wait(2000,msec);
 
