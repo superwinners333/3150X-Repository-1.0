@@ -121,7 +121,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 4; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 15; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();

@@ -40,8 +40,8 @@ rotation levertracker = rotation(PORT17, false); // for lever tracking
 rotation odomx = rotation(PORT10,true); // positive should be to the right
 inertial Gyro = inertial(PORT3);
 distance backSensor = distance(PORT2);
-distance leftSensor = distance(PORT12);
-distance rightSensor = distance(PORT3);
+distance leftSensor = distance(PORT13);
+distance rightSensor = distance(PORT18);
 distance frontSensor = distance(PORT4);
 
 bumper jumpbutton = bumper(Brain.ThreeWirePort.H);

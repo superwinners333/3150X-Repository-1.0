@@ -1,6 +1,7 @@
 #include "../movement.hpp"
 #include "../helper_functions.hpp"
 #include "../odom.hpp"
+#include "../Odometry.hpp"
 #include "vex.h"
 #include <iostream>
 #include <vector>
@@ -14,7 +15,7 @@
 
 void solo_awp() { // NEGATIVE TURNS TO THE LEFT
     // declare initial conditions
-    PIDDataSet TurnPara={1.5,0.1,0.12};
+  PIDDataSet TurnPara={1.5,0.1,0.15};
   PIDDataSet TestPara={2,0.1,0.3};
   PIDDataSet DrivePara={2.4,0.12,0.1};
   PIDDataSet curvePara={1.9,0.1,0.24};
@@ -23,68 +24,72 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
   // CPos.y = 24.75;
   // CPos.x = 56.5;
 
+  Gyro.setHeading(-90,degrees);
+  ORIGIN_X = 86.7;
+  ORIGIN_Y = 21.1;
+
   RunIndex(100);
   RunLever(-100);
-  driveToPoint(DrivePara, 0, 20, 100, 95, 2, false);
+  MoveEncoderPID(TurnPara, -100, 13.3, 0.3, -100, false);
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  TurnMaxTimePID(TurnPara, 90, 0.3, false); // turns to matchloader
-  MoveTimePID(TurnPara, 50, 1.0, 0.2, 90,false); // move into matchloader
-  driveToPoint(DrivePara, -16.5, 32, -70, -40, 2.6, true); // go into long goal
+  TurnMaxTimePID(TurnPara, 180, 0.2, false); // turns to matchloader
+  MoveTimePID(TurnPara, 45, 1.02, 0.2, 180,false); // move into matchloader
+  OdomReset(false,false,true,true);
+  driveToPoint(DrivePara, 30.3, 16.5, -70, -40, 2.6, true); // go into long goal
+  std::cout<< "CPos.y: " <<CPos.y<<std::endl;
   Move(-40,-40);
-  leverFull(100);
-  Move(0,0);
-  CPos.x = -18.0;
-  std::cout<< "CPos.x: " <<CPos.x<<std::endl;
-  Scrapper.set(false);
-  RunIndex(100);
-  MoveEncoderPID(TurnPara, 60, 0.2, 0.1, 90,false); // move out of long goal
-  TurnMaxTimePID(TurnPara, -155, 0.25, false); // turn to next 3 blocks
-  MoveEncoderPID(TurnPara, 70, 24, 0.5, -155,false); // move to next 3 blocks
-  TurnMaxTimePID(TestPara, -180, 0.25, false); // turn to next 3 blocks
-  driveToPoint(DrivePara, -20, -31.5, 100, 90, 2.6, true);
-  std::cout<< "CPos.x: " <<CPos.x<<std::endl;
-  Scrapper.set(true);
-  leverLift(false);
-  TurnMaxTimePID(TurnPara, 135, 0.2, false); // turn to middle goal
-  driveToPoint(DrivePara, -28.5, -28, -80, -70, 2.6, true); // go to middle goal
-  wait(300,msec);
-  leverFull(65);
-  leverLift(true);
-  RunIndex(-100);
-  RunLever(-100);
-  driveToPoint(DrivePara, -3, -57, 100, 90, 2.6, true);
-  TurnMaxTimePID(TurnPara, 90, 0.2, false); // turn matchload
-  RunLever(0);
-  RunIndex(100);
-  MoveTimePID(TurnPara, 50, 1.0, 0.2, 90,false); // move into matchloader
-  driveToPoint(DrivePara, -17, -57, -70, -40, 2.6, true);
-  leverFull(100);
-  wait(15,sec);
-
-
-  wait(50,msec);
-  Move(-40,-40);
-  leverFull(80);
-  Move(0,0);
-  wait(50,msec);
-  CPos.y = (41.0-24.75);
-  CPos.x = (23.0-56.5);
-  wait(50,msec);
-  // driveToPoint(DrivePara, -28, 10, -80, -20, 2.6, false);
-  MoveEncoderPID(TurnPara, 100, 2, 0.2, 160, false);
-  MoveEncoderPID(TurnPara, 110, 9, 0.3, 90, false); 
-  Wings.set(false); // lowers wings
-
-  TurnMaxTimePID(TurnPara, -180, 0.2, false); // turns to matchload
-
-  MoveEncoderPID(TurnPara, -80, 17, 0.2, 179, false); // backs up to wing
   wait(150,msec);
-  Move(40,0);
+  leverFull(100);
+  Move(0,0);
+  leverDown();
+  std::cout<< "CPos.x: " <<CPos.x<<std::endl;
+  OdomReset(false,false,true,true);
+  CPos.y = (41.9-ORIGIN_Y); // 41.9-21.1= 20.8
+  // CPos.x = -18.0;
+  Scrapper.set(false);
+  // thread smt = thread(leverDown);
+  MoveEncoderPID(TurnPara, 60, 1.6, 0.1, 180,false); // move out of long goal
+  TurnMaxTimePID(TurnPara, -61, 0.25, false); // turn to next 3 blocks
+  RunIndex(100);
+  MoveEncoderPID(TurnPara, 80, 25.3, 0.4, -61,false); // move to next 3 blocks
+  Scrapper.set(true);
+  TurnMaxTimePID(TestPara, -90, 0.35, true); // turn to next 3 blocks
+  Scrapper.set(false);
+
+  // MoveTimePID(DrivePara, -40, 0.5, 0.3, -68,false); // turns from long goal to middle blocks
+  // TurnMaxTimePID(DrivePara, -68, 0.5, false); // turns to middle blocks
+  std::cout<< "x: " <<CPos.x<<std::endl;
+  std::cout<< "y: " <<CPos.y<<std::endl;
+  leverLift(false);
+  driveToPoint(DrivePara, -35.0, 24.2, 100, 90, 2.6, true);
+  Scrapper.set(true);
+  // MoveEncoderPID(TurnPara, -80, 1, 0.3, -90, true); // move to middle goal
+  TurnMaxTimePID(TestPara, -135, 0.2, false); // turns to middle goal
+  MoveEncoderPID(TurnPara, -80, 10, 0.3, -135, true); // go to middle goal
+  CStop();
+  CStop();
+  leverHalf(60);
+  lock.set(false);
+  leverDown();
+  RunIndex(100);
+  driveToPoint(DrivePara, -59.0, 3.0, 100, 90, 2.6, true);
+  leverLift(true);
   wait(100,msec);
+  TurnMaxTimePID(TurnPara, 180, 0.2, false); // turn to matchload
+  MoveTimePID(TurnPara, 50, 1.05, 0.3, 180,false); // move into matchloader
+  OdomReset(false,false,true,true);
+  driveToPoint(DrivePara, -64.0, 16.5, -70, -40, 2.6, false); // go into long goal
+  Move(-40,-40);
+  wait(200,msec);
+  leverFull(100);
+  RunLever(-100);
+  RunIndex(-100);
   std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
-  wait(2000,msec);
+  // MoveEncoderPID(TurnPara, 100, 30, 0.3, -135, false);
+  
+  wait(15,sec);
 
   int screenheading = Gyro.heading(degrees);
   Brain.Screen.clearScreen();
