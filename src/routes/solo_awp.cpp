@@ -62,19 +62,20 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
   // TurnMaxTimePID(DrivePara, -68, 0.5, false); // turns to middle blocks
   std::cout<< "x: " <<CPos.x<<std::endl;
   std::cout<< "y: " <<CPos.y<<std::endl;
+
   leverLift(false);
-  driveToPoint(DrivePara, -35.0, 24.2, 100, 90, 2.6, true);
+  driveToPoint(DrivePara, -32.5, 24.2, 100, 90, 2.6, true); // go to next 3 blocks
   Scrapper.set(true);
   // MoveEncoderPID(TurnPara, -80, 1, 0.3, -90, true); // move to middle goal
   TurnMaxTimePID(TestPara, -135, 0.2, false); // turns to middle goal
-  MoveEncoderPID(TurnPara, -80, 10, 0.3, -135, true); // go to middle goal
+  MoveEncoderPID(TurnPara, -80, 8.5, 0.3, -135, true); // go to middle goal
   CStop();
   CStop();
   leverHalf(60);
   lock.set(false);
   leverDown();
   RunIndex(100);
-  driveToPoint(DrivePara, -59.0, 3.0, 100, 90, 2.6, true);
+  driveToPoint(DrivePara, -59.0, 3.0, 100, 90, 2.6, true); // go to between long goal and matchload
   leverLift(true);
   wait(100,msec);
   TurnMaxTimePID(TurnPara, 180, 0.2, false); // turn to matchload
