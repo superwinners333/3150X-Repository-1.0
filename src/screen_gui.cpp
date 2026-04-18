@@ -27,7 +27,7 @@ const char* leftAutos[] = {"3+6","9 Block","7 Wing","3+4","4 rush","anti 7","har
 // autoselector values 1,2,3,4,5,6,7,8,9,10,11,12
 // high side
 
-const char* rightAutos[] = {"3+6","9 Block","Solo-AWP"," 7 Wing","3+4","4 rush","push awp"," "," "," "," "," "}; // SAME FOR THIS ONE
+const char* rightAutos[] = {"3+6","9 Block","Solo-AWP"," 7 Wing","3+4","4 rush","push awp","counter"," "," "," "," "}; // SAME FOR THIS ONE
 
 // autoselector values 13,14,15,16,17,18,19,20,21,22,23,24
 // low side

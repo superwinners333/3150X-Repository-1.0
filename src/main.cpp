@@ -141,27 +141,27 @@ void autonomous(void) {
 
   switch (AutoSelectorVal) {
     // high side autos
-    case 1: high_basic(); break;
-    case 2: high_long(); break;
-    case 3: high_rush(); break;
-    case 4: high_middle_wing(); break;
-    case 5: high_four(); break;
-    case 6: high_counter_rush(); break;
-    case 7: high_wingbreak(); break;
-    case 8: high_all(); break;
+    case 1: high_basic(); break; // 6+3
+    case 2: high_long(); break; // 9 block
+    case 3: high_rush(); break; // 7 rush
+    case 4: high_middle_wing(); break; // 4+3
+    case 5: high_four(); break; // four rush
+    case 6: high_counter_rush(); break; // 9 block
+    case 7: high_wingbreak(); break; // wing very hard
+    case 8: high_all(); break; // 7 in mid goal
     case 9: break;
     case 10: break;
     case 11: break;
     case 12: break;
     // low side autos
-    case 13: low_basic(); break;
-    case 14: low_long(); break;
-    case 15: solo_awp(); break;
-    case 16: low_rush(); break;
-    case 17: low_middle_wing(); break;
-    case 18: low_four(); break;
-    case 19: push_awp(); break;
-    case 20: counter_awp(); break;
+    case 13: low_basic(); break; // 6+3
+    case 14: low_long(); break; // 9 block
+    case 15: solo_awp(); break; // regular awp
+    case 16: low_rush(); break; // 7 rush
+    case 17: low_middle_wing(); break; // 3+4
+    case 18: low_four(); break; // four rush
+    case 19: push_awp(); break; // push awp
+    case 20: counter_awp(); break; // counter awp
     case 21: break;
     case 22: break;
     case 23: break;
