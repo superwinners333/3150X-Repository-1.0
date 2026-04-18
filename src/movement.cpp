@@ -190,7 +190,7 @@ double wrapAngle(double angle){
   return angle;
 }
 
-bool liftUp = false;
+bool liftUp = true;
 void leverLift(bool up) {
   if (up) {
     Lift.set(false);
@@ -505,7 +505,7 @@ void leverHalf(int speed) {
   while (levering == 1) {
     if (upwards) {
       if (liftUp) maxLeverAngle = 58;
-      else maxLeverAngle = 68;
+      else maxLeverAngle = 65;
       RunIndex(100);
       lock.set(true);
       if (levertracker.position(degrees) < maxLeverAngle) RunLever(fabs(speed)); // leverspeed
@@ -542,7 +542,7 @@ void leverDown() {
   RunIndex(-100);
   RunLever(-100);
   while (levering == 1) {
-    if (autolevertime.value() > 0.5 || levertracker.position(degrees) < 3) { // time before assuming the lever has stalled and exiting
+    if (autolevertime.value() > 0.7 || levertracker.position(degrees) < 3) { // time before assuming the lever has stalled and exiting
       levering=0;
       RunLever(0);
       RunIndex(0);

@@ -35,27 +35,29 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
   RunLever(0);
   Scrapper.set(true);
   TurnMaxTimePID(TurnPara, 180, 0.2, false); // turns to matchloader
-  MoveTimePID(TurnPara, 45, 1.02, 0.2, 180,false); // move into matchloader
+  MoveTimePID(TurnPara, 45, 1.00, 0.2, 180,false); // move into matchloader
   OdomReset(false,false,true,true);
   driveToPoint(DrivePara, 30.3, 16.5, -70, -40, 2.6, true); // go into long goal
   std::cout<< "CPos.y: " <<CPos.y<<std::endl;
   Move(-40,-40);
-  wait(150,msec);
-  leverFull(100);
+  wait(250,msec);
+  leverFull(90);
   Move(0,0);
   leverDown();
   std::cout<< "CPos.x: " <<CPos.x<<std::endl;
   OdomReset(false,false,true,true);
-  CPos.y = (41.9-ORIGIN_Y); // 41.9-21.1= 20.8
+  CPos.y = (40.0-ORIGIN_Y); // 41.9-21.1= 20.8
   // CPos.x = -18.0;
   Scrapper.set(false);
   // thread smt = thread(leverDown);
   MoveEncoderPID(TurnPara, 60, 1.6, 0.1, 180,false); // move out of long goal
   TurnMaxTimePID(TurnPara, -61, 0.25, false); // turn to next 3 blocks
   RunIndex(100);
-  MoveEncoderPID(TurnPara, 80, 25.3, 0.4, -61,false); // move to next 3 blocks
+  MoveEncoderPID(TurnPara, 80, 25, 0.4, -61,false); // move to next 3 blocks
   Scrapper.set(true);
   TurnMaxTimePID(TestPara, -90, 0.35, true); // turn to next 3 blocks
+  OdomReset(false,false,true,true);
+  wait(100,msec);
   Scrapper.set(false);
 
   // MoveTimePID(DrivePara, -40, 0.5, 0.3, -68,false); // turns from long goal to middle blocks
@@ -64,17 +66,21 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
   std::cout<< "y: " <<CPos.y<<std::endl;
 
   leverLift(false);
-  driveToPoint(DrivePara, -32.5, 24.2, 100, 90, 2.6, true); // go to next 3 blocks
+  driveToPoint(DrivePara, -33.1, 26.0, 80, 60, 2.6, true); // go to next 3 blocks
   Scrapper.set(true);
+
   // MoveEncoderPID(TurnPara, -80, 1, 0.3, -90, true); // move to middle goal
   TurnMaxTimePID(TestPara, -135, 0.2, false); // turns to middle goal
-  MoveEncoderPID(TurnPara, -80, 8.5, 0.3, -135, true); // go to middle goal
+  MoveEncoderPID(TurnPara, -60, 8.0, 0.3, -135, true); // go to middle goal
   CStop();
   CStop();
+  wait(200,msec);
   leverHalf(60);
+  wait(100,msec);
   lock.set(false);
   leverDown();
   RunIndex(100);
+
   driveToPoint(DrivePara, -59.0, 3.0, 100, 90, 2.6, true); // go to between long goal and matchload
   leverLift(true);
   wait(100,msec);
@@ -83,10 +89,11 @@ void solo_awp() { // NEGATIVE TURNS TO THE LEFT
   OdomReset(false,false,true,true);
   driveToPoint(DrivePara, -64.0, 16.5, -70, -40, 2.6, false); // go into long goal
   Move(-40,-40);
-  wait(200,msec);
-  leverFull(100);
+  wait(250,msec);
+  leverFull(90);
   RunLever(-100);
   RunIndex(-100);
+  CStop();
   std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
   // MoveEncoderPID(TurnPara, 100, 30, 0.3, -135, false);
   

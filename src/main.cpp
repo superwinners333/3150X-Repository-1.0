@@ -121,7 +121,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 15; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 20; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -161,7 +161,7 @@ void autonomous(void) {
     case 17: low_middle_wing(); break;
     case 18: low_four(); break;
     case 19: push_awp(); break;
-    case 20: break;
+    case 20: counter_awp(); break;
     case 21: break;
     case 22: break;
     case 23: break;
@@ -220,13 +220,13 @@ int ATask(void)
 {
     while(true)
   {
-    if (Controller1.ButtonL2.pressing()==1)
+    if (Controller1.ButtonL2.pressing()==1 && RightTaskActiv == 0 && R1TaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing())
     {
       Pistake.set(false);
       RunIndex(-75); // 40
       lock.set(false);
     }
-    else if (Controller1.ButtonL1.pressing()==1) 
+    else if (Controller1.ButtonL1.pressing()==1 && RightTaskActiv == 0 && R1TaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing()) 
     {
       Pistake.set(true);
       RunIndex(100);
@@ -312,47 +312,47 @@ int PTask(void)
     // -------------------------------------- Double Park
 
     // Activates lever (with acceleration)
-    if(RightTaskActiv==0&&R1TaskActiv==0&&Controller1.ButtonRight.pressing()) {
-      RightTaskActiv=1;
-      levertime.clear();
-      upwards = true;
-      exittime = 0;
-      waiting = false;
-    }
-    if (RightTaskActiv==1) {
-      if (upwards) {
-        if (liftUp) maxLeverAngle = 115;
-        else maxLeverAngle = 135;
-        RunIndex(100);
-        lock.set(true);
-        if (liftUp && levertracker.position(degrees) < 35) RunLever(50); // runs the lever slow to get the blocks in a line
-        else if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
-        else { // THIS IS THE ACCELERATING CODE
-          upwards = false;
-          waiting = true;
-          exittime = levertime.value() + 0.3; // time to wait for before exiting
-        }
-      } 
-      else if (waiting) { // THIS IS THE ACCELERATING CODE
-        if (levertime.value() > exittime) { // pauses to let the lever settle
-          waiting = false; // unpauses
-        }
-      }
-      else { // THIS IS THE ACCELERATING CODE
-        RunIndex(-100);
-        if (levertracker.position(degrees) > 3) RunLever(-100);
-        else RightTaskActiv=0;
-      }
-      // auto exit code to prevent stalling
-      if (levertime.value() > 1.3 && liftUp) { // less time because lever moves faster for long goal
-        R1TaskActiv=0; 
-        RunLever(0);
-      }
-      else if (levertime.value() > 1.6) { // more time cause lever moves slower for middle goal
-        R1TaskActiv=0;
-        RunLever(0);
-      }
-    }
+    // if(RightTaskActiv==0&&R1TaskActiv==0&&Controller1.ButtonRight.pressing()) {
+    //   RightTaskActiv=1;
+    //   levertime.clear();
+    //   upwards = true;
+    //   exittime = 0;
+    //   waiting = false;
+    // }
+    // if (RightTaskActiv==1) {
+    //   if (upwards) {
+    //     if (liftUp) maxLeverAngle = 115;
+    //     else maxLeverAngle = 135;
+    //     RunIndex(100);
+    //     lock.set(true);
+    //     if (liftUp && levertracker.position(degrees) < 35) RunLever(50); // runs the lever slow to get the blocks in a line
+    //     else if (levertracker.position(degrees) < maxLeverAngle) RunLever(leverSpeed);
+    //     else { // THIS IS THE ACCELERATING CODE
+    //       upwards = false;
+    //       waiting = true;
+    //       exittime = levertime.value() + 0.3; // time to wait for before exiting
+    //     }
+    //   } 
+    //   else if (waiting) { // THIS IS THE ACCELERATING CODE
+    //     if (levertime.value() > exittime) { // pauses to let the lever settle
+    //       waiting = false; // unpauses
+    //     }
+    //   }
+    //   else { // THIS IS THE ACCELERATING CODE
+    //     RunIndex(-100);
+    //     if (levertracker.position(degrees) > 3) RunLever(-100);
+    //     else RightTaskActiv=0;
+    //   }
+    //   // auto exit code to prevent stalling
+    //   if (levertime.value() > 1.3 && liftUp) { // less time because lever moves faster for long goal
+    //     R1TaskActiv=0; 
+    //     RunLever(0);
+    //   }
+    //   else if (levertime.value() > 1.6) { // more time cause lever moves slower for middle goal
+    //     R1TaskActiv=0;
+    //     RunLever(0);
+    //   }
+    // }
 
     // Lever with NO acceleration
     if(RightTaskActiv==0&&R1TaskActiv==0&&Controller1.ButtonR1.pressing()) {
