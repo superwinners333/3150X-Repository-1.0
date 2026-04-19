@@ -504,7 +504,7 @@ void leverHalf(int speed) {
 
   while (levering == 1) {
     if (upwards) {
-      if (liftUp) maxLeverAngle = 58;
+      if (liftUp) maxLeverAngle = 51;
       else maxLeverAngle = 65;
       RunIndex(100);
       lock.set(true);
@@ -748,7 +748,7 @@ void driveToPoint(PIDDataSet KVals, double target_x, double target_y, double max
           if (max_correction > fabs(Correction)) {
             max_correction = fabs(Correction);
           }
-          if (fabs(Correction) > max_correction) {
+          if (fabs(Correction) > fabs(max_correction)) {
             int signCorrection = (Correction > 0) ? 1 : -1;
             Correction = signCorrection * max_correction;
           }

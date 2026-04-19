@@ -78,12 +78,12 @@ void counter_awp() { // NEGATIVE TURNS TO THE LEFT
   // leverDown();
   // RunIndex(100);
 
-  driveToPoint(DrivePara, -66, 3.0, 100, 90, 2.6, true); // go to between long goal and matchload
+  driveToPoint(DrivePara, -65, 3.0, 100, 90, 2.6, true); // go to between long goal and matchload
   wait(100,msec);
   TurnMaxTimePID(TurnPara, 180, 0.2, false); // turn to long goal
   std::cout<< "x2: " <<CPos.x<<std::endl;
   std::cout<< "y2: " <<CPos.y<<std::endl;
-  driveToPoint(DrivePara, -62.0, 16.5, -70, -40, 2.6, false); // go into long goal
+  driveToPoint(DrivePara, -63.3, 16.5, -70, -40, 2.6, false); // go into long goal
   Move(-40,-40);
   wait(250,msec);
   leverFull(80);
@@ -109,6 +109,7 @@ void counter_awp() { // NEGATIVE TURNS TO THE LEFT
   wait(50,msec);
   leverFull(60);
   wait(100,msec);
+  Scrapper.set(false);
   RunIndex(-100);
   RunLever(-100);
 

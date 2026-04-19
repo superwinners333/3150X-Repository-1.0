@@ -1,6 +1,8 @@
 #include "../movement.hpp"
 #include "../helper_functions.hpp"
 #include "vex.h"
+#include "../odom.hpp"
+#include "../Odometry.hpp"
 #include <iostream>
 //PID Straight and turn arguments:
 // MoveEncoderPID(TestPara, motor speed, encoder travel distance (inches), time to full speed(sec), relative heading(to starting position), braking?)
@@ -11,6 +13,81 @@
 // PurePursuitDrive(std::vector<Point> path, PIDDataSet KTurn, double lookahead, double maxSpeed, bool reverse, bool brake)
 
 void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
+  PIDDataSet TurnPara={1.5,0.1,0.12};
+  PIDDataSet TestPara={2,0.1,0.3};
+  PIDDataSet DrivePara={2.4,0.12,0.1};
+  PIDDataSet curvePara={1.9,0.1,0.24};
+
+  timer stopwatch;
+  ORIGIN_Y = 24.75;
+  ORIGIN_X = 56.5;
+
+  RunIndex(100);
+  RunLever(-100);
+  driveToPoint(DrivePara, -3, 15, 100, 95, 2, false);
+  levertracker.setPosition(0,degrees);
+  RunLever(0);
+  Scrapper.set(true);
+  driveToPoint(DrivePara, -34.9, 9, 80, 35, 2.6, true);
+
+  MoveTimePID(TestPara, 40, 1.35, 0.02, -180, false); // matchload
+  OdomReset(false,false,true,true);
+  CPos.y = -8.0;
+
+  MoveEncoderPID(TurnPara, -80, 5.0, 0.3, 180,true); // move out of scrapper 
+  TurnMaxTimePID(TurnPara, -135, 0.2, false);
+  leverLift(false);
+  MoveEncoderPID(TurnPara, -100, 30.5, 0.3, -135, false); // go to middle goal
+  MoveEncoderPID(TurnPara, -50, 9.0, 0.3, -135, false); // go to middle goal
+  wait(50,msec);
+  Move(-15,-15);
+  wait(50,msec);
+  leverHalf(60);
+  lock.set(false);
+  wait(50,msec);
+  lock.set(true);
+  Scrapper.set(false);
+  thread down = thread(leverDown); // lowers lever
+
+  TurnMaxTimePID(TurnPara, -90, 0.25, false); // turn to blocks underneath long goal
+  // Wings.set(false);
+  MoveEncoderPID(TurnPara, 90, 24, 0.2, -90, false); // picks up blocks under long goal
+  CStop();
+  Scrapper.set(true);
+  wait(100,msec);
+  MoveEncoderPID(TurnPara, -50, 1.3, 0.2, -90, false);
+  CStop();
+  Scrapper.set(false);
+  leverLift(true);
+  // Wings.set(true);
+  TurnMaxTimePID(TurnPara, -140, 0.30, false); // turn to matchload wall to prepare to wing out
+  MoveEncoderPID(TurnPara, 80, 5, 0.2, -160, false); // move into long goal to wing align
+  Wings.set(false); // lowers wings
+  MoveEncoderPID(TurnPara, 80, 15, 0.2, -178, false); // wing out long goal
+  OdomReset(false,false,true,true);
+  MoveEncoderPID(TurnPara, 80, 8, 0.2, -160, false); // go to between matchload and long goal
+  TurnMaxTimePID(TurnPara, 180, 0.25, false); // turn to long goal
+  CPos.y = 5.0;
+  driveToPoint(DrivePara, 33.7, 14.9, -80, -40, 2.6, false); // go into long goal
+  leverFull();
+
+
+  
+
+  // Scrapper.set(true);
+  std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
+  wait(2000,msec);
+
+  int screenheading = Gyro.heading(degrees);
+  Brain.Screen.clearScreen();
+  Brain.Screen.setFont(monoL);
+  Brain.Screen.setPenColor("#808080");
+  Brain.Screen.setCursor(3,10);
+  Brain.Screen.print("HEADING:");
+  Brain.Screen.setCursor(4,10);
+  Brain.Screen.print(screenheading);
+  
+    /*
     // declare initial conditions
     PIDDataSet TurnPara={1.5,0.1,0.12};
     PIDDataSet TestPara={1.5,0.1,0.15};
@@ -91,4 +168,5 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
     Brain.Screen.print("HEADING:");
     Brain.Screen.setCursor(4,10);
     Brain.Screen.print(screenheading);
+    */
 }

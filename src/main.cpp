@@ -121,7 +121,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 20; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 17; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -146,7 +146,7 @@ void autonomous(void) {
     case 3: high_rush(); break; // 7 rush
     case 4: high_middle_wing(); break; // 4+3
     case 5: high_four(); break; // four rush
-    case 6: high_counter_rush(); break; // 9 block
+    case 6: high_counter_rush(); break; // anti 7 rush
     case 7: high_wingbreak(); break; // wing very hard
     case 8: high_all(); break; // 7 in mid goal
     case 9: break;
@@ -162,7 +162,7 @@ void autonomous(void) {
     case 18: low_four(); break; // four rush
     case 19: push_awp(); break; // push awp
     case 20: counter_awp(); break; // counter awp
-    case 21: break;
+    case 21: low_counter_rush(); break; // anti 7 rush
     case 22: break;
     case 23: break;
     case 24: break;
@@ -288,6 +288,8 @@ int PTask(void)
         RunLever(-100);
         // RunIndex(-100);
         lock.set(true);
+
+        // (levertracker.position(degrees) < 0)
       }
       else RunLever(0);
     } 

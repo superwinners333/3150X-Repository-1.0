@@ -22,6 +22,7 @@ extern void high_four();
 extern void push_awp();
 extern void counter_awp();
 extern void high_counter_rush();
+extern void low_counter_rush();
 extern void high_all();
 extern void high_wingbreak();
 

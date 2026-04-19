@@ -24,47 +24,51 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
 
   RunIndex(100);
   RunLever(-100);
-  driveToPoint(DrivePara, -3, 15, 100, 95, 2, false);
+  driveToPoint(DrivePara, -3, 15, 100, 95, 2, false); // 3 blocks in middle
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, -34.5, 9, 80, 40, 2.6, true);
-  // wait(100,msec);
-  // std::cout<< CPos.x <<std::endl;
-  MoveTimePID(TestPara, 55, 1.29, 0.02, -180, false);
+  driveToPoint(DrivePara, -34.5, 9, 80, 40, 2.6, true); // go to between long goal and matchload
+  MoveTimePID(TestPara, 40, 1.35, 0.02, -180, false); // matchload
+  OdomReset(false,false,true,true);
   CPos.y = -10.0;
   driveToPoint(DrivePara, -34, 15, -80, -40, 2.6, false);
-  MoveTimePID(TestPara, 50, 0.15, 0.02, -180, false);
-  MoveTimePID(TestPara, -60, 0.1, 0.02, -180, false);
+  // MoveTimePID(TestPara, 50, 0.15, 0.02, -180, false);
+  // MoveTimePID(TestPara, -60, 0.1, 0.02, -180, false);
   Move(-40,-40);
   wait(100,msec);
   leverHalf(90);
+  wait(50,msec);
+  lock.set(false);
   Move(0,0);
   wait(50,msec);
   CPos.y = (41.0-24.75);
   OdomReset(false,false,true,true);
   // CPos.x = (23.0-56.5);
   wait(50,msec);
-  leverDown();
-  
-  driveToPoint(DrivePara, -34, 0, 90, 70, 2.6, false);
+  Scrapper.set(false);
+  // leverDown(); // lowers lever
+  // RunIndex(100);
+  thread down = thread(leverDown); // lowers lever
+  driveToPoint(DrivePara, -34, 0, 90, 70, 2.6, false); // move forward a bit
   leverLift(false);
-  driveToPoint(DrivePara, -2, 31, -80, -20, 2.6, true);
+  driveToPoint(DrivePara, -2, 31, -80, -20, 2.6, true); // go to middle goal
   Move(-20,-20);
-  leverFull(60);
-  driveToPoint(DrivePara, -24, 15, 80, 50, 2.6, true);
+  leverFull(60); // scores middle
+  wait(100,msec);
+  driveToPoint(DrivePara, -24, 15, 80, 50, 2.6, true);  // go forward to wing
   leverLift(true);
+  TurnMaxTimePID(TurnPara, 179, 0.4, false); // turns to wing
   
 
   Wings.set(false); // lowers wings
   RunLever(-100);
   RunIndex(-100);
-  Scrapper.set(false);
   TurnMaxTimePID(TurnPara, -180, 0.2, false); // turns to wing
   MoveEncoderPID(TurnPara, -80, 12, 0.2, 179, false); // backs up to wing
   RunLever(0);
   RunIndex(0);
-  wait(150,msec);
+  wait(100,msec);
   Move(40,-5);
   wait(100,msec);
   // Scrapper.set(true);
