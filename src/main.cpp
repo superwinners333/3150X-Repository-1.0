@@ -42,7 +42,8 @@ void pre_auton(void) {
   Scrapper.set(false);
   Funnel.set(false);
   Wings.set(false);
-  Pistake.set(true);
+  intakeDown();
+  // Pistake.set(true);
   leverLift(true);
   levertracker.setPosition(0,degrees);
   levertracker.resetPosition();
@@ -222,19 +223,22 @@ int ATask(void)
   {
     if (Controller1.ButtonL2.pressing()==1 && RightTaskActiv == 0 && R1TaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing())
     {
-      Pistake.set(false);
+      intakeUp();
+      // Pistake.set(false);
       RunIndex(-75); // 40
       lock.set(false);
     }
     else if (Controller1.ButtonL1.pressing()==1 && RightTaskActiv == 0 && R1TaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing()) 
     {
-      Pistake.set(true);
+      intakeDown();
+      // Pistake.set(true);
       RunIndex(100);
       lock.set(false);
     }
     else if (!Controller1.ButtonLeft.pressing() && !Controller1.ButtonUp.pressing() && RightTaskActiv == 0 && R1TaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing())
     {
-      Pistake.set(true);
+      intakeDown();
+      //Pistake.set(true);
       RunIndex(0);
       lock.set(false);
     } 

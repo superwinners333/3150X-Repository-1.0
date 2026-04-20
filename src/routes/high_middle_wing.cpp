@@ -36,9 +36,8 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   // MoveTimePID(TestPara, 50, 0.15, 0.02, -180, false);
   // MoveTimePID(TestPara, -60, 0.1, 0.02, -180, false);
   Move(-40,-40);
-  wait(100,msec);
-  leverHalf(90);
-  wait(50,msec);
+  wait(250,msec);
+  leverHalf(80);
   lock.set(false);
   Move(0,0);
   wait(50,msec);
@@ -50,13 +49,13 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   // leverDown(); // lowers lever
   // RunIndex(100);
   thread down = thread(leverDown); // lowers lever
-  driveToPoint(DrivePara, -34, 0, 90, 70, 2.6, false); // move forward a bit
+  driveToPoint(DrivePara, -34, 1.5, 90, 70, 2.6, false); // move forward a bit
   leverLift(false);
   driveToPoint(DrivePara, -2, 31, -80, -20, 2.6, true); // go to middle goal
   Move(-20,-20);
-  leverFull(60); // scores middle
+  leverFull(45); // scores middle
   wait(100,msec);
-  driveToPoint(DrivePara, -24, 15, 80, 50, 2.6, true);  // go forward to wing
+  MoveEncoderPID(TurnPara, 80, 15, 0.2, -135, false);  // go forward to wing
   leverLift(true);
   TurnMaxTimePID(TurnPara, 179, 0.4, false); // turns to wing
   

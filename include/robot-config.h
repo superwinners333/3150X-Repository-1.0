@@ -26,6 +26,7 @@ extern digital_out Lift;
 extern digital_out Funnel;
 extern digital_out odomLift;
 extern digital_out Pistake;
+extern digital_out Pistake2;
 
 extern rotation levertracker;
 extern rotation odomx;

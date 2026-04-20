@@ -25,10 +25,10 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, 34.7, 7.5, 80, 35, 2.6, true);
+  driveToPoint(DrivePara, 35, 7.5, 80, 35, 2.6, true);
   // wait(100,msec);
   // std::cout<< CPos.x <<std::endl;
-  MoveTimePID(TestPara, 40, 1.05, 0.02, -180, false); // matchload
+  MoveTimePID(TestPara, 40, 1.2, 0.02, -180, false); // matchload
   OdomReset(false,false,true,true);
   CPos.y = -10.0;
   driveToPoint(DrivePara, 33.7, 14.9, -80, -40, 2.6, false); // go into long goal
@@ -41,30 +41,33 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   lock.set(false);
   wait(100,msec);
   lock.set(true);
+  wait(50,msec);
   CPos.y = (41.0-24.75);
   OdomReset(false,false,true,true);
   thread down = thread(leverDown); // lowers lever
   wait(50,msec);
   // driveToPoint(DrivePara, -24, 10, 80, 20, 2.6, false);
 
-  MoveEncoderPID(TurnPara, 100, 8.5, 0.2, 180, true); // Move away from long goal
+  MoveEncoderPID(TurnPara, 100, 8, 0.2, 180, true); // Move away from long goal
   TurnMaxTimePID(TurnPara, -45, 0.2, false); // turn to low goal
   lock.set(false);
   Scrapper.set(false);
-  driveToPoint(DrivePara, -3, 18.8, 80, 40, 2.6, true); // go into low goal
+  driveToPointantiOrbit(DrivePara, -2.1, 26.5, 80, 40, 2.6, true); // go into low goal
   // MoveEncoderPID(TurnPara, 100, 35, 0.3, -45, false); // move to low goal
   // MoveEncoderPID(TurnPara, 40, 7, 0.1, -45, false); // slow down
+  Move(20,20);
+  wait(100,msec);
   RunIndex(-50);
   // wait(600,msec);
   MoveTimePID(TestPara, 40, 0.6, 0.02, -45, false); // score in low goal
-  MoveEncoderPID(TurnPara, -100, 16.8, 0.2, -45, false); // back up from low goal
+  MoveEncoderPID(TurnPara, -100, 18, 0.2, -45, false); // back up from low goal
   RunIndex(0);
   // wing code
   Wings.set(false); // lowers wings
   // RunLever(-100);
   // RunIndex(-100);
   TurnMaxTimePID(TurnPara, 0, 0.13, true); // turns to wing
-  MoveEncoderPID(TurnPara, 80, 12.8, 0.2, 0, false); // goes forward up to wing
+  MoveEncoderPID(TurnPara, 80, 14, 0.2, 0, false); // goes forward up to wing
   RunLever(0);
   RunIndex(0);
   Move(-60,40);

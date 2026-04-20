@@ -53,6 +53,10 @@ extern void RunIndex(int val);
 extern void MiddleScore(void);
 extern void NeutralScore(void);
 extern void HighScore(void);
+extern void intakeUp(void);
+extern void intakeDown(void);
+extern void intakeNeutral(void);
+extern void intakeLift(bool up);
 
 extern bool liftUp;
 extern void leverLift(bool up);
@@ -71,4 +75,5 @@ extern void CurveEncoderPID(PIDDataSet KVals, int SpeedL, int SpeedR, double dis
 extern void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxAccel, int Speed, double timeout, double ABSHDG, bool brake);
 
 extern void driveToPoint(PIDDataSet KVals, double target_x, double target_y, double max_speed, double final_decel_speed, double timeout_ms, bool brake, double decel_distance = 8.0, double Matchload_distance = -1, double depoly_distance = -1);
+extern void driveToPointantiOrbit(PIDDataSet KVals, double target_x, double target_y, double max_speed, double final_decel_speed, double timeout_ms, bool brake, double decel_distance = 8.0, double Matchload_distance = -1, double depoly_distance = -1);
 #endif

@@ -69,7 +69,7 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
   TurnMaxTimePID(TurnPara, 180, 0.25, false); // turn to long goal
   CPos.y = 5.0;
   driveToPoint(DrivePara, 33.7, 14.9, -80, -40, 2.6, false); // go into long goal
-  leverFull();
+  leverFull(70);
 
 
   

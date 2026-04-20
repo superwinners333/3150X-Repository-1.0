@@ -30,18 +30,18 @@ void counter_awp() { // NEGATIVE TURNS TO THE LEFT
 
   RunIndex(100);
   RunLever(-100);
-  MoveEncoderPID(TurnPara, -100, 13.2, 0.3, -100, false);
+  MoveEncoderPID(TurnPara, -100, 13.3, 0.3, -100, false);
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
   TurnMaxTimePID(TurnPara, 180, 0.2, false); // turns to matchloader
-  MoveTimePID(TurnPara, 45, 1.00, 0.2, 180,false); // move into matchloader
+  MoveTimePID(TurnPara, 45, 1.03, 0.2, 180,false); // move into matchloader
   OdomReset(false,false,true,true);
   driveToPoint(DrivePara, 30.3, 16.5, -70, -40, 2.6, true); // go into long goal
   std::cout<< "CPos.y: " <<CPos.y<<std::endl;
   Move(-40,-40);
   wait(250,msec);
-  leverFull(90);
+  leverFull(55);
   Move(0,0);
   leverDown();
   std::cout<< "CPos.x: " <<CPos.x<<std::endl;
@@ -49,14 +49,15 @@ void counter_awp() { // NEGATIVE TURNS TO THE LEFT
   CPos.y = (40.0-ORIGIN_Y); // 41.9-21.1= 20.8
   Scrapper.set(false);
   MoveEncoderPID(TurnPara, 60, 1.6, 0.1, 180,false); // move out of long goal
-  TurnMaxTimePID(TurnPara, -61, 0.25, false); // turn to next 3 blocks
+  TurnMaxTimePID(TurnPara, -55, 0.25, false); // turn to next 3 blocks
   RunIndex(100);
   lock.set(false);
-  MoveEncoderPID(TurnPara, 80, 25, 0.4, -61,false); // move to next 3 blocks
+  MoveEncoderPID(TurnPara, 60, 22, 0.4, -55,false); // move to next 3 blocks
   Scrapper.set(true);
+  MoveEncoderPID(TurnPara, 50, 1, 0.01, -55,false); // move to next 3 blocks
   TurnMaxTimePID(TestPara, -90, 0.35, true); // turn to next 3 blocks
   OdomReset(false,false,true,true);
-  wait(100,msec);
+  wait(150,msec);
   Scrapper.set(false);
 
   // MoveTimePID(DrivePara, -40, 0.5, 0.3, -68,false); // turns from long goal to middle blocks
@@ -64,50 +65,49 @@ void counter_awp() { // NEGATIVE TURNS TO THE LEFT
   std::cout<< "x: " <<CPos.x<<std::endl;
   std::cout<< "y: " <<CPos.y<<std::endl;
 
-  driveToPoint(DrivePara, -33.1, 26.0, 80, 60, 2.6, true); // go to next 3 blocks
+  driveToPoint(DrivePara, -33, 27.5, 70, 40, 2.6, false); // go to next 3 blocks
   Scrapper.set(true);
-
-  // MoveEncoderPID(TurnPara, -80, 1, 0.3, -90, true); // move to middle goal
-  TurnMaxTimePID(TestPara, -135, 0.2, false); // turns to middle goal
-  // MoveEncoderPID(TurnPara, -60, 8.0, 0.3, -135, true); // go to middle goal
-  // CStop();
-  // CStop();
-  // leverHalf(60);
-  // wait(100,msec);
-  // lock.set(false);
-  // leverDown();
-  // RunIndex(100);
-
-  driveToPoint(DrivePara, -65, 3.0, 100, 90, 2.6, true); // go to between long goal and matchload
+  BStop();
   wait(100,msec);
-  TurnMaxTimePID(TurnPara, 180, 0.2, false); // turn to long goal
+
+  TurnMaxTimePID(TestPara, -135, 0.2, false); // turns to middle goal
+
+  driveToPoint(DrivePara, -62, 4.0, 90, 80, 2.6, true); // go to between long goal and matchload
+  wait(100,msec);
+  TurnMaxTimePID(DrivePara, 180, 0.25, true); // turn to long goal
   std::cout<< "x2: " <<CPos.x<<std::endl;
   std::cout<< "y2: " <<CPos.y<<std::endl;
-  driveToPoint(DrivePara, -63.3, 16.5, -70, -40, 2.6, false); // go into long goal
+  OdomReset(false,false,true,true);
+  driveToPoint(DrivePara, -63.4, 16.5, -70, -40, 2.6, false); // go into long goal
+  std::cout<< "x3: " <<CPos.x<<std::endl;
+  std::cout<< "y3: " <<CPos.y<<std::endl;
+  BStop();
   Move(-40,-40);
   wait(250,msec);
-  leverFull(80);
+  leverFull(60);
   Move(0,0);
   wait(100,msec);
   leverDown();
   RunIndex(100);
+
   std::cout<< "CPos.x: " <<CPos.x<<std::endl;
   OdomReset(false,false,true,true);
   CPos.y = (40.0-ORIGIN_Y); // 41.9-21.1= 20.8
   MoveEncoderPID(TurnPara, 80, 10.0, 0.2, 180,false); // move into matchloader
   lock.set(false);
-  MoveTimePID(TurnPara, 50, 0.96, 0.3, 180,false); // slows down into matchloader
+  MoveTimePID(TurnPara, 50, 1.03, 0.3, 180,false); // slows down into matchloader
   OdomReset(false,false,true,true);
   CPos.y = -10.0;
-  MoveEncoderPID(TurnPara, -80, 5.0, 0.3, 180,true); // move out of scrapper 
+  MoveEncoderPID(TurnPara, -80, 4.75, 0.3, 180,true); // move out of scrapper 
   TurnMaxTimePID(TurnPara, -135, 0.2, false);
   leverLift(false);
   MoveEncoderPID(TurnPara, -100, 30.5, 0.3, -135, false); // go to middle goal
-  MoveEncoderPID(TurnPara, -50, 9.0, 0.3, -135, false); // go to middle goal
+  MoveEncoderPID(TurnPara, -50, 9.5, 0.3, -135, false); // go to middle goal
+  BStop();
   wait(50,msec);
   Move(-15,-15);
   wait(50,msec);
-  leverFull(60);
+  leverFull(40);
   wait(100,msec);
   Scrapper.set(false);
   RunIndex(-100);
