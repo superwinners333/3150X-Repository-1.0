@@ -57,15 +57,15 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   // MoveEncoderPID(TurnPara, 40, 7, 0.1, -45, false); // slow down
   Move(20,20);
   wait(100,msec);
-  RunIndex(-50);
-  // wait(600,msec);
+  RunIndex(-50); // outake to score
+
   MoveTimePID(TestPara, 40, 0.6, 0.02, -45, false); // score in low goal
   MoveEncoderPID(TurnPara, -100, 18, 0.2, -45, false); // back up from low goal
-  RunIndex(0);
+  RunIndex(0); // stop intake
+
   // wing code
   Wings.set(false); // lowers wings
-  // RunLever(-100);
-  // RunIndex(-100);
+
   TurnMaxTimePID(TurnPara, 0, 0.13, true); // turns to wing
   MoveEncoderPID(TurnPara, 80, 14, 0.2, 0, false); // goes forward up to wing
   RunLever(0);

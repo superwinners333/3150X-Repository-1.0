@@ -25,19 +25,18 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
 
   RunIndex(100);
   RunLever(-100);
-  driveToPoint(DrivePara, -3, 15, 100, 95, 2, false);
+  driveToPointantiOrbit(DrivePara, -3, 15, 100, 95, 2, false);
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, -34.9, 9, 80, 35, 2.6, true);
+  driveToPointantiOrbit(DrivePara, -34.9, 9, 80, 35, 2.6, true);
   // wait(100,msec);
   // std::cout<< CPos.x <<std::endl;
   MoveTimePID(TestPara, 40, 1.35, 0.02, -180, false); // matchload
   OdomReset(false,false,true,true);
   CPos.y = -10.0;
-  driveToPoint(DrivePara, -34, 15, -80, -40, 2.6, false); // go into long goal
-  // MoveTimePID(TestPara, 50, 0.15, 0.02, -180, false); // go back and forht to shake the blocks
-  // MoveTimePID(TestPara, -60, 0.1, 0.02, -180, false);
+  driveToPointantiOrbit(DrivePara, -34, 15, -80, -40, 2.6, false); // go into long goal
+
   Move(-40,-40);
   wait(100,msec);
   leverFull(80);
@@ -46,15 +45,16 @@ void high_rush() { // NEGATIVE TURNS TO THE LEFT
   CPos.y = (41.0-24.75);
   OdomReset(false,false,true,true);
   wait(50,msec);
-  // driveToPoint(DrivePara, -24, 10, 80, 20, 2.6, false);
-  MoveEncoderPID(TurnPara, 100, 4.5, 0.2, 170, false);
-  TurnMaxTimePID(TurnPara, -150, 0.2, false);
+
+  // wing code
+  MoveEncoderPID(TurnPara, 100, 4.5, 0.2, 170, false); // move forward
+  TurnMaxTimePID(TurnPara, -150, 0.2, false); // turn
   Scrapper.set(false);
-  MoveEncoderPID(TurnPara, -100, 4, 0.3, -150, false); 
+  MoveEncoderPID(TurnPara, -100, 4, 0.3, -150, false); // back up to the side of long goal
   Wings.set(false); // lowers wings
   RunLever(-100);
   RunIndex(-100);
-  TurnMaxTimePID(TurnPara, -180, 0.2, false); // turns to matchload
+  TurnMaxTimePID(TurnPara, -180, 0.2, false); // turns to wing
   MoveEncoderPID(TurnPara, -55, 13.4, 0.2, 179, false); // backs up to wing
   RunLever(0);
   RunIndex(0);
