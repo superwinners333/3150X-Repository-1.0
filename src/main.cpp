@@ -122,7 +122,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 17; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 6; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -225,7 +225,7 @@ int ATask(void)
     {
       intakeUp();
       // Pistake.set(false);
-      RunIndex(-75); // 40
+      RunIndex(-60); // 40
       lock.set(false);
     }
     else if (Controller1.ButtonL1.pressing()==1 && RightTaskActiv == 0 && R1TaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing()) 

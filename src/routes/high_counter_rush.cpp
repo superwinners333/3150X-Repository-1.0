@@ -22,22 +22,21 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
   ORIGIN_Y = 24.75;
   ORIGIN_X = 56.5;
 
-  RunIndex(100);
+ RunIndex(100);
   RunLever(-100);
-  driveToPoint(DrivePara, -3, 15, 100, 95, 2, false);
+  driveToPointantiOrbit(DrivePara, -3, 16, 100, 95, 2, false); // 3 blocks in middle
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, -34.9, 9, 80, 35, 2.6, true);
-
-  MoveTimePID(TestPara, 40, 1.35, 0.02, -180, false); // matchload
+  driveToPointantiOrbit(DrivePara, -29.5, 2.7, 80, 40, 2.6, true); // go to between long goal and matchload
+  MoveTimePID(TestPara, 40, 1.3, 0.02, -180, false); // matchload
   OdomReset(false,false,true,true);
   CPos.y = -8.0;
 
   MoveEncoderPID(TurnPara, -80, 5.0, 0.3, 180,true); // move out of scrapper 
   TurnMaxTimePID(TurnPara, -135, 0.2, false);
   leverLift(false);
-  MoveEncoderPID(TurnPara, -100, 30.5, 0.3, -135, false); // go to middle goal
+  MoveEncoderPID(TurnPara, -100, 32, 0.3, -135, false); // go to middle goal
   MoveEncoderPID(TurnPara, -50, 9.0, 0.3, -135, false); // go to middle goal
   wait(50,msec);
   Move(-15,-15);
@@ -49,18 +48,16 @@ void high_counter_rush() { // NEGATIVE TURNS TO THE LEFT
   Scrapper.set(false);
   thread down = thread(leverDown); // lowers lever
 
-  TurnMaxTimePID(TurnPara, -90, 0.25, false); // turn to blocks underneath long goal
+  TurnMaxTimePID(TurnPara, -80, 0.25, false); // turn to blocks underneath long goal
   // Wings.set(false);
-  MoveEncoderPID(TurnPara, 90, 24, 0.2, -90, false); // picks up blocks under long goal
-  CStop();
-  Scrapper.set(true);
+  MoveEncoderPID(TurnPara, 90, 22, 0.2, -80, true); // picks up blocks under long goal
   wait(100,msec);
-  MoveEncoderPID(TurnPara, -50, 1.3, 0.2, -90, false);
+  MoveEncoderPID(TurnPara, -50, 2, 0.2, -90, false); // back up
   CStop();
   Scrapper.set(false);
   leverLift(true);
   // Wings.set(true);
-  TurnMaxTimePID(TurnPara, -140, 0.30, false); // turn to matchload wall to prepare to wing out
+  TurnMaxTimePID(TurnPara, -180, 0.30, false); // turn to matchload wall to prepare to wing out
   MoveEncoderPID(TurnPara, 80, 5, 0.2, -160, false); // move into long goal to wing align
   Wings.set(false); // lowers wings
   MoveEncoderPID(TurnPara, 80, 15, 0.2, -178, false); // wing out long goal

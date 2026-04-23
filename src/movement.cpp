@@ -559,6 +559,7 @@ void leverDown() {
   RunIndex(-100);
   RunLever(-100);
   while (levering == 1) {
+    if (levertracker.position(degrees) < 10) RunIndex(0);
     if (autolevertime.value() > 0.7 || levertracker.position(degrees) < 3) { // time before assuming the lever has stalled and exiting
       levering=0;
       RunLever(0);

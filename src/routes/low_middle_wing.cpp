@@ -21,14 +21,14 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
 
   RunIndex(100);
   RunLever(-100);
-  driveToPoint(DrivePara, 3, 15, 100, 95, 2, false);
+  driveToPointantiOrbit(DrivePara, 3, 16, 100, 95, 2, false);
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, 35, 7.5, 80, 35, 2.6, true);
+  driveToPointantiOrbit(DrivePara, 31.1, 3.5, 80, 35, 2.6, true);
   // wait(100,msec);
   // std::cout<< CPos.x <<std::endl;
-  MoveTimePID(TestPara, 40, 1.2, 0.02, -180, false); // matchload
+  MoveTimePID(TestPara, 40, 1.25, 0.02, -180, false); // matchload
   OdomReset(false,false,true,true);
   CPos.y = -10.0;
   driveToPoint(DrivePara, 33.7, 14.9, -80, -40, 2.6, false); // go into long goal
@@ -48,35 +48,36 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   wait(50,msec);
   // driveToPoint(DrivePara, -24, 10, 80, 20, 2.6, false);
 
-  MoveEncoderPID(TurnPara, 100, 8, 0.2, 180, true); // Move away from long goal
+  MoveEncoderPID(TurnPara, 100, 7, 0.2, 180, true); // Move away from long goal
   TurnMaxTimePID(TurnPara, -45, 0.2, false); // turn to low goal
   lock.set(false);
   Scrapper.set(false);
-  driveToPointantiOrbit(DrivePara, -2.1, 26.5, 80, 40, 2.6, true); // go into low goal
+  driveToPointantiOrbit(DrivePara, -1.1, 27.5, 80, 40, 2.6, true); // go into low goal
   // MoveEncoderPID(TurnPara, 100, 35, 0.3, -45, false); // move to low goal
   // MoveEncoderPID(TurnPara, 40, 7, 0.1, -45, false); // slow down
   Move(20,20);
   wait(100,msec);
+  intakeUp();
   RunIndex(-50); // outake to score
 
-  MoveTimePID(TestPara, 40, 0.6, 0.02, -45, false); // score in low goal
-  MoveEncoderPID(TurnPara, -100, 18, 0.2, -45, false); // back up from low goal
-  RunIndex(0); // stop intake
-
+  MoveTimePID(TestPara, 40, 0.7, 0.02, -45, false); // score in low goal
+  MoveEncoderPID(TurnPara, -100, 22, 0.2, -45, false); // back up from low goal
+  RunIndex(-100); // stop intake
+  MoveEncoderPID(TurnPara, -100, 22.2, 0.2, -100, false);
   // wing code
+  intakeDown();
   Wings.set(false); // lowers wings
 
-  TurnMaxTimePID(TurnPara, 0, 0.13, true); // turns to wing
-  MoveEncoderPID(TurnPara, 80, 14, 0.2, 0, false); // goes forward up to wing
+  TurnMaxTimePID(TurnPara, 180, 0.15, true); // turns to wing
+  MoveEncoderPID(TurnPara, -60, 27, 0.2, 180, false); // goes backwards up to wing
   RunLever(0);
   RunIndex(0);
-  Move(-60,40);
-  wait(500,msec);
-  BStop();
+  Move(40,-20);
+  wait(200,msec);
 
   // Scrapper.set(true);
   std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
-  wait(2000,msec);
+  wait(15000,msec);
 
   int screenheading = Gyro.heading(degrees);
   Brain.Screen.clearScreen();
