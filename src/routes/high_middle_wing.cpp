@@ -28,8 +28,8 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPointantiOrbit(DrivePara, -31.6, 1, 80, 40, 2.6, true); // go to between long goal and matchload
-  MoveTimePID(TestPara, 40, 1.4, 0.02, -180, false); // matchload
+  driveToPointantiOrbit(DrivePara, -31.0, 3.5, 80, 40, 2.6, true); // go to between long goal and matchload
+  MoveTimePID(TestPara, 40, 1.25, 0.02, -180, false); // matchload
   OdomReset(false,false,true,true);
   CPos.y = -10.0;
   driveToPoint(DrivePara, -34, 15, -80, -40, 2.6, false);
@@ -56,7 +56,7 @@ void high_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   Move(-20,-20);
   leverFull(45); // scores middle
   wait(100,msec);
-  MoveEncoderPID(TurnPara, 80, 20.0, 0.2, -135, false);  // go forward to wing
+  MoveEncoderPID(TurnPara, 80, 21.3, 0.2, -135, false);  // go forward to wing
   leverLift(true);
   TurnMaxTimePID(TurnPara, 179, 0.4, false); // turns to wing
   

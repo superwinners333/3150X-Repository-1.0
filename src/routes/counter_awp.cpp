@@ -47,7 +47,7 @@ void counter_awp() { // NEGATIVE TURNS TO THE LEFT
   RunLever(0);
   Scrapper.set(true);
   TurnMaxTimePID(TurnPara, 180, 0.2, false); // turns to matchloader
-  MoveTimePID(TurnPara, 45, 0.95, 0.2, 180,false); // move into matchloader
+  MoveTimePID(TurnPara, 45, 0.9, 0.2, 180,false); // move into matchloader
   OdomReset(false,false,true,true);
   driveToPoint(DrivePara, 30.3, 16.5, -70, -40, 2.6, true); // go into long goal
   std::cout<< "CPos.y: " <<CPos.y<<std::endl;
@@ -85,13 +85,13 @@ void counter_awp() { // NEGATIVE TURNS TO THE LEFT
 
   TurnMaxTimePID(TestPara, -135, 0.2, false); // turns to middle goal
 
-  driveToPoint(DrivePara, -66.4, 3.7, 90, 80, 2.6, true); // go to between long goal and matchload
+  driveToPoint(DrivePara, -66.9, 3.7, 90, 80, 2.6, true); // go to between long goal and matchload
   wait(100,msec);
   TurnMaxTimePID(DrivePara, 180, 0.25, true); // turn to long goal
   std::cout<< "x2: " <<CPos.x<<std::endl;
   std::cout<< "y2: " <<CPos.y<<std::endl;
   OdomReset(false,false,true,true);
-  driveToPoint(DrivePara, -63.4, 16.5, -70, -40, 2.6, false); // go into long goal
+  driveToPoint(DrivePara, -63.9, 16.5, -70, -40, 2.6, false); // go into long goal
   std::cout<< "x3: " <<CPos.x<<std::endl;
   std::cout<< "y3: " <<CPos.y<<std::endl;
   BStop();
@@ -109,14 +109,14 @@ void counter_awp() { // NEGATIVE TURNS TO THE LEFT
   driveToPoint(DrivePara, -62.6, 0, 80, 80, 2.6, false); // move into matchloader
   // MoveEncoderPID(TurnPara, 80, 10.0, 0.2, 180,false); // move into matchloader
   lock.set(false);
-  MoveTimePID(TurnPara, 50, 1.0, 0.3, 180,false); // slows down into matchloader
+  MoveTimePID(TurnPara, 50, 0.7, 0.3, 180,false); // slows down into matchloader
   OdomReset(false,false,true,true);
   CPos.y = -10.0;
-  MoveEncoderPID(TurnPara, -80, 4.3, 0.3, 180,true); // move out of scrapper 
+  MoveEncoderPID(TurnPara, -80, 5.0, 0.3, 180,true); // move out of scrapper 
   TurnMaxTimePID(TurnPara, -135, 0.2, false);
   Scrapper.set(false);
   leverLift(false);
-  MoveEncoderPID(TurnPara, -100, 31.5, 0.3, -135, false); // go to middle goal
+  MoveEncoderPID(TurnPara, -100, 28, 0.3, -135, false); // go to middle goal
   MoveEncoderPID(TurnPara, -50, 10.0, 0.01, -135, false); // go to middle goal
   BStop();
   wait(50,msec);

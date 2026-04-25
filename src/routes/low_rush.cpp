@@ -25,17 +25,17 @@ void low_rush() { // NEGATIVE TURNS TO THE LEFT
 
   RunIndex(100);
   RunLever(-100);
-  driveToPoint(DrivePara, 3, 15, 100, 95, 2, false);
+  driveToPointantiOrbit(DrivePara, 3, 16, 100, 95, 2, false);
   levertracker.setPosition(0,degrees);
   RunLever(0);
   Scrapper.set(true);
-  driveToPoint(DrivePara, 34.9, 9, 80, 35, 2.6, true);
+  driveToPointantiOrbit(DrivePara, 31.1, 3.5, 80, 35, 2.6, true);
   // wait(100,msec);
   // std::cout<< CPos.x <<std::endl;
-  MoveTimePID(TestPara, 40, 1.35, 0.02, -180, false); // matchload
+  MoveTimePID(TestPara, 40, 1.25, 0.02, -180, false); // matchload
   OdomReset(false,false,true,true);
   CPos.y = -10.0;
-  driveToPoint(DrivePara, 34, 15, -80, -40, 2.6, false); // go into long goal
+  driveToPoint(DrivePara, 33.7, 14.9, -80, -40, 2.6, false); // go into long goal
   // MoveTimePID(TestPara, 50, 0.15, 0.02, -180, false); // go back and forht to shake the blocks
   // MoveTimePID(TestPara, -60, 0.1, 0.02, -180, false);
   Move(-40,-40);

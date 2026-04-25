@@ -76,4 +76,5 @@ extern void MovePID(PIDDataSet DistK, PIDDataSet HeadK, double dist, double maxA
 
 extern void driveToPoint(PIDDataSet KVals, double target_x, double target_y, double max_speed, double final_decel_speed, double timeout_ms, bool brake, double decel_distance = 8.0, double Matchload_distance = -1, double depoly_distance = -1);
 extern void driveToPointantiOrbit(PIDDataSet KVals, double target_x, double target_y, double max_speed, double final_decel_speed, double timeout_ms, bool brake, double decel_distance = 8.0, double Matchload_distance = -1, double depoly_distance = -1);
+extern void dp1(PIDDataSet KVals, double target_x, double target_y, double max_speed, double final_decel_speed, double timeout_ms, bool brake, double decel_distance = 8.0, double Matchload_distance = -1, double depoly_distance = -1);
 #endif

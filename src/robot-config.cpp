@@ -13,7 +13,7 @@ controller Controller1 = controller(primary);
 // LEFT SIDE
 motor LF = motor(PORT7, ratio6_1, true);
 motor LM = motor(PORT8, ratio6_1, true);
-motor LB = motor(PORT9, ratio6_1, true); 
+motor LB = motor(PORT21, ratio6_1, true); 
 // RIGHT SIDE
 motor RF = motor(PORT16, ratio6_1, false);
 motor RM = motor(PORT6, ratio6_1, false);

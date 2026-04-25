@@ -122,7 +122,7 @@ AutonLogic();
 
 void autonomous(void) {
   
-  if (!confirmed) AutoSelectorVal = 6; // for automatic auto selection
+  if (!confirmed) AutoSelectorVal = 17; // for automatic auto selection
 
 
   Brain.Screen.clearScreen();
@@ -225,7 +225,7 @@ int ATask(void)
     {
       intakeUp();
       // Pistake.set(false);
-      RunIndex(-60); // 40
+      RunIndex(-55); // 40
       lock.set(false);
     }
     else if (Controller1.ButtonL1.pressing()==1 && RightTaskActiv == 0 && R1TaskActiv == 0 && !Controller1.ButtonX.pressing() && !Controller1.ButtonY.pressing()) 
@@ -370,7 +370,7 @@ int PTask(void)
     }
     if (R1TaskActiv==1) {
       if (upwards) {
-        if (liftUp) maxLeverAngle = 115;
+        if (liftUp || BTaskActiv == 1) maxLeverAngle = 115;
         else maxLeverAngle = 135;
         RunIndex(100);
         lock.set(true);
@@ -419,7 +419,7 @@ int PTask(void)
         Lift.set(false);
       }
 
-      if (liftUp) {
+      if (liftUp || BTaskActiv == 1) {
         leverSpeed = 100;
         maxLeverAngle = 135;
       }

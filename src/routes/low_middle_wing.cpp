@@ -36,7 +36,7 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   // MoveTimePID(TestPara, -60, 0.1, 0.02, -180, false);
   Move(-40,-40);
   wait(200,msec);
-  leverHalf(60);
+  leverHalf(75);
   Move(0,0);
   lock.set(false);
   wait(100,msec);
@@ -55,7 +55,7 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   driveToPointantiOrbit(DrivePara, -1.1, 27.5, 80, 40, 2.6, true); // go into low goal
   // MoveEncoderPID(TurnPara, 100, 35, 0.3, -45, false); // move to low goal
   // MoveEncoderPID(TurnPara, 40, 7, 0.1, -45, false); // slow down
-  Move(20,20);
+  Move(30,30);
   wait(100,msec);
   intakeUp();
   RunIndex(-50); // outake to score
@@ -63,13 +63,13 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
   MoveTimePID(TestPara, 40, 0.7, 0.02, -45, false); // score in low goal
   MoveEncoderPID(TurnPara, -100, 22, 0.2, -45, false); // back up from low goal
   RunIndex(-100); // stop intake
-  MoveEncoderPID(TurnPara, -100, 22.2, 0.2, -100, false);
+  MoveEncoderPID(TurnPara, -100, 21.8, 0.2, -100, false);
   // wing code
   intakeDown();
   Wings.set(false); // lowers wings
 
   TurnMaxTimePID(TurnPara, 180, 0.15, true); // turns to wing
-  MoveEncoderPID(TurnPara, -60, 27, 0.2, 180, false); // goes backwards up to wing
+  MoveEncoderPID(TurnPara, -70, 27, 0.2, 180, false); // goes backwards up to wing
   RunLever(0);
   RunIndex(0);
   Move(40,-20);
@@ -77,6 +77,8 @@ void low_middle_wing() { // NEGATIVE TURNS TO THE LEFT
 
   // Scrapper.set(true);
   std::cout<< "time: " <<stopwatch/1000.0<<std::endl;
+  wait(300,msec);
+  BStop();
   wait(15000,msec);
 
   int screenheading = Gyro.heading(degrees);
